@@ -1,0 +1,61 @@
+<window id="winCombo" title="Dodaj tekst" border="normal" closable="true" width="460px" xmlns:c="client">
+	<label value="vrednost: "/><textbox id="vrednost"/><image style="position:relative;" left="30px" top="7px" src="stil/slike/Dodaj.png" height="25px" width="25px" tooltiptext="Dodaj" onClick="dodaj_element()"/>
+	<grid height="150px" width="100%">
+        <columns>
+			<column width="100%" label="Elementi"/>
+		</columns>
+		<rows id="Combo_el">			
+		</rows>
+	</grid>                    
+	<image src="stil/slike/gumb_naprej.png" width="101px" height="25px" style="position:relative; left:0px; top:10px; margin-bottom:15px;" onClick="dodaj_combo_nal()"/>
+	<zscript><![CDATA[ 
+	import java.sql.*;
+	import dnevnik.*;
+		
+		
+	public void dodaj_combo_nal(){
+		Row vrstica = new Row();
+		Cell c = new Cell();
+		Combobox combo = new Combobox();
+		int ln = Combo_el.getChildren().size();
+		for(int i = 0; i < ln; i ++){
+			Label labela = (Label) Combo_el.getFellow("Item_" + i);
+			combo.appendItem(labela.getValue());
+		}
+		Textbox t = (Textbox) Path.getComponent("/Pod_nal/Struktura").getFellow("labela");
+		combo.setId(session.getAttribute("tip_kont_nal") + "_" + t.getValue());
+		Combo_el.getChildren().clear();
+		c.appendChild(combo);
+		c = append_odstrani(c);
+		vrstica.appendChild(c);
+		Path.getComponent("/Pod_nal/Struktura_elementi").appendChild(vrstica);
+		session.setAttribute("tip_kont_nal",null);
+		winCombo.onClose();
+	}                  
+	                  
+	public void dodaj_element(){
+			Row vrstica = new Row();
+			Label lbl = new Label(vrednost.getValue());			
+			lbl.setId("Item_" + Combo_el.getChildren().size());
+			vrstica.appendChild(lbl);
+			Combo_el.appendChild(vrstica);
+	}
+	
+	public Cell append_odstrani(Cell c){
+		Image b = new Image("../../stil/slike/Odstrani.png");
+		b.setHeight("23px");
+    	b.setWidth("23px");
+    	b.setStyle("position:relative; top: 6px; left:4px;");
+    	b.addEventListener("onClick", new Odstrani_combo());
+    	c.appendChild(b);
+    	return c;
+	}
+	
+	final class Odstrani_combo implements org.zkoss.zk.ui.event.EventListener {
+		public void onEvent(Event event) throws Exception {
+				event.getTarget().getParent().getParent().detach();	
+		}
+	}
+	
+	]]></zscript>
+</window>

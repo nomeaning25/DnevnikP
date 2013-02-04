@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+<style dynamic="true">
+        .no_border tr.z-row td.z-row-inner, tr.z-row .z-cell,div.z-grid, .z-grid-header-bg 
+		 { 
+			 border: white;
+			 background:white;
+		 }
+		.CelicaLabela{
+			text-align: right;
+		}
+    </style>
+<window title="Osnovni podatki o uri" border="normal"  width="800px" style="margin:auto; padding-top:50px;">
+<zscript src="../../scripts/DB.zs"/>
+<zscript src="../../scripts/funkcije.zs"/>
+<zscript src="../../scripts/PodatkiOuri.zs"/>
+
+
+
+<grid sclass="no_border" style="padding-top:15px; padding-bottom:15px; width:700px; margin:auto;">
+		<columns>
+			<column width="200px" label=""/>
+			<column label=""/>
+		</columns>
+		<rows id="forma">
+			<row>
+				<cell sclass="CelicaLabela"><label value="Izvajalec (študent): "/></cell>
+				<cell><textbox id="Izvajalec" width="200px"  /></cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Mentor-ica (OŠ/SŠ): "/></cell>
+				<cell><textbox id="Mentor" width="200px"/></cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Datum: "/></cell>
+				<cell><datebox id="Datum" format="medium"/></cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Ura: "/></cell>
+				<cell><intbox id="Ura" width="99px"/></cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Razred: "/></cell>
+				<cell><intbox id="Razred" width="99px"/></cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Šola: "/></cell>
+				<cell><textbox id="Sola" width="200px"/></cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Učna tema: "/></cell>
+				<cell><combobox id="combo_tema" readonly="true" onCreate="combobox(&quot;combo_tema&quot;,&quot;ID&quot;,&quot;TEMA&quot;,&quot;ucna_tema_combobox&quot;)" onChange="combobox(&quot;combo_sklop&quot;,&quot;ID&quot;,&quot;SKLOP&quot;,&quot;ucni_sklop_combobox&quot;)"></combobox></cell>
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Učni sklop: "/></cell>
+				<cell><combobox id="combo_sklop" readonly="true" onChange="combobox(&quot;combo_enota&quot;,&quot;ID&quot;,&quot;ENOTA&quot;,&quot;ucna_enota_combobox&quot;)" /></cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Učna enota: "/></cell>
+				<cell><combobox id="combo_enota" readonly="true"></combobox></cell>
+			</row>
+			<row>
+				<cell sclass="CelicaLabela" style="vertical-align: top; padding-top:12px;"><label value="Specifični učni cilji: "/></cell>
+				<cell>
+					<grid>
+					 
+						<columns>
+							<column label="" width="10px"/>
+							<column label="" width="200px"/>
+							<column label=""/>			
+						</columns>
+						<rows id="SpecUcniCilji">
+							<row>
+								<cell><label>-</label> </cell>
+								<cell><textbox id="Cilj1"  width="189px" /></cell>
+								<cell><image src="../../stil/slike/Dodaj.png" width="23px" height="23px" onClick="DodajCilj(&quot;&quot;)"/></cell>
+							</row>
+						</rows>
+					</grid>
+				</cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Učni pristop: "/></cell>
+				<cell><textbox id="Pristop" width="400px"/></cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Učne oblike: "/></cell>
+				<cell><textbox id="Oblike" width="400px"/></cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Učne metode: "/></cell>
+				<cell><textbox id="Metode" width="400px"/></cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Učna sredstva in pripomočki: "/></cell>
+				<cell><textbox id="Pripomocki" width="400px"/></cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Viri: "/></cell>
+				<cell><textbox id="Viri" width="400px"/></cell>	
+			</row>			
+		</rows>
+	</grid>
+	<image src="../../stil/slike/gumb_preklici.png" width="101px" height="25px" style="position:relative; left:300px; margin-bottom:15px;" onClick="session.setAttribute(&quot;ID_datoteke&quot;,null); execution.sendRedirect(&quot;../Studentje/PrvaStranStudentje.zul&quot;);"/>
+	<image src="../../stil/slike/gumb_naprej.png" width="101px" height="25px" style="position:relative; left:300px; margin-bottom:15px;" onClick="prenesiVbazo(); execution.sendRedirect(&quot;PregledUre.zul&quot;);" onCreate="Napolni()"/>
+	
+	
+	<zscript><![CDATA[
+
+import java.sql.*;
+import dnevnik.*;                 
+
+
+public void Napolni(){
+	if(session.getAttribute("ID_datoteke") != null){
+		
+		Connection conn = null;
+		PreparedStatement s = null;
+        try
+        {
+     	   //Povežemo se na bazo
+            conn = openDB("root","","jdbc:mysql://localhost:3306/dnevnik");
+            //Kreiramo SQL za prenos podatkov v šifrant Sklopov
+         	Object[] obj_poisci_podatki_ure_priprava = {session.getAttribute("ID_datoteke")};
+	        s = PStatment(conn, "poisci_podatki_ure_priprava", obj_poisci_podatki_ure_priprava);
+		    ResultSet rs = s.executeQuery ();					    
+			rs.next();
+			
+			//query = sqlStavki.getSqlString("select_podatki_ure");n
+			
+			//query = query + " ID = " + rs.getString("PODATKI_URE_ID");;
+			
+			//s.executeQuery (query);
+			Object[] obj_select_podatki_ure = {rs.getString("PODATKI_URE_ID")};
+	        s = PStatment(conn, "select_podatki_ure", obj_select_podatki_ure);
+		    rs = s.executeQuery ();					    
+			rs.next();
+			    
+			
+				Izvajalec.setValue(rs.getString("IZVAJALEC"));
+				Mentor.setValue(rs.getString("MENTOR"));
+				Datum.setValue(rs.getDate("DATUM"));
+				Ura.setValue(Integer.parseInt(rs.getString("URA")));
+				Razred.setValue(Integer.parseInt(rs.getString("RAZRED")));
+				Sola.setValue(rs.getString("SOLA"));
+				Pristop.setValue(rs.getString("PRISTOP"));
+				Oblike.setValue(rs.getString("OBLIKE"));
+				Metode.setValue(rs.getString("METODE"));
+				Pripomocki.setValue(rs.getString("PRIPOMOCKI"));
+				Viri.setValue(rs.getString("VIRI"));
+				combo_tema.setSelectedIndex(Integer.parseInt(rs.getString("TEMA_ID")) - 1);
+				combobox("combo_sklop","ID","SKLOP","ucni_sklop_combobox");
+				List items = combo_sklop.getItems();
+				 for (int i = 0; i < items.size(); i++) {
+			    	Comboitem item = items.get(i);
+			    	Integer cval = Integer.parseInt(item.getValue().toString());
+
+			    	if(cval != null && cval.equals(Integer.parseInt(rs.getString("TEMA_ID")))){
+			    		combo_sklop.setSelectedIndex(i);
+			    		break;
+			    	}
+			     }	
+				
+				combobox("combo_enota","ID","ENOTA","ucna_enota_combobox");
+				items = combo_enota.getItems();
+				 for (int i = 0; i < items.size(); i++) {
+			    	Comboitem item = items.get(i);
+			    	Integer cval = Integer.parseInt(item.getValue().toString());
+
+			    	if(cval != null && cval.equals(Integer.parseInt(rs.getString("ENOTA_ID")))){
+			    		combo_enota.setSelectedIndex(i);
+			    		break;
+			    	}
+			     }	
+		   	
+			   	//query = sqlStavki.getSqlString("select_cilji_ure");
+				
+				//query = query + " PODATKI_URE_ID = " + session.getAttribute("ID_datoteke").toString();
+				
+				//s.executeQuery (query);
+				
+				rs = s.getResultSet ();
+				Object[] obj_select_cilji_ure = {session.getAttribute("ID_datoteke").toString()};
+		        s = PStatment(conn, "select_cilji_ure", obj_select_cilji_ure);
+			    rs = s.executeQuery ();					    
+							   	
+				if(rs.next()){
+					Cilj1.setValue(rs.getString("CILJ"));
+					
+					while(rs.next()){
+						DodajCilj(rs.getString("CILJ"));
+					}
+				}
+				
+				
+				
+			//Zapremo povezavo do baze
+			rs.close ();
+			s.close ();
+			   
+        }
+        catch (Exception e)
+        {
+            System.err.println ("ERROR: "+ e.getMessage());
+        }
+        finally
+        {
+            if (conn != null)
+            {
+                try
+                {
+                   closeDB(conn);
+                }
+                catch (Exception e) { /* ignore close errors */ }
+            }
+        }
+        	
+     }
+}
+]]></zscript>
+ </window>
+
+ </zk>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+<style dynamic="true">
+        .no_border tr.z-row td.z-row-inner, tr.z-row .z-cell,div.z-grid, .z-grid-header-bg 
+		 { 
+			 border: white;
+			 background:white;
+			 
+		 }
+
+		
+    </style>
+<window title="Pregledna zgradba ure" border="normal"  width="800px" style="margin:auto; padding-top:50px;">
+<zscript src="../../scripts/DB.zs"/>
+<zscript src="../../scripts/funkcije.zs"/>
+<grid id="ZgradbaUre"  height="700px">
+	<auxhead>
+			
+            <auxheader label="" colspan="7" rowspan="1">
+              	<button label="Dodaj vrstico" onClick="dodaj()" width="90px"/>
+            </auxheader>
+    </auxhead>
+        <columns>
+            <column align="center" hflex="2">Namen/Cilj</column>
+            <column align="center" hflex="3">Strategija doseganja</column>
+            <column align="center" hflex="3">Način preverjanja</column>
+            <column align="center" hflex="2">Metode/Oblike</column>
+            <column align="center" hflex="1">Čas</column>
+            <column align="center" hflex="2">Pripomočki</column>
+            <column align="center" hflex="2">Odstrani</column>
+        </columns>
+        <rows id="Vrstice" ></rows>
+         <foot>
+            <footer height="145px" span="7">
+            	<label value="Dodatne dejavnosti za učno šibkejše učence:"/>
+            	<textbox id="dodatne_dej_sibki_ucenci" rows="2" width="750px"></textbox>
+            	<label value="Dodatne dejavnosti za učno zmožnejše učence:"/>
+            	<textbox id="dodatne_dej_zmoznejsi_ucenci" rows="2" width="750px" style="margin-bottom:3px;"></textbox>            	
+            	<image src="../../stil/slike/gumb_preklici.png" width="101px" height="25px" style="position:relative; left:0px; top:10px; margin-bottom:15px;" onClick="execution.sendRedirect(&quot;PodatkiOuri.zul&quot;);"/>
+				<image src="../../stil/slike/gumb_naprej.png" width="101px" height="25px" style="position:relative; left:0px; top:10px; margin-bottom:15px;" onClick="PrenesiZgradbo()" onCreate="after_create()"/>
+            </footer>
+           
+        </foot>
+    </grid>
+    <zscript><![CDATA[
+    import dnevnik.*;
+    import java.sql.*;
+    import org.zkoss.zk.ui.event.EventListener;
+	
+    Sporocila VsaSporocila = new Sporocila();
+	sqlStavki sqlst = new sqlStavki();
+	Connection conn = null;
+	PreparedStatement s = null;
+	
+    public void after_create(){
+    	if(session.getAttribute("ID_datoteke") != null){
+    		//Napiši funkcijo ki napolni obrazec
+    	}
+    }
+    
+    public void dodaj(){
+
+    Row row = new Row();
+		
+	    Textbox tbxCilji = new Textbox();
+	    tbxCilji.setRows(10);
+	    tbxCilji.setId("Cilji" + Vrstice.getChildren().size());
+		row.appendChild(tbxCilji);
+    
+    	/*org.zkforge.ckez.CKeditor fckCilji = new org.zkforge.ckez.CKeditor();
+    	fckCilji.setToolbar("MyToolbar2");
+    	fckCilji.setId("Cilji" + Vrstice.getChildren().size());
+    	fckCilji.setCustomConfigurationsPath("/scripts/ck_config.js");
+    	fckCilji.setHeight("125px");
+     	row.appendChild(fckCilji);*/
+		
+    	org.zkforge.ckez.CKeditor fckStrategija = new org.zkforge.ckez.CKeditor();
+    	fckStrategija.setToolbar("MyToolbar");
+    	fckStrategija.setId("Strategija" + Vrstice.getChildren().size());
+    	fckStrategija.setCustomConfigurationsPath("../../scripts/ck_config.js");
+        fckStrategija.setHeight("125px");
+    	row.appendChild(fckStrategija);
+    	
+    	org.zkforge.ckez.CKeditor fckDoseganje = new org.zkforge.ckez.CKeditor();
+    	fckDoseganje.setToolbar("MyToolbar");
+    	fckDoseganje.setId("Strategija" + Vrstice.getChildren().size());
+    	fckDoseganje.setCustomConfigurationsPath("../../scripts/ck_config.js");
+    	fckDoseganje.setHeight("125px");
+    	row.appendChild(fckDoseganje);
+    	
+    	Textbox tbxOblike = new Textbox();
+    	tbxOblike.setRows(10);
+    	tbxOblike.setId("Oblike" + Vrstice.getChildren().size());
+    	row.appendChild(tbxOblike);
+    	
+    	Intbox tbxCas = new Intbox();
+    	tbxCas.setId("Cas" + Vrstice.getChildren().size());
+    	row.appendChild(tbxCas);
+
+    	Textbox tbxPripomocki = new Textbox();
+    	tbxPripomocki.setRows(10);
+    	tbxPripomocki.setId("Pripomocki" + Vrstice.getChildren().size());
+    	row.appendChild(tbxPripomocki);
+
+    	
+	    final Button rm = new Button("Odstrani");        
+	    rm.addEventListener(Events.ON_CLICK, new EventListener() {
+            public void onEvent(Event event) throws Exception {
+            	event.getTarget().getParent().detach();
+            }
+        });
+	    
+        row.appendChild(rm);	    
+	 
+        Vrstice.appendChild(row);
+    }
+    
+    
+    
+    public void PrenesiZgradbo(){
+    	
+    	try
+        {
+    		conn = openDB("root","","jdbc:mysql://localhost:3306/dnevnik");	        
+	        
+	        //Kreiramo SQL za prenos podatkov v šifrant Sklopov
+	        //Statement s = conn.createStatement ();
+	
+	        //String query = "";
+	    	
+	        //query = sqlst.getSqlString("delete_zgradba_ure") + session.getAttribute("ID_datoteke") + ";";
+	        //s.execute (query);
+	        Object[] obj_delete_zgradba_ure = {session.getAttribute("ID_datoteke")};
+   			s = PStatment(conn, "delete_zgradba_ure", obj_delete_zgradba_ure);
+       	    s.execute();  
+	        
+	        //query = sqlst.getSqlString("delete_dodatne_dej") + session.getAttribute("ID_datoteke") + ";";
+	        //s.execute (query);
+	        Object[] obj_delete_dodatne_dej = {session.getAttribute("ID_datoteke")};
+   			s = PStatment(conn, "delete_dodatne_dej", obj_delete_dodatne_dej);
+       	    s.execute();  
+	        
+	    	for(int i = 0; i < Vrstice.getChildren().size(); i++){
+	    		
+	    		 /*query = sqlst.getSqlString("insert_zgradba_ure");
+	    		 query = query + session.getAttribute("ID_datoteke") + ",'" 
+	    		 	+ ((org.zkforge.fckez.FCKeditor) Vrstice.getFellow("Cilji" + i)).getValue() + "','"
+	    		    + ((org.zkforge.fckez.FCKeditor) Vrstice.getFellow("Strategija" + i)).getValue() + "','" 
+	    		 	+ ((org.zkforge.fckez.FCKeditor) Vrstice.getFellow("Doseganje" + i)).getValue() +  "','" 
+	    		 	+ ((Textbox) Vrstice.getFellow("Oblike" + i)).getValue() +  "','"
+	    		 	+ ((Textbox) Vrstice.getFellow("Cas" + i)).getValue() + "','" 
+	    		 	+ ((Textbox) Vrstice.getFellow("Pripomocki" + i)).getValue() + "');";
+	    		 s.execute (query);*/
+	    		Object[] obj_insert_zgradba_ure = {
+	    				 								session.getAttribute("ID_datoteke"),
+	    				 								//((org.zkforge.ckez.CKeditor) Vrstice.getFellow("Cilji" + i)).getValue(),
+	    				 								((Textbox) Vrstice.getFellow("Cilji" + i)).getValue(),
+	    				 								((org.zkforge.ckez.CKeditor) Vrstice.getFellow("Strategija" + i)).getValue(),
+	    				 								((org.zkforge.ckez.CKeditor) Vrstice.getFellow("Doseganje" + i)).getValue(),
+	    				 								((Textbox) Vrstice.getFellow("Oblike" + i)).getValue(),
+	    				 								((Textbox) Vrstice.getFellow("Cas" + i)).getValue(),
+	    				 								((Textbox) Vrstice.getFellow("Pripomocki" + i)).getValue()	    				 								
+	    				 						  };
+	   			s = PStatment(conn, "insert_zgradba_ure", obj_insert_zgradba_ure);
+	       	    s.execute();
+	    	}
+	    	
+	    	//query = sqlst.getSqlString("insert_dodatne_dej");
+	    	//query = query + session.getAttribute("ID_datoteke") + ",'SIBKI_UCENCI','" +  dodatne_dej_sibki_ucenci.getValue() + "');" ;
+	    	//s.execute (query);
+	    	Object[] obj_insert_dodatne_dej1 = {session.getAttribute("ID_datoteke"), "SIBKI_UCENCI", dodatne_dej_sibki_ucenci.getValue()};
+   			s = PStatment(conn, "insert_dodatne_dej", obj_insert_dodatne_dej1);
+       	    s.execute(); 	    	
+	    	
+	    	//query = sqlst.getSqlString("insert_dodatne_dej");
+	    	//query = query + session.getAttribute("ID_datoteke") + ",'ZMOZNEJSI_UCENCI','" +  dodatne_dej_zmoznejsi_ucenci.getValue() + "');" ;
+	    	//s.execute (query);
+       	 	Object[] obj_insert_dodatne_dej2 = {session.getAttribute("ID_datoteke"), "ZMOZNEJSI_UCENCI", dodatne_dej_zmoznejsi_ucenci.getValue()};
+			s = PStatment(conn, "insert_dodatne_dej", obj_insert_dodatne_dej2);
+    	    s.execute();
+	  	
+        }
+        catch (Exception e)
+        {
+            System.err.println ("ERROR: "+ e.getMessage());
+        }
+        finally
+        {
+            if (conn != null)
+            {
+                try
+                {
+                    closeDB(conn);
+                }
+                catch (Exception e) { /* ignore close errors */ }
+            }
+        }	
+    }
+    
+]]></zscript>
+
+</window>
+
+ </zk>

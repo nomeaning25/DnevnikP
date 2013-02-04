@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+<style dynamic="true">
+        .no_border tr.z-row td.z-row-inner, tr.z-row .z-cell,div.z-grid, .z-grid-header-bg 
+		 { 
+			 border: white;
+			 background:white;
+		 }
+		.CelicaLabela{
+			text-align: right;
+		}
+    </style>
+    
+
+<window title="Seznam elementov" id="Pod_nal" border="normal"  width="800px" style="margin:auto; padding-top:50px;">
+
+<grid id="Struktura"  height="450px">         
+        <columns>
+			<column width="" label=""/>
+		</columns>
+		<rows id="Struktura_elementi">			
+		</rows>
+		 
+		
+	</grid>
+	<image src="../../stil/slike/gumb_naprej.png" width="101px" height="25px" style="position:relative; left:300px; margin-bottom:15px;" onCreate="kreiraj()" onClick="oddaj()"/>
+	<zscript src="../../scripts/DB.zs"/>
+	<zscript src="../../scripts/OddajNalogo.zs"/>
+</window>
+
+ </zk>

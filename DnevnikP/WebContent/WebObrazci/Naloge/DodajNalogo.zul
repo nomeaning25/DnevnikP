@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+<style dynamic="true">
+        .no_border tr.z-row td.z-row-inner, tr.z-row .z-cell,div.z-grid, .z-grid-header-bg 
+		 { 
+			 border: white;
+			 background:white;
+		 }
+		.CelicaLabela{
+			text-align: right;
+		}
+    </style>
+    
+
+<window title="Podatki naloge" id="opis_nal" border="normal"  width="800px" style="margin:auto; padding-top:50px;">
+
+<grid id="Podatki_naloge"  height="160px">
+      
+        <columns>
+			<column width="150px" label=""/>
+			<column label=""/>
+		</columns>
+		<rows id="forma">
+			<row>
+				<cell sclass="CelicaLabela"><label value="Ime naloge: "/></cell>
+				<cell><textbox id="ime_naloge" width="366px"/> </cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Opis/Navodilo: "/></cell>
+				<cell><textbox rows="4" id="opis_naloge" cols="70" style="overflow: auto;"/></cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Datum in zaključka: "/></cell>
+				<cell><datebox id="datum_zaklj" format="MEDIUM"/><timebox id="ura_zaklj" format="SHORT" style="position:relative;" left="10px"/></cell>	
+			</row>			
+		</rows>
+	</grid>
+</window>
+
+
+<window title="Seznam elementov" id="Pod_nal" border="normal"  width="800px" style="margin:auto; padding-top:50px;">
+
+<grid id="Struktura"  height="450px">
+         <auxhead>
+            <auxheader label="Dodaj element" colspan="1" rowspan="1" />
+            <auxheader colspan="4" rowspan="1">
+                <label value="id elementa: "/><textbox id="labela" constraint="/[A-Za-z0-9_]{0,}/: Vnesite brez presledkov in posebnih znakov (razen &quot;_&quot;)"/>
+                <label style="position:relative;" left="10px"  value="Tip: "/>
+                <combobox style="position:relative;" left="10px"  id="tip" disabled="false" >
+                	<comboitem label="Textovno polje"/>
+                	<comboitem label="Textovno polje (3 vrstice)"/>
+                	<comboitem label="Textovno polje (5 vrstic)"/>
+                	<comboitem label="Urejevalnik besedila"/>
+                	<comboitem label="Besedilo"/>
+                	<comboitem label="Izbirno polje"/>
+                </combobox>
+                <image style="position:relative;" left="30px" top="7px" src="../../stil/slike/Dodaj.png" height="25px" width="25px" tooltiptext="Dodaj" onClick="dodajElement_nal()"/>                    
+            </auxheader>
+        </auxhead>
+        <columns>
+			<column width="" label=""/>
+		</columns>
+		<rows id="Struktura_elementi">
+			
+		</rows>
+		 <foot>
+			<footer>
+				<image src="../../stil/slike/gumb_dodaj.png" width="101px" height="25px" style="position:relative; top:10px; margin-bottom:15px;" onClick="dodaj_nalogo()"/>
+			</footer>
+		</foot>
+		
+	</grid>
+	<zscript src="../../scripts/DB.zs"/>
+	<zscript src="../../scripts/DodajNalogo.zs"/>
+
+</window>
+
+ </zk>
