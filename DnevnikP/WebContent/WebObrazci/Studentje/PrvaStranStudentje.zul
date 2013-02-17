@@ -19,17 +19,13 @@
         <tabs id="tabs"> 
             <tab label="Naloge"/> 
             <tab label="Priprave in hospitacije"/>
-            <tab label="Priprave in hospitacije moje skupine"/>  
-            <tab label="Dnevnik"/>
-            <tab label="Osnovni podatki"/> 
         </tabs>        
         <tabpanels> 
-            <tabpanel> 
-            	
+            <tabpanel>            	
 				<grid id="SeznamNalogStud"  height="700px">
 				        <auxhead sclass="category-center">
 				            <auxheader label="Izberi vrsto izpisa" colspan="1" rowspan="1" />
-				            <auxheader colspan="4" rowspan="1">
+				            <auxheader colspan="3" rowspan="1">
 				                <radiogroup>
 				                    <attribute name="onCheck"><![CDATA[
 				                      String selected = self.getSelectedItem().getLabel();                                                     
@@ -60,10 +56,10 @@
 				   
             </tabpanel> 
             <tabpanel> 
-				<grid id="SeznamDatotek"  height="250px">
+				<grid id="SeznamDatotek"  height="700px">
 				        <auxhead sclass="category-center">
 				            <auxheader label="Izberi vrsto izpisa" colspan="1" rowspan="1" />
-				            <auxheader colspan="4" rowspan="1">
+				            <auxheader colspan="2" rowspan="1">
 				                <radiogroup>
 				                    <attribute name="onCheck"><![CDATA[
 				                      String selected = self.getSelectedItem().getLabel();                                                     
@@ -80,10 +76,11 @@
 				                        <radio label="Priprave" width="100px" />
 				                    </hlayout>
 				                </radiogroup>
-				                 <image style="position: absolute; top:5px; left: 560px;" src="../../stil/slike/Dodaj_pripravo.png" height="25px" width="25px" tooltiptext="Dodaj pripravo" onClick="vnesiPripravo()"/>
-				                <image style="position: absolute; top:5px; left: 590px;" src="../../stil/slike/Dodaj_hospitacijo.png" height="25px" width="25px" tooltiptext="Dodaj hospitacijo" onClick="vnesiHospitacijo()"/>
-				                    
 				            </auxheader>
+				            <auxheader colspan="1" rowspan="1">
+				            	<image src="../../stil/slike/Dodaj_pripravo.png" height="25px" width="25px" tooltiptext="Dodaj pripravo" onClick="vnesiPripravo()"/>
+				                <image src="../../stil/slike/Dodaj_hospitacijo.png" height="25px" width="25px" tooltiptext="Dodaj hospitacijo" onClick="vnesiHospitacijo()"/>
+			                </auxheader>
 				        </auxhead>
 				        <columns>
 				            <column hflex="2">Vrsta</column>
@@ -97,52 +94,13 @@
 				    </grid>
 				     
             </tabpanel> 
-            <tabpanel> 
-               
-            </tabpanel>
-             <tabpanel> 
-               
-            </tabpanel> 
-            <tabpanel> 
-				
-				<grid sclass="no_border" style="padding-top:15px; padding-bottom:15px; width:700px; margin:auto;">
-						<columns>
-							<column width="200px" label=""/>
-							<column label=""/>
-						</columns>
-						<rows id="forma">
-							<row>
-								<cell sclass="CelicaLabela"><label value="Ime: "/></cell>
-								<cell><label id="Ime"/></cell>	
-							</row>
-							<row>
-								<cell sclass="CelicaLabela"><label value="Priimek: "/></cell>
-								<cell><label id="Priimek"/></cell>	
-							</row>
-							<row>
-								<cell sclass="CelicaLabela"><label value="Vpisna št.: "/></cell>
-								<cell><label id="VpisnaSt"/></cell>	
-							</row>
-							<row>
-								<cell sclass="CelicaLabela"><label value="E-pošta: "/></cell>
-								<cell><label id="Eposta"/></cell>	
-							</row>
-							<row>
-								<cell sclass="CelicaLabela"><label value="Št. učnih priprav: "/></cell>
-								<cell><label id="StUcnihPriprav"/></cell>	
-							</row>
-							<row>
-								<cell sclass="CelicaLabela"><label value="Št. hospitacij: "/></cell>
-								<cell><label id="StHospitacij"/></cell>	
-							</row>					
-						</rows>
-					</grid>   
-            </tabpanel>  
+
+            
         </tabpanels> 
     </tabbox> 
     <zscript><![CDATA[
 	    import dnevnik.*;	
-	    
+	   
 	    SeznamDatotek.setRowRenderer(new DatotekeRenderer());
 	    DatotekePodatki.OsveziDatoteke();
 	    SeznamDatotek.setModel(new ListModelList(DatotekePodatki.vrniVseDatoteke()));
