@@ -1,147 +1,157 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk>
 <style dynamic="true">
-        .no_border tr.z-row td.z-row-inner, tr.z-row .z-cell,div.z-grid, .z-grid-header-bg 
-		 { 
-			 border: white;
-			 background:white;
-		 }
+         
+        .nav_tabs .z-tabpanels .z-toolbarbutton-cnt { padding: 4px;} 
+        .nav_category { cursor:pointer; } 
+        .nav_text { color: #696569; font-size : 24px; font-weight: bold;} 
+        
+
 		.CelicaLabela{
 			text-align: right;
 		}
+		
     </style>
-<window title="Prva stran" border="normal"  width="800px" style="margin:auto; padding-top:50px;">
-
-<zscript src="../../scripts/DB.zs"/>
-<zscript src="../../scripts/funkcije.zs"/>
-
-<grid sclass="no_border" style="padding-top:15px; padding-bottom:15px; width:700px; margin:auto;">
-		<columns>
-			<column width="200px" label=""/>
-			<column label=""/>
-		</columns>
-		<rows id="forma">
-			<row>
-				<cell sclass="CelicaLabela"><label value="Ime: "/></cell>
-				<cell><label id="Ime"/></cell>	
-			</row>
-			<row>
-				<cell sclass="CelicaLabela"><label value="Priimek: "/></cell>
-				<cell><label id="Priimek"/></cell>	
-			</row>
-			<row>
-				<cell sclass="CelicaLabela"><label value="Vpisna št.: "/></cell>
-				<cell><label id="VpisnaSt"/></cell>	
-			</row>
-			<row>
-				<cell sclass="CelicaLabela"><label value="E-pošta: "/></cell>
-				<cell><label id="Eposta"/></cell>	
-			</row>
-			<row>
-				<cell sclass="CelicaLabela"><label value="Št. učnih priprav: "/></cell>
-				<cell><label id="StUcnihPriprav"/></cell>	
-			</row>
-			<row>
-				<cell sclass="CelicaLabela"><label value="Št. hospitacij: "/></cell>
-				<cell><label id="StHospitacij"/></cell>	
-			</row>					
-		</rows>
-	</grid>
+    <zscript src="../../scripts/DB.zs"/>
+	<zscript src="../../scripts/funkcije.zs"/>
 	
+    <tabbox width="1000px" height="750px" style="margin:auto; padding-top:15px;" sclass="nav_tabs"> 
+        <tabs id="tabs"> 
+            <tab label="Naloge"/> 
+            <tab label="Priprave in hospitacije"/>
+            <tab label="Priprave in hospitacije moje skupine"/>  
+            <tab label="Dnevnik"/>
+            <tab label="Osnovni podatki"/> 
+        </tabs>        
+        <tabpanels> 
+            <tabpanel> 
+            	
+				<grid id="SeznamNalogStud"  height="700px">
+				        <auxhead sclass="category-center">
+				            <auxheader label="Izberi vrsto izpisa" colspan="1" rowspan="1" />
+				            <auxheader colspan="4" rowspan="1">
+				                <radiogroup>
+				                    <attribute name="onCheck"><![CDATA[
+				                      String selected = self.getSelectedItem().getLabel();                                                     
+				                        if (selected.equals("Vse naloge")) {
+				                        	SeznamNalogStud.setModel(new ListModelList(NalogeStudPodatki.vrniVseNalogeStud()));
+				                        } else {
+				                        	SeznamNalogStud.setModel(new ListModelList(NalogeStudPodatki.vrniNalogeStudGledeDatuma()));
+				                        }
+				                        footer_category_nal.setLabel("Št. datotek: " + SeznamNalogStud.getRows().getChildren().size() + "");
+				                    ]]></attribute>
+				                    <hlayout>
+				                        <radio label="Vse naloge" checked="true" width="100px" />
+				                        <radio label="Ne zaključene naloge" width="100px" />
+				                    </hlayout>
+				                </radiogroup>                    
+				            </auxheader>
+				        </auxhead>
+				        <columns>
+				            <column hflex="2">Ime naloge</column>
+				            <column hflex="2">Datum zaključka</column>
+				            <column hflex="6">Opis</column>
+				            <column hflex="1">Akcije</column>
+				        </columns>
+				        <foot>
+				            <footer span="4" id="footer_category_nal" class="footer_right" />
+				        </foot>
+				    </grid>
+				   
+            </tabpanel> 
+            <tabpanel> 
+				<grid id="SeznamDatotek"  height="250px">
+				        <auxhead sclass="category-center">
+				            <auxheader label="Izberi vrsto izpisa" colspan="1" rowspan="1" />
+				            <auxheader colspan="4" rowspan="1">
+				                <radiogroup>
+				                    <attribute name="onCheck"><![CDATA[
+				                      String selected = self.getSelectedItem().getLabel();                                                     
+				                        if (selected.equals("Vsi dokumenti")) {
+				                        	SeznamDatotek.setModel(new ListModelList(DatotekePodatki.vrniVseDatoteke()));
+				                        } else {
+				                        	SeznamDatotek.setModel(new ListModelList(DatotekePodatki.vrniDatotekeGledeVrste(selected)));
+				                        }
+				                        footer_category_dat.setLabel("Št. datotek: " + SeznamDatotek.getRows().getChildren().size() + "");
+				                    ]]></attribute>
+				                    <hlayout>
+				                        <radio label="Vsi dokumenti" checked="true" width="100px" />
+				                        <radio label="Hospitacije" width="100px" />
+				                        <radio label="Priprave" width="100px" />
+				                    </hlayout>
+				                </radiogroup>
+				                 <image style="position: absolute; top:5px; left: 560px;" src="../../stil/slike/Dodaj_pripravo.png" height="25px" width="25px" tooltiptext="Dodaj pripravo" onClick="vnesiPripravo()"/>
+				                <image style="position: absolute; top:5px; left: 590px;" src="../../stil/slike/Dodaj_hospitacijo.png" height="25px" width="25px" tooltiptext="Dodaj hospitacijo" onClick="vnesiHospitacijo()"/>
+				                    
+				            </auxheader>
+				        </auxhead>
+				        <columns>
+				            <column hflex="2">Vrsta</column>
+				            <column hflex="1">Datum</column>
+				            <column hflex="7">Opis</column>
+				            <column hflex="1">Akcije</column>
+				        </columns>
+				        <foot>
+				            <footer span="4" id="footer_category_dat" class="footer_right" />
+				        </foot>
+				    </grid>
+				     
+            </tabpanel> 
+            <tabpanel> 
+               
+            </tabpanel>
+             <tabpanel> 
+               
+            </tabpanel> 
+            <tabpanel> 
+				
+				<grid sclass="no_border" style="padding-top:15px; padding-bottom:15px; width:700px; margin:auto;">
+						<columns>
+							<column width="200px" label=""/>
+							<column label=""/>
+						</columns>
+						<rows id="forma">
+							<row>
+								<cell sclass="CelicaLabela"><label value="Ime: "/></cell>
+								<cell><label id="Ime"/></cell>	
+							</row>
+							<row>
+								<cell sclass="CelicaLabela"><label value="Priimek: "/></cell>
+								<cell><label id="Priimek"/></cell>	
+							</row>
+							<row>
+								<cell sclass="CelicaLabela"><label value="Vpisna št.: "/></cell>
+								<cell><label id="VpisnaSt"/></cell>	
+							</row>
+							<row>
+								<cell sclass="CelicaLabela"><label value="E-pošta: "/></cell>
+								<cell><label id="Eposta"/></cell>	
+							</row>
+							<row>
+								<cell sclass="CelicaLabela"><label value="Št. učnih priprav: "/></cell>
+								<cell><label id="StUcnihPriprav"/></cell>	
+							</row>
+							<row>
+								<cell sclass="CelicaLabela"><label value="Št. hospitacij: "/></cell>
+								<cell><label id="StHospitacij"/></cell>	
+							</row>					
+						</rows>
+					</grid>   
+            </tabpanel>  
+        </tabpanels> 
+    </tabbox> 
+    <zscript><![CDATA[
+	    import dnevnik.*;	
+	    
+	    SeznamDatotek.setRowRenderer(new DatotekeRenderer());
+	    DatotekePodatki.OsveziDatoteke();
+	    SeznamDatotek.setModel(new ListModelList(DatotekePodatki.vrniVseDatoteke()));
+	    footer_category_dat.setLabel("Št. datotek: "+ DatotekePodatki.vrniVseDatoteke().size() +"");
+
+	    SeznamNalogStud.setRowRenderer(new NalogeStudRenderer());
+	    NalogeStudPodatki.OsveziNalogeStud();
+	    SeznamNalogStud.setModel(new ListModelList(NalogeStudPodatki.vrniVseNalogeStud()));
+	    footer_category_nal.setLabel("Št. datotek: "+ NalogeStudPodatki.vrniVseNalogeStud().size() +"");
 	
- </window>
-
-<window title="Naloge" border="normal"  width="800px" style="margin:auto; padding-top:50px;">
-<zscript src="../../scripts/DB.zs"/>
-<zscript src="../../scripts/funkcije.zs"/>
-<grid id="SeznamNalogStud"  height="250px">
-        <auxhead sclass="category-center">
-            <auxheader label="Izberi vrsto izpisa" colspan="1" rowspan="1" />
-            <auxheader colspan="4" rowspan="1">
-                <radiogroup>
-                    <attribute name="onCheck"><![CDATA[
-                      String selected = self.getSelectedItem().getLabel();                                                     
-                        if (selected.equals("Vse naloge")) {
-                        	SeznamNalogStud.setModel(new ListModelList(NalogeStudPodatki.vrniVseNalogeStud()));
-                        } else {
-                        	SeznamNalogStud.setModel(new ListModelList(NalogeStudPodatki.vrniNalogeStudGledeDatuma()));
-                        }
-                        footer_category.setLabel("Št. datotek: " + SeznamNalogStud.getRows().getChildren().size() + "");
-                    ]]></attribute>
-                    <hlayout>
-                        <radio label="Vse naloge" checked="true" width="100px" />
-                        <radio label="Ne zaključene naloge" width="100px" />
-                    </hlayout>
-                </radiogroup>                    
-            </auxheader>
-        </auxhead>
-        <columns>
-            <column hflex="2">Ime naloge</column>
-            <column hflex="2">Datum zaključka</column>
-            <column hflex="6">Opis</column>
-            <column hflex="1">Akcije</column>
-        </columns>
-        <foot>
-            <footer span="4" id="footer_category" class="footer_right" />
-        </foot>
-    </grid>
-    <zscript><![CDATA[
-    import dnevnik.*;
-
-    SeznamNalogStud.setRowRenderer(new NalogeStudRenderer());
-    NalogeStudPodatki.OsveziNalogeStud();
-    SeznamNalogStud.setModel(new ListModelList(NalogeStudPodatki.vrniVseNalogeStud()));
-    footer_category.setLabel("Št. datotek: "+ NalogeStudPodatki.vrniVseNalogeStud().size() +"");
-
-]]></zscript>
-</window>
-
-<window title="Moji dokumenti" border="normal"  width="800px" style="margin:auto; padding-top:50px;">
-<zscript src="../../scripts/DB.zs"/>
-<zscript src="../../scripts/funkcije.zs"/>
-<grid id="SeznamDatotek"  height="250px">
-        <auxhead sclass="category-center">
-            <auxheader label="Izberi vrsto izpisa" colspan="1" rowspan="1" />
-            <auxheader colspan="4" rowspan="1">
-                <radiogroup>
-                    <attribute name="onCheck"><![CDATA[
-                      String selected = self.getSelectedItem().getLabel();                                                     
-                        if (selected.equals("Vsi dokumenti")) {
-                        	SeznamDatotek.setModel(new ListModelList(DatotekePodatki.vrniVseDatoteke()));
-                        } else {
-                        	SeznamDatotek.setModel(new ListModelList(DatotekePodatki.vrniDatotekeGledeVrste(selected)));
-                        }
-                        footer_category.setLabel("Št. datotek: " + SeznamDatotek.getRows().getChildren().size() + "");
-                    ]]></attribute>
-                    <hlayout>
-                        <radio label="Vsi dokumenti" checked="true" width="100px" />
-                        <radio label="Hospitacije" width="100px" />
-                        <radio label="Priprave" width="100px" />
-                    </hlayout>
-                </radiogroup>
-                 <image style="position: absolute; top:5px; left: 560px;" src="../../stil/slike/Dodaj_pripravo.png" height="25px" width="25px" tooltiptext="Dodaj pripravo" onClick="vnesiPripravo()"/>
-                <image style="position: absolute; top:5px; left: 590px;" src="../../stil/slike/Dodaj_hospitacijo.png" height="25px" width="25px" tooltiptext="Dodaj hospitacijo" onClick="vnesiHospitacijo()"/>
-                    
-            </auxheader>
-        </auxhead>
-        <columns>
-            <column hflex="2">Vrsta</column>
-            <column hflex="1">Datum</column>
-            <column hflex="7">Opis</column>
-            <column hflex="1">Akcije</column>
-        </columns>
-        <foot>
-            <footer span="4" id="footer_category" class="footer_right" />
-        </foot>
-    </grid>
-    <zscript><![CDATA[
-    import dnevnik.*;
-
-    SeznamDatotek.setRowRenderer(new DatotekeRenderer());
-    DatotekePodatki.OsveziDatoteke();
-    SeznamDatotek.setModel(new ListModelList(DatotekePodatki.vrniVseDatoteke()));
-    footer_category.setLabel("Št. datotek: "+ DatotekePodatki.vrniVseDatoteke().size() +"");
-
-]]></zscript>
-</window>
+	]]></zscript>   
  </zk>
