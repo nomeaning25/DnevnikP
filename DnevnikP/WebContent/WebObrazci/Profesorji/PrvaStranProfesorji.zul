@@ -22,7 +22,7 @@
         </tabs>        
         <tabpanels> 
             <tabpanel>            	
-				<grid id="SeznamNalogStud"  height="250px">
+				<grid id="SeznamNalogStud"  height="700px">
 			        <auxhead sclass="category-center">
 			            <auxheader label="Izberi vrsto izpisa" colspan="1" rowspan="1" />
 			            <auxheader colspan="2" rowspan="1">
