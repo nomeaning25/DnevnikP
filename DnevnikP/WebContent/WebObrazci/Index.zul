@@ -1,12 +1,13 @@
 <?page title="Aplikacija" contentType="text/html;charset=UTF-8"?>
-<zk>
+<zk>	
 
-        <window id="win" border="none" height="810px" style="margin:auto; padding-top:0px; padding-bottom:20px;">
+        <window id="win" border="none" height="100%" style="margin:auto; padding-top:0px;">
             <borderlayout	>
                 <north border="none">
                 <zk switch="${ID_skupine_upor}">
 				    <zk case="1">   
 				       <include src="./Studentje/menu.zul" />
+				       
 				    </zk>
 				    <zk case="2">
 				       <include src="./Profesorji/menu.zul" />
@@ -15,10 +16,12 @@
                      
                 </north>
                 <center border="none">
-                    <div>
-                        
-                    </div>
+                   <iframe id="iframe" src="http://www.zkoss.org" width="100%" height="100%"/>
                 </center>
             </borderlayout>
+            <zscript><![CDATA[            
+				iframe.setSrc("./Studentje/Index.zul");
+			]]></zscript>
         </window>
+        
 </zk>
