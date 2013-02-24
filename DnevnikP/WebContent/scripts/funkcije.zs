@@ -173,16 +173,8 @@ import dnevnik.*;
                 
                 if(!rs.getString("ID").equals("-1")){
                 		session.setAttribute("ID_uporabnika",rs.getString("ID"));
-                		session.setAttribute("ID_skupine_upor",rs.getString("UPOR_SKUPINA_ID"));
-                		if(rs.getString("UPOR_SKUPINA_ID").equals("1")){
-                			execution.sendRedirect("Studentje/PrvaStranStudentje.zul");
-                		}
-                		else if(rs.getString("UPOR_SKUPINA_ID").equals("2")) {
-                			execution.sendRedirect("Profesorji/PrvaStranProfesorji.zul");
-                		}
-                		else {
-                			//execution.sendRedirect("PodatkiOuri.zul");
-                		}
+                		session.setAttribute("ID_skupine_upor",rs.getString("UPOR_SKUPINA_ID"));                		
+                	    execution.sendRedirect("Index.zul");                		
                 }
                 else{
                 		alert(VsaSporocila.getSporocilo("Nepravilna_prijava"));

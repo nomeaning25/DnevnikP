@@ -1,0 +1,24 @@
+<?page title="Aplikacija" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+        <window id="win" border="none" height="810px" style="margin:auto; padding-top:0px; padding-bottom:20px;">
+            <borderlayout	>
+                <north border="none">
+                <zk switch="${ID_skupine_upor}">
+				    <zk case="1">   
+				       <include src="./Studentje/menu.zul" />
+				    </zk>
+				    <zk case="2">
+				       <include src="./Profesorji/menu.zul" />
+				    </zk>				   
+				</zk>
+                     
+                </north>
+                <center border="none">
+                    <div>
+                        
+                    </div>
+                </center>
+            </borderlayout>
+        </window>
+</zk>
