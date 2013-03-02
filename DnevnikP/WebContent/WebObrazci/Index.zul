@@ -6,8 +6,7 @@
                 <north border="none">
                 <zk switch="${ID_skupine_upor}">
 				    <zk case="1">   
-				       <include src="./Studentje/menu.zul" />
-				       
+				       <include src="./Studentje/menu.zul" />				       
 				    </zk>
 				    <zk case="2">
 				       <include src="./Profesorji/menu.zul" />

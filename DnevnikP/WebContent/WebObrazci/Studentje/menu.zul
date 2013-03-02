@@ -4,18 +4,25 @@
             <menuitem label="Nova priprava" onClick="" image="" />
             <menuitem label="Nova hospitacija" onClick="" image="" />
             <menuseparator />
-            <menuitem label="Odjava" onClick="alert(self.label)" image="/widgets/window/positioning/img/DoorOpen-16x16.png" />
+            <menuitem label="Odjava" onClick="" image="" />
         </menupopup>
     </menu>
-    <menuitem label="Naloge"/>
+    <menu label="Pregled">
+        <menupopup>
+            <menuitem label="Priprave" onClick="iframe.setSrc(&quot;./Priprava/Pregled.zul;&quot;)" image="" />
+            <menuitem label="Hospitacije" onClick="iframe.setSrc(&quot;./Hospitacija/Pregled.zul;&quot;)" image="" />
+            <menuitem label="Naloge" onClick="" image="" />
+            <menuseparator />
+            <menuitem label="Dnevnik"/>
+        </menupopup>
+    </menu>
     <menu label="Moja skupina">
         <menupopup>
             <menuitem label="Priprave" onClick="" image="" />
             <menuitem label="Hospitacije" onClick="" image="" />
             <menuitem label="Naloge" onClick="" image="" />                                
         </menupopup>
-    </menu>
-    <menuitem label="Dnevnik"/>
+    </menu>    
     <menu label="Pomoč">
         <menupopup>
             <menuitem label="Pomoč" onClick="" image="" />
