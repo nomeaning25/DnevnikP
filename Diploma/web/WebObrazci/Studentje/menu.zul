@@ -1,0 +1,33 @@
+<menubar id="menubar" width="100%">
+    <menu label="Datoteka">
+        <menupopup>
+            <menuitem label="Nova priprava" onClick="" image="" />
+            <menuitem label="Nova hospitacija" onClick="" image="" />
+            <menuseparator />
+            <menuitem label="Odjava" onClick="" image="" />
+        </menupopup>
+    </menu>
+    <menu label="Pregled">
+        <menupopup>
+            <menuitem label="Priprave" onClick="iframe.setSrc(&quot;./Priprava/Pregled.zul;&quot;)" image="" />
+            <menuitem label="Hospitacije" onClick="iframe.setSrc(&quot;./Hospitacija/Pregled.zul;&quot;)" image="" />
+            <menuitem label="Naloge" onClick="" image="" />
+            <menuseparator />
+            <menuitem label="Dnevnik"/>
+        </menupopup>
+    </menu>
+    <menu label="Moja skupina">
+        <menupopup>
+            <menuitem label="Priprave" onClick="" image="" />
+            <menuitem label="Hospitacije" onClick="" image="" />
+            <menuitem label="Naloge" onClick="" image="" />                                
+        </menupopup>
+    </menu>    
+    <menu label="Pomoč">
+        <menupopup>
+            <menuitem label="Pomoč" onClick="" image="" />
+            <menuseparator />
+            <menuitem label="O programu" onClick="" image="" />                           
+        </menupopup>
+    </menu>
+</menubar>

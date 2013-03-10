@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+<zscript><![CDATA[ 
+   org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "silvertail");
+   Executions.sendRedirect("WebObrazci/Prijava.zul");
+]]></zscript>
+ </zk>

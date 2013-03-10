@@ -1,0 +1,54 @@
+<zk>
+	<div id="SeznamDatotek" width="800px" style="margin:auto; padding-top:100px;"></div>
+	<zscript><![CDATA[
+	    import dnevnik.*;		
+	    import java.sql.*;
+	    
+    	Connection conn = null;
+    	if(Sessions.getCurrent().getAttribute("ID_uporabnika") != null){
+	    	try {
+		        String userName = "root";
+		        String password = "";
+		        String url = "jdbc:mysql://localhost:3306/dnevnik";
+				Class.forName ("com.mysql.jdbc.Driver").newInstance ();
+		        conn = DriverManager.getConnection (url, userName, password);
+		        System.out.println ("Database connection established");
+		        
+		        PreparedStatement ps = null;
+				String query = sqlStavki.getSqlString("Seznam_Priprav");
+		        ps = conn.prepareStatement(query);
+	        	ps.setObject(1, Sessions.getCurrent().getAttribute("ID_uporabnika").toString());
+	        	ResultSet rs = ps.executeQuery();
+		 	    
+		 	    while (rs.next()) 
+	            {
+		 	    	Div tmp = new Div();
+		 	    	tmp.setClass("datoteka_item");
+					tmp.appendChild(new Html("<span class='datum'>" + rs.getString("Datum") + "</span><br/>" + "<span class='naslov'>" + rs.getString("Naslov_ure") + "</span>"));	    	
+		 	    	SeznamDatotek.appendChild(tmp);	
+	            }
+		    	rs.close ();
+		    	ps.close ();
+	    	}
+	    	catch (Exception e)
+	        {
+	            System.err.println ("ERROR: "+ e.getMessage());
+	        }
+	        finally
+	        {
+	            if (conn != null)
+	            {
+	                try
+	                {
+	                    conn.close ();
+	                    System.out.println ("Database connection terminated");
+	                }
+	                catch (Exception e) { /* ignore close errors */ }
+	            }
+	        } 
+    	}
+	    
+			   
+	
+	]]></zscript>
+ </zk>

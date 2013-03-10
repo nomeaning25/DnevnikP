@@ -1,0 +1,40 @@
+<window id="winTxt" title="Dodaj tekst" border="normal" closable="true" width="460px" xmlns:c="client">
+	<ckeditor id="Besedilo_nal" toolbar="Basic"></ckeditor>
+	<image src="stil/slike/gumb_naprej.png" width="101px" height="25px" style="position:relative; left:0px; top:10px; margin-bottom:15px;" onClick="dodaj_besedilo_nal()"/>
+	<zscript><![CDATA[ 
+		import java.sql.*;
+		import dnevnik.*;
+				
+				
+ 		public void dodaj_besedilo_nal(){
+			Row vrstica = new Row();
+			Html besedilo = new Html(Besedilo_nal.getValue());
+			Cell c = new Cell();
+			Textbox t = (Textbox) Path.getComponent("/Pod_nal/Struktura").getFellow("labela");
+			besedilo.setId(session.getAttribute("tip_kont_nal") + "_" + t.getValue());
+			besedilo.setStyle("position:relative; top: 0px; left:10px;");
+			c.appendChild(besedilo);		
+			c = append_odstrani(c);			
+			vrstica.appendChild(c);
+			Path.getComponent("/Pod_nal/Struktura_elementi").appendChild(vrstica);
+			session.setAttribute("tip_kont_nal",null);
+			winTxt.onClose();
+		}
+ 		
+ 		public Cell append_odstrani(Cell c){
+			Image b = new Image("../../stil/slike/Odstrani.png");
+			b.setHeight("23px");
+	    	b.setWidth("23px");
+	    	b.setStyle("position:relative; top: -15px; left:4px;");
+	    	b.addEventListener("onClick", new Odstrani_txt());
+	    	c.appendChild(b);
+	    	return c;
+		}
+ 		
+ 		final class Odstrani_txt implements org.zkoss.zk.ui.event.EventListener {
+ 			public void onEvent(Event event) throws Exception {
+ 					event.getTarget().getParent().detach();	
+ 			}
+ 		}
+	]]></zscript>
+</window>
