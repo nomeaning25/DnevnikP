@@ -32,7 +32,7 @@ public class sqlStavki {
 		sql_stavki.put("Seznam_Datotek","select * from dnevnik.v_datoteke WHERE UPORABNIK_ID = ?;");
 		sql_stavki.put("Seznam_Hospitacij","select Naslov_Ure, Datum from dnevnik.hospitacije WHERE UPORABNIK_ID = ?;");
 		sql_stavki.put("Seznam_Hospitacij_vse","select h.Naslov_Ure, h.Datum, concat(s.priimek, ' ', s.ime, ', ',s.id) as student from dnevnik.hospitacije h, dnevnik.studentje s Where h.uporabnik_id = s.id;");
-		sql_stavki.put("Seznam_Priprav","select pu.Naslov_Ure, pu.Datum from dnevnik.podatki_ure pu, dnevnik.ucna_priprava p WHERE pu.id = p.podatki_ure_id AND UPORABNIK_ID = ?;");
+		sql_stavki.put("Seznam_Priprav","select pu.id , pu.Naslov_Ure, pu.Datum from dnevnik.podatki_ure pu, dnevnik.ucna_priprava p WHERE pu.id = p.podatki_ure_id AND UPORABNIK_ID = ? ORDER BY pu.Datum DESC;");
 		sql_stavki.put("select_podatki_ure","select ID, IZVAJALEC, MENTOR, DATUM, URA, RAZRED, SOLA, TEMA_ID, SKLOP_ID, ENOTA_ID, PRISTOP, OBLIKE, METODE, PRIPOMOCKI, VIRI from dnevnik.podatki_ure WHERE ID = ?;");
 		sql_stavki.put("select_hospitacija","select ID, IZVAJALEC, MENTOR, DATUM, URA, RAZRED, SOLA, TEMA_ID, SKLOP_ID, ENOTA_ID, NASLOV_URE from dnevnik.hospitacije WHERE ID = ?;");
 		sql_stavki.put("select_hosp_vidik_B","select id_hospitacije, opazovani_vidik, opazovani_vidik_opazanja, ravnanje_z_opazovanim_vidikom, razlaganje_opazanja, zakaj_je_vidkik_pomemben, utemeljitev_premislekov from dnevnik.hospitacija_vidik_b WHERE id_hospitacije = ?;");

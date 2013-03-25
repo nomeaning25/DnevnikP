@@ -1,6 +1,5 @@
 <?page title="Aplikacija" contentType="text/html;charset=UTF-8"?>
 <zk>	
-
         <window id="win" border="none" height="100%" style="margin:auto; padding-top:0px;">
             <borderlayout	>
                 <north border="none">

@@ -1,5 +1,33 @@
 <zk>
-	<div id="SeznamDatotek" width="800px" style="margin:auto; padding-top:100px;"></div>
+        <?link href='http://fonts.googleapis.com/css?family=Italianno&subset=latin,latin-ext' rel='stylesheet' type='text/css'?>
+        <style>
+            .datoteka_item{
+                padding-left: 150px;
+                padding-right: 20px;
+                padding-top:30px;
+                font-size: 25px;
+                width: 180px;
+                height: 155px;
+                float: left;
+                margin-right:5px;
+                margin-bottom:5px;  
+                background-image: url('../../stil/slike/Gumb-datoteka.png');
+                font-family: 'Italianno', cursive;
+                line-height: 22px;
+                color: #686868;
+                cursor: pointer;
+            }
+            
+            .datoteka_item:hover{
+                background-image: url('../../stil/slike/Gumb-datoteka-hover.png');
+            }
+            
+            .datoteka_item .datum{
+                font-size:20px;
+                color: #B5B5B5; 
+            }
+        </style>
+	<div id="SeznamDatotek" width="1066px" style="margin:auto; padding-top:100px;"></div>
 	<zscript><![CDATA[
 	    import dnevnik.*;		
 	    import java.sql.*;
@@ -20,13 +48,20 @@
 	        	ps.setObject(1, Sessions.getCurrent().getAttribute("ID_uporabnika").toString());
 	        	ResultSet rs = ps.executeQuery();
 		 	    
-		 	    while (rs.next()) 
-	            {
-		 	    	Div tmp = new Div();
-		 	    	tmp.setClass("datoteka_item");
-					tmp.appendChild(new Html("<span class='datum'>" + rs.getString("Datum") + "</span><br/>" + "<span class='naslov'>" + rs.getString("Naslov_ure") + "</span>"));	    	
-		 	    	SeznamDatotek.appendChild(tmp);	
-	            }
+		 	while (rs.next()) 
+                        {
+                            Div tmp = new Div();
+                            String id = rs.getString("id");
+                            tmp.setClass("datoteka_item");
+                            tmp.appendChild(new Html("<span class='datum'>" + rs.getString("Datum") + "</span><br/>" + "<span class='naslov'>" + rs.getString("Naslov_ure") + "</span>"));	    	
+                            tmp.addEventListener("onClick", new EventListener() {
+                                public void onEvent(Event e) throws Exception {
+                                    Sessions.getCurrent().setAttribute("ID_datoteke", id);
+                                    execution.sendRedirect("../Priprava/PodatkiOuri.zul");
+                                }
+                            });
+                            SeznamDatotek.appendChild(tmp);	
+                        }
 		    	rs.close ();
 		    	ps.close ();
 	    	}

@@ -1,28 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk>
-<style dynamic="true">
+    <?link href='http://fonts.googleapis.com/css?family=Italianno&subset=latin,latin-ext' rel='stylesheet' type='text/css'?>
+    <style>
+        body{
+            background: #686868; 
+        }
         .no_border tr.z-row td.z-row-inner, tr.z-row .z-cell,div.z-grid, .z-grid-header-bg 
 		 { 
 			 border: white;
 			 background:white;
 		 }
 		.CelicaLabela{
-			text-align: right;
+                    text-align: right;    
+                    
 		}
+            .z-label{
+                font-weight: bold;
+            }
+                
+            .z-textbox, .z-intbox{ 
+                color: #686868;
+                border-color : #FFF; 
+                background: #FFF;
+                font-size: 16px;
+                border-bottom: 1px solid #B5B5B5;
+            }
+            .z-combobox-inp, .z-datebox-inp{ 
+                color: #686868;
+                border-color : #FFF; 
+                background: #FFF;
+                font-size: 16px;
+                border-bottom: 1px solid #B5B5B5;
+            }
+            
+            .z-datebox .z-datebox-btn {
+                background: url('../../stil/slike/calendar.png');   
+                background-size: 18px 18px;   
+                width: 18px;
+                height: 18px;
+                border-color : #FFF;
+            }
+        
+            .z-combobox .z-combobox-btn {
+                background: url('../../stil/slike/Arrow-down.png');   
+                background-size: 22px 22px;   
+                width: 22px;
+                height: 22px;
+                border-color : #FFF;
+            }
+            .z-textbox:hover, .z-datebox-inp:hover, .z-intbox:hover, .z-combobox-inp:hover{
+                border-bottom: 1px solid black;
+            }
+
+
     </style>
-<window title="Osnovni podatki o uri" border="normal"  width="800px" style="margin:auto; padding-top:50px;">
+<window border="none"  width="800px" style="margin:auto; padding-top: 50px; padding-bottom: 50px; backgorund-color: #B5B5B5;">
 <zscript src="../../scripts/DB.zs"/>
 <zscript src="../../scripts/funkcije.zs"/>
 <zscript src="../../scripts/PodatkiOuri.zs"/>
 
 
 
-<grid sclass="no_border" style="padding-top:15px; padding-bottom:15px; width:700px; margin:auto;">
+<grid sclass="no_border" style="padding:50px; width:700px; margin:auto;">
 		<columns>
 			<column width="200px" label=""/>
 			<column label=""/>
 		</columns>
 		<rows id="forma">
+                        <row>
+				<cell style="text-align: center; padding-bottom: 35px;" colspan="2"><label style="font-size: 26px; text-align: right;" value="Učna priprava"/></cell>	
+			</row>
+                        <row>
+				<cell sclass="CelicaLabela"><label value="Naslov ure: "/></cell>
+				<cell><textbox id="Naslov" width="200px"  /></cell>	
+			</row>
 			<row>
 				<cell sclass="CelicaLabela"><label value="Izvajalec (študent): "/></cell>
 				<cell><textbox id="Izvajalec" width="200px"  /></cell>	
@@ -73,7 +124,7 @@
 							<row>
 								<cell><label>-</label> </cell>
 								<cell><textbox id="Cilj1"  width="189px" /></cell>
-								<cell><image src="../../stil/slike/Dodaj.png" width="23px" height="23px" onClick="DodajCilj(&quot;&quot;)"/></cell>
+								<cell><image src="../../stil/slike/Dodaj_2.png" width="23px" height="23px" onClick="DodajCilj(&quot;&quot;)"/></cell>
 							</row>
 						</rows>
 					</grid>
@@ -98,13 +149,31 @@
 			<row>
 				<cell sclass="CelicaLabela"><label value="Viri: "/></cell>
 				<cell><textbox id="Viri" width="400px"/></cell>	
+			</row>
+                         <row>
+				<cell style="text-align: center; padding-top: 35px;" colspan="2">
+                                    <image src="../../stil/slike/zapri_1.png">
+                                        <attribute name="onClick"><![CDATA[
+                                        Messagebox.show("Želite shraniti pripravo?", "Confirm Dialog", Messagebox.YES | Messagebox.NO  | Messagebox.CANCEL, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+                                            public void onEvent(Event evt) throws InterruptedException {
+                                                if (evt.getName().equals("onYes")) {
+                                                    prenesiVbazo();
+                                                } else if (evt.getName().equals("onNo")) {
+                                                    session.setAttribute("ID_datoteke",null); execution.sendRedirect("../Priprava/Pregled.zul");
+                                                } else {
+                                                    
+                                                }
+                                            }
+                                        });
+                                        ]]>
+                                        </attribute>
+                                    </image>
+                                    <image src="../../stil/slike/shrani_in_nadaljuj.png" onClick="prenesiVbazo(); execution.sendRedirect(&quot;PregledUre.zul&quot;);" onCreate="Napolni()"/>
+                                </cell>	
 			</row>			
 		</rows>
 	</grid>
-	<image src="../../stil/slike/gumb_preklici.png" width="101px" height="25px" style="position:relative; left:300px; margin-bottom:15px;" onClick="session.setAttribute(&quot;ID_datoteke&quot;,null); execution.sendRedirect(&quot;../Studentje/PrvaStranStudentje.zul&quot;);"/>
-	<image src="../../stil/slike/gumb_naprej.png" width="101px" height="25px" style="position:relative; left:300px; margin-bottom:15px;" onClick="prenesiVbazo(); execution.sendRedirect(&quot;PregledUre.zul&quot;);" onCreate="Napolni()"/>
-	
-	
+            
 	<zscript><![CDATA[
 
 import java.sql.*;

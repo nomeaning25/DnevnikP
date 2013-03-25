@@ -73,7 +73,7 @@ import dnevnik.*;
         }
 
 		//Funkcija, ki vrne podatke z vnosne forme v obliki polja
-		public String[] dobiPodatke(boolean VsaObvezna){
+        public String[] dobiPodatke(boolean VsaObvezna){
 	    	List str;
 	    	List vrstica;
 	    	Component celica;

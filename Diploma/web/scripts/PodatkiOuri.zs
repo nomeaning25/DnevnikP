@@ -6,15 +6,16 @@ import java.sql.*;
   
  	// spremenljivke:
  	// * Num: koliko je vseh polj
- 	// * Neobvezna_polja: seznam zaporedniš št. vseh polj, ki niso obvezna
+ 	// * Neobvezna_polja: seznam zaporedniï¿½ ï¿½t. vseh polj, ki niso obvezna
   
     Integer[] Neobvezna_polja = {};
-    Integer Num = 15;
+    Integer Num = 16;
     
  	//funkcija, ki prenese podate o uri v bazo
     public void prenesiVbazo(){
     	String[] data = dobiPodatke(true);
-    	if(data.length < Num){
+    	//if(data.length < Num){
+        if(Num < Num){
     		alert(VsaSporocila.getSporocilo("vnesite_vsa_pola"));
     	}
     	else{
@@ -24,7 +25,7 @@ import java.sql.*;
     		PreparedStatement s = null;
             try
             {
-         	   //Povežemo se na bazo
+         	   //Poveï¿½emo se na bazo
             	conn = openDB("root","","jdbc:mysql://localhost:3306/dnevnik");
             	
                 String query = "";
@@ -162,7 +163,7 @@ import java.sql.*;
 		tbx.setId("text" + id);
 		tbx.setValue(vrednost);		
     	Row row = new Row();
-    	Image odstrani = new Image("../../stil/slike/Odstrani.png");
+    	Image odstrani = new Image("../../stil/slike/Odstrani_1.png");
 	    	odstrani.setHeight("23px");
 	    	odstrani.setWidth("23px");
 	    	odstrani.addEventListener("onClick", new Odstrani());
