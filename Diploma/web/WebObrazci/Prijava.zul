@@ -10,7 +10,7 @@
 			text-align: right;
 		}
     </style>
-<window title="Prijava" border="normal"  width="400px" style="margin:auto; padding-top:50px;">
+<window title="Prijava" border="normal"  width="400px" style="margin:auto; padding-top:50px;" onOK="preveriPrijavo()" >
 
 <zscript src="../scripts/DB.zs"/>
 <zscript src="../scripts/funkcije.zs"/>
@@ -21,20 +21,14 @@
 			<column label=""/>
 		</columns>
 		<rows id="forma">
-			<row>
-				<cell sclass="CelicaLabela"><label value="Uporabniško ime: "/></cell>
-				<cell><textbox id="uime" width="150px"  /></cell>	
-			</row>
-			<row>
-				<cell sclass="CelicaLabela"><label value="Geslo: "/></cell>
-				<cell><textbox id="geslo" width="150px" type="password"/></cell>	
-			</row>		
+			<row>Uporabniško ime:<textbox id="uime" width="150px"  /></row>
+			<row>Geslo:<textbox id="geslo" width="150px" type="password"/></row>
+                        <row><cell sclass="loginCtl" colspan="2"><vlayout>
+                            <button label="Prijava" onClick="preveriPrijavo()" width="100px"/>
+                            <label id="mesg" />
+                        </vlayout></cell></row>		
 		</rows>
 	</grid>
-	
-	
-	
-	<button label="Prijava" style="position:relative; left:140px; width:100px; margin-bottom:15px;" onClick="preveriPrijavo()" />
 	
  </window>
 

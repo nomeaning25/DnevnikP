@@ -1,32 +1,32 @@
 <menubar id="menubar" width="100%">
     <menu label="Datoteka">
         <menupopup>
-            <menuitem label="Nova priprava" onClick="" image="" />
-            <menuitem label="Nova hospitacija" onClick="" image="" />
+            <menuitem label="Nova priprava" onClick="" image="../../stil/slike/icons/linedpaperpencil32.png" />
+            <menuitem label="Nova hospitacija" onClick="" image="../../stil/slike/icons/notepencil32.png" />
             <menuseparator />
-            <menuitem label="Odjava" onClick="alert(self.label)" image="/widgets/window/positioning/img/DoorOpen-16x16.png" />
+            <menuitem label="Odjava" onClick="alert(self.label)" image="../../stil/slike/icons/plug32.png" />
         </menupopup>
     </menu>
     <menu label="Naloge">
         <menupopup>
-            <menuitem label="Nova naloga" onClick="" image="" />
-            <menuitem label="Pregled nalog" onClick="" image="" />
+            <menuitem label="Nova naloga" onClick="" image="../../stil/slike/icons/paperpencil32.png" />
+            <menuitem label="Pregled nalog" onClick="" image="../../stil/slike/icons/folder32.png" />
             <menuseparator />
-            <menuitem label="Pregled oddanih nalog" onClick="" image="" />
+            <menuitem label="Pregled oddanih nalog" onClick="" image="../../stil/slike/icons/papercheck32.png" />
         </menupopup>
     </menu>
     <menu label="Skupine">
         <menupopup>
-            <menuitem label="Sestavi skupino" onClick="" image="" />
-            <menuitem label="Pregled skupin" onClick="" image="" />                           
+            <menuitem label="Sestavi skupino" onClick="" image="../../stil/slike/icons/usersplus32.png" />
+            <menuitem label="Pregled skupin" onClick="" image="../../stil/slike/icons/users32.png" />                           
         </menupopup>
     </menu>
-    <menuitem label="Dnevniki" onClick="" image="" />
+    <menuitem label="Dnevniki" onClick="" image="../../stil/slike/icons/pencil32.png" />
     <menu label="Pomoč">
         <menupopup>
-            <menuitem label="Pomoč" onClick="" image="" />
+            <menuitem label="Pomoč" onClick="" image="../../stil/slike/icons/questionbook32.png" />
             <menuseparator />
-            <menuitem label="O programu" onClick="" image="" />                           
+            <menuitem label="O programu" onClick="" image="../../stil/slike/icons/lightbulb32.png" />                           
         </menupopup>
     </menu>
 </menubar>

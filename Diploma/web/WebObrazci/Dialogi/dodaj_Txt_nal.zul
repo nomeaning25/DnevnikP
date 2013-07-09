@@ -1,6 +1,6 @@
 <window id="winTxt" title="Dodaj tekst" border="normal" closable="true" width="460px" xmlns:c="client">
 	<ckeditor id="Besedilo_nal" toolbar="Basic"></ckeditor>
-	<image src="stil/slike/gumb_naprej.png" width="101px" height="25px" style="position:relative; left:0px; top:10px; margin-bottom:15px;" onClick="dodaj_besedilo_nal()"/>
+	<image src="../../stil/slike/gumb_naprej.png" width="101px" height="25px" style="position:relative; left:0px; top:10px; margin-bottom:15px;" onClick="dodaj_besedilo_nal()"/>
 	<zscript><![CDATA[ 
 		import java.sql.*;
 		import dnevnik.*;

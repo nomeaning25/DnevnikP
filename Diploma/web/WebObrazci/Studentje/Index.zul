@@ -11,7 +11,7 @@
 	<window border="none" width="800px" style="margin:auto; padding-top:100px;">
 	  <div class="div-button" onClick="execution.sendRedirect(&quot;../Priprava/Pregled.zul&quot;);" style="float:left;"><image src="../../stil/slike/Gumb-prva-stran-pr.png" tooltip="pr"/></div>
 	  <div class="div-button" onClick="execution.sendRedirect(&quot;../Priprava/Pregled.zul&quot;);" style="float:left;"><image src="../../stil/slike/Gumb-prva-stran-Ho.png" tooltip="ho"/></div>
-	  <div class="div-button" onClick="execution.sendRedirect(&quot;../Priprava/Pregled.zul&quot;);" style="float:left;"><image src="../../stil/slike/Gumb-prva-stran-na.png" tooltip="na"/></div>
+	  <div class="div-button" onClick="execution.sendRedirect(&quot;../Naloge/DodajNalogo.zul&quot;);" style="float:left;"><image src="../../stil/slike/Gumb-prva-stran-na.png" tooltip="na"/></div>
 	  <div class="div-button" onClick="execution.sendRedirect(&quot;../Priprava/Pregled.zul&quot;);" style="float:left;"><image src="../../stil/slike/Gumb-prva-stran-sk.png" tooltip="sk"/></div>
 	  <div class="div-button" onClick="execution.sendRedirect(&quot;../Priprava/Pregled.zul&quot;);" style="float:left;"><image src="../../stil/slike/Gumb-prva-stran-dn.png" tooltip="dn"/></div>
 	  <div class="div-button" onClick="execution.sendRedirect(&quot;../Priprava/Pregled.zul&quot;);" style="float:left;"><image src="../../stil/slike/Gumb-prva-stran-ob.png" tooltip="ob"/></div>	  

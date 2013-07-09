@@ -1,204 +1,315 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk>
-<style dynamic="true">
-        .no_border tr.z-row td.z-row-inner, tr.z-row .z-cell,div.z-grid, .z-grid-header-bg 
+<?link href='http://fonts.googleapis.com/css?family=Italianno&subset=latin,latin-ext' rel='stylesheet' type='text/css'?>
+    <style>
+        body{
+            background: #686868; 
+        }
+        .no_border tr.z-row td.z-row-inner, tr.z-row .z-cell, .z-grid-header-bg 
 		 { 
 			 border: white;
 			 background:white;
-			 
 		 }
+		.CelicaLabela{
+                    text-align: right;    
+                    
+		}
+            .z-label{
+                font-weight: bold;
+            }
+                
+            .z-textbox, .z-intbox{ 
+                color: #686868;
+                border-color : #FFF; 
+                background: #FFF;
+                font-size: 16px;
+                border-bottom: 1px solid #B5B5B5;
+            }
+            .z-combobox-inp, .z-datebox-inp{ 
+                color: #686868;
+                border-color : #FFF; 
+                background: #FFF;
+                font-size: 16px;
+                border-bottom: 1px solid #B5B5B5;
+            }
+            
+            .z-datebox .z-datebox-btn {
+                background: url('../../stil/slike/calendar.png');   
+                background-size: 18px 18px;   
+                width: 18px;
+                height: 18px;
+                border-color : #FFF;
+            }
+        
+            .z-combobox .z-combobox-btn {
+                background: url('../../stil/slike/Arrow-down.png');   
+                background-size: 22px 22px;   
+                width: 22px;
+                height: 22px;
+                border-color : #FFF;
+            }
+            .z-textbox:hover, .z-datebox-inp:hover, .z-intbox:hover, .z-combobox-inp:hover{
+                border-bottom: 1px solid black;
+            }
+        
+            .izbrana-vrstica{
+                background: none repeat scroll 0 0 #CCCCCC !important;
+            }
 
-		
+
     </style>
-<window title="Pregledna zgradba ure" border="normal"  width="800px" style="margin:auto; padding-top:50px;">
-<zscript src="../../scripts/DB.zs"/>
-<zscript src="../../scripts/funkcije.zs"/>
-<grid id="ZgradbaUre"  height="700px">
-	<auxhead>
-			
-            <auxheader label="" colspan="7" rowspan="1">
-              	<button label="Dodaj vrstico" onClick="dodaj()" width="90px"/>
-            </auxheader>
-    </auxhead>
-        <columns>
-            <column align="center" hflex="2">Namen/Cilj</column>
-            <column align="center" hflex="3">Strategija doseganja</column>
-            <column align="center" hflex="3">Način preverjanja</column>
-            <column align="center" hflex="2">Metode/Oblike</column>
-            <column align="center" hflex="1">Čas</column>
-            <column align="center" hflex="2">Pripomočki</column>
-            <column align="center" hflex="2">Odstrani</column>
-        </columns>
-        <rows id="Vrstice" ></rows>
-         <foot>
-            <footer height="145px" span="7">
-            	<label value="Dodatne dejavnosti za učno šibkejše učence:"/>
-            	<textbox id="dodatne_dej_sibki_ucenci" rows="2" width="750px"></textbox>
-            	<label value="Dodatne dejavnosti za učno zmožnejše učence:"/>
-            	<textbox id="dodatne_dej_zmoznejsi_ucenci" rows="2" width="750px" style="margin-bottom:3px;"></textbox>            	
-            	<image src="../../stil/slike/gumb_preklici.png" width="101px" height="25px" style="position:relative; left:0px; top:10px; margin-bottom:15px;" onClick="execution.sendRedirect(&quot;PodatkiOuri.zul&quot;);"/>
-				<image src="../../stil/slike/gumb_naprej.png" width="101px" height="25px" style="position:relative; left:0px; top:10px; margin-bottom:15px;" onClick="PrenesiZgradbo()" onCreate="after_create()"/>
-            </footer>
-           
-        </foot>
+
+    
+<window id="pregled_ure" border="none"  width="900px" style="margin:auto; padding-top: 50px; padding-bottom: 50px; backgorund-color: #B5B5B5;">
+    <grid style="border: white; padding:50px; background:white;">
+        <rows>
+            <row>
+                <cell style="text-align: center; padding-bottom: 35px;"><label style="font-size: 26px; text-align: right;" value="Zgradba ure"/></cell>	
+            </row>
+            <row style="background:#FFFFFF; border: white;">
+                <hlayout>
+                    <grid id="PregledUre"  height="725px" width="150px">        
+                        <columns>           
+                            <column hflex="2">Cilj</column>
+                            <column hflex="1" visible="false">Stretegija</column>
+                            <column hflex="1" visible="false">Nacin doseganja</column>
+                            <column hflex="2" visible="false">Metode</column>
+                            <column hflex="1">Čas</column>
+                            <column hflex="2" visible="false">Pripomocki</column>
+                            <column hflex="2" visible="false">Sprememba</column>
+                            <column hflex="2" visible="false">id</column>
+                        </columns>
+                        <foot>
+                            <footer span="4" id="footer_category_nal" class="footer_right" >
+                                 <button id="arrow-up" label="Premakni" dir="reverse" disabled="true" image="../../stil/slike/Arrow-up.png" onClick="move_up()"/>
+
+                                <button id="arrow-down" label="Premakni" dir="reverse" disabled="true" image="../../stil/slike/Arrow-down.png" onClick="move_down()" />
+                                
+                            </footer>
+                        </foot>
+                    </grid>
+                    <grid id="Podatki" style="border: white; margin-left: 15px;" width="610px">
+                        <rows id="polja">
+                            <row>
+                                <cell sclass="loginCtl" width="100px">
+                                    <vlayout>Namen/Cilj:</vlayout>
+                                </cell>
+                                <cell sclass="loginCtl" width="310px">
+                                    <vlayout>
+                                        <textbox id="cilj" value="" width="360px">
+                                            <attribute name="onChange">
+                                                sprememba.setValue(1 + "");
+                                            </attribute>
+                                        </textbox>
+                                    </vlayout>
+                                </cell>
+                            <cell sclass="loginCtl" width="60px">
+                                <vlayout>Čas (min):</vlayout>
+                            </cell>
+                            <cell sclass="loginCtl" width="70px">
+                                <vlayout>
+                                    <textbox id="cas" value="" width="70px">
+                                            <attribute name="onChange">
+                                                sprememba.setValue(1 + "");
+                                            </attribute>
+                                        </textbox>
+                                </vlayout>
+                            </cell>
+                            </row>                            
+                            <row><cell sclass="loginCtl" colspan="1"><vlayout>Metode/Oblike:</vlayout></cell><cell sclass="loginCtl" colspan="3"><vlayout><textbox id="metode" value="" width="495px">
+                                            <attribute name="onChange">
+                                                sprememba.setValue(1 + "");
+                                            </attribute>
+                                        </textbox></vlayout></cell></row>
+                            <row><cell sclass="loginCtl" colspan="1"><vlayout>Pripomočki:</vlayout></cell><cell sclass="loginCtl" colspan="3"><vlayout><textbox id="pripomocki" value="" width="495px">
+                                            <attribute name="onChange">
+                                                sprememba.setValue(1 + "");
+                                            </attribute>
+                                        </textbox></vlayout></cell></row>
+                            <row>
+                                <cell height="20px" colspan="4"><textbox id="rowid" visible="false"/>
+                                        <textbox id="sprememba" visible="false" />
+                                </cell>
+                            </row>
+                            <row><cell sclass="loginCtl" colspan="4"><vlayout>Strategija doseganja:</vlayout></cell></row>
+                            <row>
+                                <cell sclass="loginCtl" colspan="4">
+                                    <vlayout>
+                                        <ckeditor id="doseganje" width="585px" customConfigurationsPath="/scripts/ck_config.js" toolbar="Basic" ><attribute name="onChange">
+                                            sprememba.setValue(1 + "");
+                                            </attribute></ckeditor>
+                                    </vlayout>
+                                </cell>
+                            </row>
+                            <row><cell sclass="loginCtl" colspan="4"><vlayout>Način preverjanja:</vlayout></cell></row>
+                            <row>
+                                <cell sclass="loginCtl" colspan="4">
+                                    <vlayout>
+                                        <ckeditor id="preverjanje" width="585px" customConfigurationsPath="/scripts/ck_config.js" toolbar="Basic">
+                                            <attribute name="onChange">                                                
+                                                sprememba.setValue(1 + "");                    
+                                            </attribute>
+                                        </ckeditor>
+                                    </vlayout>
+                                </cell>
+                            </row>                                   
+                            <row>
+                                <cell height="20px" colspan="4" align="center">                                    
+                                    <button label="Odstrani izbrano" onClick="delete();"></button><button label="Posodobi izbrano" onClick="update();"></button><button label="Vstavi kot novo" onClick="insert()"></button><button label="Počisti polja" onClick="clear()"></button>                                    
+                                </cell>
+                            </row>
+                        </rows>            
+                    </grid>
+                </hlayout>
+            </row>
+            <row>
+                <cell style="text-align: center; padding-top: 35px;">
+                    <image src="../../stil/slike/nazaj.png">
+                        <attribute name="onClick"><![CDATA[
+                            if(sprememba.getValue().equals("1")){
+                                Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
+                                    public void onEvent(Event evt) throws InterruptedException {
+                                        if (evt.getName().equals("onYes")) {
+                                            execution.sendRedirect("../Priprava/PodatkiOuri.zul");
+                                        } 
+                                    }
+                                });
+                            }
+                            else {
+                                execution.sendRedirect("../Priprava/PodatkiOuri.zul");
+                            }
+                        ]]>
+                        </attribute>
+                    </image>
+                    <image src="../../stil/slike/zapri_1.png">
+                        <attribute name="onClick"><![CDATA[
+                        if(sprememba.getValue().equals("1")){
+                                Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
+                                    public void onEvent(Event evt) throws InterruptedException {
+                                        if (evt.getName().equals("onYes")) {
+                                            session.setAttribute("ID_datoteke",null); execution.sendRedirect("../Priprava/Pregled.zul");
+                                        } 
+                                    }
+                                });
+                            }
+                            else {
+                                session.setAttribute("ID_datoteke",null); execution.sendRedirect("../Priprava/Pregled.zul");
+                            }
+                        ]]>
+                        </attribute>
+                    </image>
+                    <image src="../../stil/slike/nadaljuj.png">
+                        <attribute name="onClick"><![CDATA[
+                        if(sprememba.getValue().equals("1")){
+                                Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
+                                    public void onEvent(Event evt) throws InterruptedException {
+                                        if (evt.getName().equals("onYes")) {
+                                            execution.sendRedirect("../Priprava/PodatkiOuri.zul");
+                                        } 
+                                    }
+                                });
+                            }
+                            else {
+                                execution.sendRedirect("../Priprava/PodrobniPregled.zul");
+                            }
+                        ]]>
+                        </attribute>
+                    </image>
+                </cell>	
+            </row>
+        </rows>
     </grid>
     <zscript><![CDATA[
-    import dnevnik.*;
-    import java.sql.*;
-    import org.zkoss.zk.ui.event.EventListener;
-	
-    Sporocila VsaSporocila = new Sporocila();
-	sqlStavki sqlst = new sqlStavki();
-	Connection conn = null;
-	PreparedStatement s = null;
-	
-    public void after_create(){
-    	if(session.getAttribute("ID_datoteke") != null){
-    		//Napiši funkcijo ki napolni obrazec
-    	}
-    }
-    
-    public void dodaj(){
-
-    Row row = new Row();
-		
-	    Textbox tbxCilji = new Textbox();
-	    tbxCilji.setRows(10);
-	    tbxCilji.setId("Cilji" + Vrstice.getChildren().size());
-		row.appendChild(tbxCilji);
-    
-    	/*org.zkforge.ckez.CKeditor fckCilji = new org.zkforge.ckez.CKeditor();
-    	fckCilji.setToolbar("MyToolbar2");
-    	fckCilji.setId("Cilji" + Vrstice.getChildren().size());
-    	fckCilji.setCustomConfigurationsPath("/scripts/ck_config.js");
-    	fckCilji.setHeight("125px");
-     	row.appendChild(fckCilji);*/
-		
-    	org.zkforge.ckez.CKeditor fckStrategija = new org.zkforge.ckez.CKeditor();
-    	fckStrategija.setToolbar("MyToolbar");
-    	fckStrategija.setId("Strategija" + Vrstice.getChildren().size());
-    	fckStrategija.setCustomConfigurationsPath("../../scripts/ck_config.js");
-        fckStrategija.setHeight("125px");
-    	row.appendChild(fckStrategija);
-    	
-    	org.zkforge.ckez.CKeditor fckDoseganje = new org.zkforge.ckez.CKeditor();
-    	fckDoseganje.setToolbar("MyToolbar");
-    	fckDoseganje.setId("Strategija" + Vrstice.getChildren().size());
-    	fckDoseganje.setCustomConfigurationsPath("../../scripts/ck_config.js");
-    	fckDoseganje.setHeight("125px");
-    	row.appendChild(fckDoseganje);
-    	
-    	Textbox tbxOblike = new Textbox();
-    	tbxOblike.setRows(10);
-    	tbxOblike.setId("Oblike" + Vrstice.getChildren().size());
-    	row.appendChild(tbxOblike);
-    	
-    	Intbox tbxCas = new Intbox();
-    	tbxCas.setId("Cas" + Vrstice.getChildren().size());
-    	row.appendChild(tbxCas);
-
-    	Textbox tbxPripomocki = new Textbox();
-    	tbxPripomocki.setRows(10);
-    	tbxPripomocki.setId("Pripomocki" + Vrstice.getChildren().size());
-    	row.appendChild(tbxPripomocki);
-
-    	
-	    final Button rm = new Button("Odstrani");        
-	    rm.addEventListener(Events.ON_CLICK, new EventListener() {
-            public void onEvent(Event event) throws Exception {
-            	event.getTarget().getParent().detach();
-            }
-        });
-	    
-        row.appendChild(rm);	    
-	 
-        Vrstice.appendChild(row);
-    }
-    
-    
-    
-    public void PrenesiZgradbo(){
-    	
-    	try
-        {
-    		conn = openDB("root","","jdbc:mysql://localhost:3306/dnevnik");	        
-	        
-	        //Kreiramo SQL za prenos podatkov v šifrant Sklopov
-	        //Statement s = conn.createStatement ();
-	
-	        //String query = "";
-	    	
-	        //query = sqlst.getSqlString("delete_zgradba_ure") + session.getAttribute("ID_datoteke") + ";";
-	        //s.execute (query);
-	        Object[] obj_delete_zgradba_ure = {session.getAttribute("ID_datoteke")};
-   			s = PStatment(conn, "delete_zgradba_ure", obj_delete_zgradba_ure);
-       	    s.execute();  
-	        
-	        //query = sqlst.getSqlString("delete_dodatne_dej") + session.getAttribute("ID_datoteke") + ";";
-	        //s.execute (query);
-	        Object[] obj_delete_dodatne_dej = {session.getAttribute("ID_datoteke")};
-   			s = PStatment(conn, "delete_dodatne_dej", obj_delete_dodatne_dej);
-       	    s.execute();  
-	        
-	    	for(int i = 0; i < Vrstice.getChildren().size(); i++){
-	    		
-	    		 /*query = sqlst.getSqlString("insert_zgradba_ure");
-	    		 query = query + session.getAttribute("ID_datoteke") + ",'" 
-	    		 	+ ((org.zkforge.fckez.FCKeditor) Vrstice.getFellow("Cilji" + i)).getValue() + "','"
-	    		    + ((org.zkforge.fckez.FCKeditor) Vrstice.getFellow("Strategija" + i)).getValue() + "','" 
-	    		 	+ ((org.zkforge.fckez.FCKeditor) Vrstice.getFellow("Doseganje" + i)).getValue() +  "','" 
-	    		 	+ ((Textbox) Vrstice.getFellow("Oblike" + i)).getValue() +  "','"
-	    		 	+ ((Textbox) Vrstice.getFellow("Cas" + i)).getValue() + "','" 
-	    		 	+ ((Textbox) Vrstice.getFellow("Pripomocki" + i)).getValue() + "');";
-	    		 s.execute (query);*/
-	    		Object[] obj_insert_zgradba_ure = {
-	    				 								session.getAttribute("ID_datoteke"),
-	    				 								//((org.zkforge.ckez.CKeditor) Vrstice.getFellow("Cilji" + i)).getValue(),
-	    				 								((Textbox) Vrstice.getFellow("Cilji" + i)).getValue(),
-	    				 								((org.zkforge.ckez.CKeditor) Vrstice.getFellow("Strategija" + i)).getValue(),
-	    				 								((org.zkforge.ckez.CKeditor) Vrstice.getFellow("Doseganje" + i)).getValue(),
-	    				 								((Textbox) Vrstice.getFellow("Oblike" + i)).getValue(),
-	    				 								((Textbox) Vrstice.getFellow("Cas" + i)).getValue(),
-	    				 								((Textbox) Vrstice.getFellow("Pripomocki" + i)).getValue()	    				 								
-	    				 						  };
-	   			s = PStatment(conn, "insert_zgradba_ure", obj_insert_zgradba_ure);
-	       	    s.execute();
-	    	}
-	    	
-	    	//query = sqlst.getSqlString("insert_dodatne_dej");
-	    	//query = query + session.getAttribute("ID_datoteke") + ",'SIBKI_UCENCI','" +  dodatne_dej_sibki_ucenci.getValue() + "');" ;
-	    	//s.execute (query);
-	    	Object[] obj_insert_dodatne_dej1 = {session.getAttribute("ID_datoteke"), "SIBKI_UCENCI", dodatne_dej_sibki_ucenci.getValue()};
-   			s = PStatment(conn, "insert_dodatne_dej", obj_insert_dodatne_dej1);
-       	    s.execute(); 	    	
-	    	
-	    	//query = sqlst.getSqlString("insert_dodatne_dej");
-	    	//query = query + session.getAttribute("ID_datoteke") + ",'ZMOZNEJSI_UCENCI','" +  dodatne_dej_zmoznejsi_ucenci.getValue() + "');" ;
-	    	//s.execute (query);
-       	 	Object[] obj_insert_dodatne_dej2 = {session.getAttribute("ID_datoteke"), "ZMOZNEJSI_UCENCI", dodatne_dej_zmoznejsi_ucenci.getValue()};
-			s = PStatment(conn, "insert_dodatne_dej", obj_insert_dodatne_dej2);
-    	    s.execute();
-	  	
+        import dnevnik.*;
+        
+        import org.zkoss.zk.ui.event.EventListener;
+        
+        PregledUre.setRowRenderer(new PregledUreRenderer());
+        PregledUrePodatki.napolni();
+        PregledUre.setModel(new ListModelList(PregledUrePodatki.vrniVrstice()));        
+                 
+        public void update(){            
+            PregledUrePodatki.update_row();
+            PregledUrePodatki.napolni();
+            PregledUre.setModel(new ListModelList(PregledUrePodatki.vrniVrstice()));
+            sprememba.setValue("0");
+            Events.postEvent(new Event(Events.ON_CLICK, PregledUre.getRows().getChildren().get(Sessions.getCurrent().getAttribute("zgradba_ure_row"))));           
         }
-        catch (Exception e)
-        {
-            System.err.println ("ERROR: "+ e.getMessage());
+        
+        public void delete(){
+            PregledUrePodatki.delete_row();
+            PregledUrePodatki.napolni();
+            PregledUre.setModel(new ListModelList(PregledUrePodatki.vrniVrstice()));
+            clear();
         }
-        finally
-        {
-            if (conn != null)
-            {
-                try
-                {
-                    closeDB(conn);
-                }
-                catch (Exception e) { /* ignore close errors */ }
+        
+        public void insert(){
+            PregledUrePodatki.insert_row();
+            PregledUrePodatki.napolni();
+            PregledUre.setModel(new ListModelList(PregledUrePodatki.vrniVrstice()));        
+            sprememba.setValue("0");
+            Events.postEvent(new Event(Events.ON_CLICK, PregledUre.getRows().getChildren().get(PregledUre.getRows().getChildren().size() - 1)));           
+        }
+        
+        public void clear(){
+            cilj.setValue("");
+            cas.setValue("");
+            metode.setValue("");
+            pripomocki.setValue("");
+            doseganje.setValue("");
+            preverjanje.setValue("");
+            rowid.setValue("");
+            sprememba.setValue("");
+            arrow-up.setDisabled(true);
+            arrow-down.setDisabled(true);
+        }
+        
+        public void move_up(){
+             if(sprememba.getValue().equals("1")){
+                Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
+                    public void onEvent(Event evt) throws InterruptedException {
+                        if (evt.getName().equals("onYes")) {
+                            PregledUrePodatki.move_row_up();
+                            PregledUrePodatki.napolni();
+                            PregledUre.setModel(new ListModelList(PregledUrePodatki.vrniVrstice()));
+                            sprememba.setValue("0");
+                            Events.postEvent(new Event(Events.ON_CLICK, PregledUre.getRows().getChildren().get(Sessions.getCurrent().getAttribute("zgradba_ure_row") - 1)));           
+                        } 
+                    }
+                });
             }
-        }	
-    }
-    
-]]></zscript>
-
+            else {
+                PregledUrePodatki.move_row_up();
+                PregledUrePodatki.napolni();
+                PregledUre.setModel(new ListModelList(PregledUrePodatki.vrniVrstice()));
+                Events.postEvent(new Event(Events.ON_CLICK, PregledUre.getRows().getChildren().get(Sessions.getCurrent().getAttribute("zgradba_ure_row") - 1)));          
+        
+            }            
+        }
+        
+        public void move_down(){
+             if(sprememba.getValue().equals("1")){
+                Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
+                    public void onEvent(Event evt) throws InterruptedException {
+                        if (evt.getName().equals("onYes")) {
+                            PregledUrePodatki.move_row_down();
+                            PregledUrePodatki.napolni();
+                            PregledUre.setModel(new ListModelList(PregledUrePodatki.vrniVrstice()));
+                            sprememba.setValue("0");
+                            Events.postEvent(new Event(Events.ON_CLICK, PregledUre.getRows().getChildren().get(Sessions.getCurrent().getAttribute("zgradba_ure_row") + 1)));          
+                        } 
+                    }
+                });
+            }
+            else {
+                PregledUrePodatki.move_row_down();
+                PregledUrePodatki.napolni();
+                PregledUre.setModel(new ListModelList(PregledUrePodatki.vrniVrstice()));
+                Events.postEvent(new Event(Events.ON_CLICK, PregledUre.getRows().getChildren().get(Sessions.getCurrent().getAttribute("zgradba_ure_row") + 1)));          
+            }            
+        }
+              
+    ]]></zscript>
 </window>
 
  </zk>

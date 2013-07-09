@@ -43,7 +43,7 @@
 		        System.out.println ("Database connection established");
 		        
 		        PreparedStatement ps = null;
-				String query = sqlStavki.getSqlString("Seznam_Priprav");
+			String query = sqlStavki.getSqlString("Seznam_Priprav");
 		        ps = conn.prepareStatement(query);
 	        	ps.setObject(1, Sessions.getCurrent().getAttribute("ID_uporabnika").toString());
 	        	ResultSet rs = ps.executeQuery();
@@ -52,6 +52,7 @@
                         {
                             Div tmp = new Div();
                             String id = rs.getString("id");
+                            
                             tmp.setClass("datoteka_item");
                             tmp.appendChild(new Html("<span class='datum'>" + rs.getString("Datum") + "</span><br/>" + "<span class='naslov'>" + rs.getString("Naslov_ure") + "</span>"));	    	
                             tmp.addEventListener("onClick", new EventListener() {

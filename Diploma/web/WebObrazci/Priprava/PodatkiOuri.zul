@@ -154,10 +154,11 @@
 				<cell style="text-align: center; padding-top: 35px;" colspan="2">
                                     <image src="../../stil/slike/zapri_1.png">
                                         <attribute name="onClick"><![CDATA[
-                                        Messagebox.show("Želite shraniti pripravo?", "Confirm Dialog", Messagebox.YES | Messagebox.NO  | Messagebox.CANCEL, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+                                        Messagebox.show("Želite shraniti pripravo?", "Pozor!", Messagebox.YES | Messagebox.NO  | Messagebox.CANCEL, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
                                             public void onEvent(Event evt) throws InterruptedException {
                                                 if (evt.getName().equals("onYes")) {
                                                     prenesiVbazo();
+                                                    session.setAttribute("ID_datoteke",null); execution.sendRedirect("../Priprava/Pregled.zul");
                                                 } else if (evt.getName().equals("onNo")) {
                                                     session.setAttribute("ID_datoteke",null); execution.sendRedirect("../Priprava/Pregled.zul");
                                                 } else {
@@ -168,7 +169,7 @@
                                         ]]>
                                         </attribute>
                                     </image>
-                                    <image src="../../stil/slike/shrani_in_nadaljuj.png" onClick="prenesiVbazo(); execution.sendRedirect(&quot;PregledUre.zul&quot;);" onCreate="Napolni()"/>
+                                    <image src="../../stil/slike/nadaljuj.png" onClick="prenesiVbazo(); execution.sendRedirect(&quot;PregledUre.zul&quot;);" onCreate="Napolni()"/>
                                 </cell>	
 			</row>			
 		</rows>
@@ -195,17 +196,12 @@ public void Napolni(){
 		    ResultSet rs = s.executeQuery ();					    
 			rs.next();
 			
-			//query = sqlStavki.getSqlString("select_podatki_ure");n
-			
-			//query = query + " ID = " + rs.getString("PODATKI_URE_ID");;
-			
-			//s.executeQuery (query);
 			Object[] obj_select_podatki_ure = {rs.getString("PODATKI_URE_ID")};
 	        s = PStatment(conn, "select_podatki_ure", obj_select_podatki_ure);
 		    rs = s.executeQuery ();					    
 			rs.next();
 			    
-			
+                                Naslov.setValue(rs.getString("NASLOV_URE"));
 				Izvajalec.setValue(rs.getString("IZVAJALEC"));
 				Mentor.setValue(rs.getString("MENTOR"));
 				Datum.setValue(rs.getDate("DATUM"));

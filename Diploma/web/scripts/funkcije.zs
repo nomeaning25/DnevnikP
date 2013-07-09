@@ -74,6 +74,7 @@ import dnevnik.*;
 
 		//Funkcija, ki vrne podatke z vnosne forme v obliki polja
         public String[] dobiPodatke(boolean VsaObvezna){
+                
 	    	List str;
 	    	List vrstica;
 	    	Component celica;
@@ -94,12 +95,13 @@ import dnevnik.*;
 	    	String[] podatki = {};    	
 	    	
 	    	str = forma.getChildren();
-	        for(int i=0;i<str.size();i++) {
+	        for(int i=1;i<str.size()-1;i++) {
 	        	tmpValue = "null";
 		     	vrstica = ((Row) str.get(i)).getChildren();
+                                
 			  	celica = (Component) vrstica.get(1);
 			  	celica = (Component) celica.getChildren().get(0);
-			  	
+
 			  	if(celica.getClass().toString().endsWith("Textbox")){
 			  		tbx = (Textbox) celica;
 			  		if(tbx.getValue() != "") tmpValue = tbx.getValue();
@@ -144,6 +146,7 @@ import dnevnik.*;
 			  	}
 			  	
 		  	}
+
 			if(VsaObvezna){
 				vsebina = vsebina.replaceAll("null,","");
 				vsebina = vsebina.replaceAll("null;","");

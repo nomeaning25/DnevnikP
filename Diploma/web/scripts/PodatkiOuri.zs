@@ -9,7 +9,7 @@ import java.sql.*;
  	// * Neobvezna_polja: seznam zaporedni� �t. vseh polj, ki niso obvezna
   
     Integer[] Neobvezna_polja = {};
-    Integer Num = 16;
+    Integer Num = 17;
     
  	//funkcija, ki prenese podate o uri v bazo
     public void prenesiVbazo(){
@@ -44,22 +44,23 @@ import java.sql.*;
                  	idure = rs.getString("PODATKI_URE_ID");
                  	
                  	Object[] obj_update_podatki_ure =   {
-							                 				Izvajalec.getValue(),
-							                 				Mentor.getValue(),
-							                 				Datum.getValue(),
-							                 				Ura.getValue(),
-							                 				Razred.getValue(),
-							                 				Sola.getValue(),
-							                 				data[6].trim(),
-							                 				data[7].trim(),
-							                 				data[8].trim(),
-							                 				Pristop.getValue(),
-							                 				Oblike.getValue(),
-							                 				Metode.getValue(),
-							                 				Pripomocki.getValue(),
-							                 				Viri.getValue(),
-							                 				idure
-							                 			};
+                                    Naslov.getValue(),                        
+                                    Izvajalec.getValue(),
+                                    Mentor.getValue(),
+                                    Datum.getValue(),
+                                    Ura.getValue(),
+                                    Razred.getValue(),
+                                    Sola.getValue(),
+                                    data[6].trim(),
+                                    data[7].trim(),
+                                    data[8].trim(),
+                                    Pristop.getValue(),
+                                    Oblike.getValue(),
+                                    Metode.getValue(),
+                                    Pripomocki.getValue(),
+                                    Viri.getValue(),
+                                    idure
+                            };
 	                s = PStatment(conn, "update_podatki_ure", obj_update_podatki_ure);
                  	s.execute ();
                  	

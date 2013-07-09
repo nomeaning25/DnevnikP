@@ -2,10 +2,10 @@ CKEDITOR.editorConfig = function(config) {
     config.extraPlugins = 'uicolor';
     config.resize_enabled = false;
     config.toolbar = 'MyToolbar';
-    config.toolbar_MyToolbar = [ [ 'Bold','TextColor' ] ];
+    config.toolbar_MyToolbar = [ [ 'Bold','TextColor' ], ['Itemize'] ];
     config.toolbar = 'MyToolbar2';
     config.toolbar_MyToolbar2 = [ [ ] ];
-    config.toolbarStartupExpanded = false;
+    config.toolbarStartupExpanded = true;
     config.removePlugins = 'elementspath';
 };
 
@@ -14,8 +14,9 @@ CKEDITOR.stylesSet.add('my_custom_style', [
   { name: 'My Custom Block', element: 'h3', styles: { color: 'blue'} },
   { name: 'My Custom Inline', element: 'span', attributes: {'class': 'mine'} }
 ]);
-// This code is for when you start up a CKEditor instance
-CKEDITOR.replace( 'editor1',{
+ //This code is for when you start up a CKEditor instance
+/*CKEDITOR.replace( 'editor1',{
   uiColor: '#9AB8F3',
   stylesSet: 'my_custom_style'
-});
+});*/ 
+CKEDITOR.focusManager.prototype['blur'] = CKEDITOR.focusManager.prototype['forceBlur'];
