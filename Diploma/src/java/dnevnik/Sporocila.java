@@ -8,7 +8,7 @@ public class Sporocila {
 	public Sporocila(){
 		Sporocila.put("vnesite_vsa_pola", "Prosim vnesite vse podatke.");
 		Sporocila.put("niste_vnesli_vseh_obveznih_polj", "Niste vnesli vseh obveznih podatkov. To so: \n");
-		Sporocila.put("Nepravilna_prijava", "Napaèno uporabniško ime ali geslo");
+		Sporocila.put("Nepravilna_prijava", "Napaï¿½no uporabniï¿½ko ime ali geslo");
 	}
 		
 	public static String getSporocilo(String Ime) {

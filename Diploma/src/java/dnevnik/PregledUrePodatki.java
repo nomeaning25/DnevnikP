@@ -18,10 +18,11 @@ public class PregledUrePodatki {
 
     private static List<PregledUre> vrstice = new ArrayList<PregledUre>();      //Pripravimo spremenjivko v katero bomo vnesli podatke
 
-    public  PregledUrePodatki(){
+    private  PregledUrePodatki(){
         napolni();
     }
     
+    //Funkcija, ki glede na poizvedbo v bazi kreira seznam vrstic zgradbe ure.
     public static void napolni(){
     	if(Sessions.getCurrent().getAttribute("ID_datoteke") != null){
             database db = new database();
@@ -37,7 +38,9 @@ public class PregledUrePodatki {
                 //Vrtimo zanko po vseh vrsticah, ki jih statement vrne
                 while (rs.next()) 
                 {
-                    vrstice.add(new PregledUre(rs.getInt("id"), rs.getString("cilj"), rs.getString("strategija"), rs.getString("nacin"),rs.getString("metode"), rs.getString("cas"), rs.getString("pripomocki"), rs.getInt("zap")));
+                    PregledUre p = new PregledUre(rs.getInt("id"), rs.getString("cilj"), rs.getString("strategija"), rs.getString("nacin"), rs.getString("metode"), rs.getString("cas"), rs.getString("pripomocki"), rs.getInt("zap"));
+                            
+                    vrstice.add(p);
                 }
                 rs.close ();
                 db.close ();
@@ -53,22 +56,20 @@ public class PregledUrePodatki {
     	}
     }
     
+    //Funkcija za vstavljanje nove vrstice v bazo
     public static void insert_row(){
         database db = new database();
             
             PreparedStatement s;
             try
             {   
-                int zap = 1;
                 //Pripravimo statement za poizvedbo po podatkih
                 Object[] param_max = {Sessions.getCurrent().getAttribute("ID_datoteke")};   
-                s = db.Statement(Boolean.TRUE, "select max(ZAP) as zap FROM pregled_ure WHERE UCNA_PRIPRAVA_ID = ?;", param_max);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
+                s = db.Statement(Boolean.TRUE, "select ifnull(max(ZAP),0) as zap FROM pregled_ure WHERE UCNA_PRIPRAVA_ID = ?;", param_max);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
                 ResultSet rs = s.executeQuery ();	                                
-                if(rs.next()){
-                    zap = rs.getInt("zap") + 1;
-                }
+                rs.next();
                 //Pripravimo statement za posodobitev podatkiov
-                Object[] param = { Sessions.getCurrent().getAttribute("ID_datoteke"), ((Textbox) Path.getComponent("/pregled_ure/Podatki").getFellow("cilj")).getValue(), ((org.zkforge.ckez.CKeditor) Path.getComponent("/pregled_ure/Podatki").getFellow("doseganje")).getValue(),((org.zkforge.ckez.CKeditor) Path.getComponent("/pregled_ure/Podatki").getFellow("preverjanje")).getValue(),((Textbox) Path.getComponent("/pregled_ure/Podatki").getFellow("metode")).getValue(),((Textbox) Path.getComponent("/pregled_ure/Podatki").getFellow("cas")).getValue(),((Textbox) Path.getComponent("/pregled_ure/Podatki").getFellow("pripomocki")).getValue(), zap};   
+                Object[] param = { Sessions.getCurrent().getAttribute("ID_datoteke"), ((Textbox) Path.getComponent("/pregled_ure/Podatki").getFellow("cilj")).getValue(), ((org.zkforge.ckez.CKeditor) Path.getComponent("/pregled_ure/Podatki").getFellow("doseganje")).getValue(),((org.zkforge.ckez.CKeditor) Path.getComponent("/pregled_ure/Podatki").getFellow("preverjanje")).getValue(),((Textbox) Path.getComponent("/pregled_ure/Podatki").getFellow("metode")).getValue(),((Textbox) Path.getComponent("/pregled_ure/Podatki").getFellow("cas")).getValue(),((Textbox) Path.getComponent("/pregled_ure/Podatki").getFellow("pripomocki")).getValue(), rs.getInt("zap") + 1};   
                 s = db.Statement(Boolean.FALSE, "insert_zgradba_ure", param);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
                 s.execute();
                 db.close ();
@@ -83,6 +84,7 @@ public class PregledUrePodatki {
             }
     }
     
+    //Funkcija, ki posodobi trenutno izbrano vrstico
     public static void update_row(){
         database db = new database();
             
@@ -105,6 +107,7 @@ public class PregledUrePodatki {
             }
     }
     
+    //Funkcija, ki iz baze izbriše trenutno izbrano vrstico
     public static void delete_row(){
         database db = new database();
             
@@ -150,20 +153,21 @@ public class PregledUrePodatki {
             }
     }
     
+    //Funkcija, ki trenutno izbrano vrstico premakne za 1 navzgor glede na trenutni "zap"
     public static void move_row_up(){
         database db = new database();
             
             PreparedStatement s;
             try
             {                   
-                //Pripravimo statement za poizvedbo po podatkih
+                //Pripravimo statement za poizvedbo po podatkih. Poiščemo trenutni "zap"
                 Object[] param_z = {((Textbox) Path.getComponent("/pregled_ure/Podatki").getFellow("rowid")).getValue()};   
                 s = db.Statement(Boolean.TRUE, "select zap FROM pregled_ure WHERE ID = ?;", param_z);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
                 ResultSet rs = s.executeQuery ();	                                
                 rs.next();
                 int zap = rs.getInt("zap") - 1;
                 
-                //Pripravimo statement za posodobitev podatkiov
+                //Pripravimo statement za posodobitev podatkiov. Potrebno je popraviti "zap" trenutni vrstici, ter vrstici, ki je nad njo.
                 Object[] param = {zap + 1 , zap, Sessions.getCurrent().getAttribute("ID_datoteke")};   
                 s = db.Statement(Boolean.TRUE, "UPDATE dnevnik.pregled_ure SET zap = ? where zap = ? and UCNA_PRIPRAVA_ID = ?;", param);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
                 s.execute();
@@ -183,20 +187,21 @@ public class PregledUrePodatki {
             }
     }
     
+    //Funkcija, ki trenutno izbrano vrstico premakne za 1 navzdol glede na trenutni "zap"
     public static void move_row_down(){
         database db = new database();
             
             PreparedStatement s;
             try
             {   
-                 //Pripravimo statement za poizvedbo po podatkih
+                 //Pripravimo statement za poizvedbo po podatkih. Poiščemo trenutni "zap"
                 Object[] param_z = {((Textbox) Path.getComponent("/pregled_ure/Podatki").getFellow("rowid")).getValue()};   
                 s = db.Statement(Boolean.TRUE, "select zap FROM pregled_ure WHERE ID = ?;", param_z);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
                 ResultSet rs = s.executeQuery ();	                                
                 rs.next();
                 int zap = rs.getInt("zap") + 1;
                 
-                //Pripravimo statement za posodobitev podatkiov
+                //Pripravimo statement za posodobitev podatkiov. Potrebno je popraviti "zap" trenutni vrstici, ter vrstici, ki je pod njo.
                 Object[] param = {zap - 1 , zap, Sessions.getCurrent().getAttribute("ID_datoteke")};   
                 s = db.Statement(Boolean.TRUE, "UPDATE dnevnik.pregled_ure SET zap = ? where zap = ? and UCNA_PRIPRAVA_ID = ?;", param);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
                 s.execute();

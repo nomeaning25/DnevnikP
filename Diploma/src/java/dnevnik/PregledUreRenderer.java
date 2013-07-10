@@ -1,12 +1,10 @@
 package dnevnik;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Label;
@@ -43,8 +41,8 @@ public class PregledUreRenderer implements RowRenderer {
                         public void onEvent(Event evt) throws InterruptedException {   
                             
                             if (evt.getName().equals("onYes")) {
-                                ((Button) Path.getComponent("/pregled_ure/Podatki").getFellow("arrow-up")).setDisabled(true);
-                                ((Button) Path.getComponent("/pregled_ure/Podatki").getFellow("arrow-down")).setDisabled(true);
+                                ((Button) Path.getComponent("/pregled_ure/Podatki").getFellow("arrow_up")).setDisabled(true);
+                                ((Button) Path.getComponent("/pregled_ure/Podatki").getFellow("arrow_down")).setDisabled(true);
                                 Row vrstica = (Row) event.getTarget();
                                 Rows vrstice = (Rows) vrstica.getParent();
                                 Sessions.getCurrent().setAttribute("zgradba_ure_row", vrstice.getChildren().indexOf(vrstica));                               
@@ -58,18 +56,18 @@ public class PregledUreRenderer implements RowRenderer {
                                 ((Textbox) Path.getComponent("/pregled_ure/Podatki").getFellow("sprememba")).setValue(((Label) event.getTarget().getChildren().get(6)).getValue().toString());
                                 Clients.evalJavaScript("$('.izbrana-vrstica').toggleClass('izbrana-vrstica'); $('#" + event.getTarget().getUuid() + "').toggleClass('izbrana-vrstica'); $('.izbrana-vrstica>td').toggleClass('izbrana-vrstica');");
                                 if(vrstice.getChildren().indexOf(vrstica) != 0){
-                                    ((Button) Path.getComponent("/pregled_ure/Podatki").getFellow("arrow-up")).setDisabled(false);
+                                    ((Button) Path.getComponent("/pregled_ure/Podatki").getFellow("arrow_up")).setDisabled(false);
                                 }
                                 if(vrstice.getChildren().indexOf(vrstica) != vrstice.getChildren().size() - 1){
-                                    ((Button) Path.getComponent("/pregled_ure/Podatki").getFellow("arrow-down")).setDisabled(false);
+                                    ((Button) Path.getComponent("/pregled_ure/Podatki").getFellow("arrow_down")).setDisabled(false);
                                 }
                             }
                         }
                     }); 
                 }
                 else {
-                    ((Button) Path.getComponent("/pregled_ure/Podatki").getFellow("arrow-up")).setDisabled(true);
-                    ((Button) Path.getComponent("/pregled_ure/Podatki").getFellow("arrow-down")).setDisabled(true);
+                    ((Button) Path.getComponent("/pregled_ure/Podatki").getFellow("arrow_up")).setDisabled(true);
+                    ((Button) Path.getComponent("/pregled_ure/Podatki").getFellow("arrow_down")).setDisabled(true);
                     Row vrstica = (Row) event.getTarget();
                     Rows vrstice = (Rows) vrstica.getParent();
                     Sessions.getCurrent().setAttribute("zgradba_ure_row", vrstice.getChildren().indexOf(vrstica)); 
@@ -84,10 +82,10 @@ public class PregledUreRenderer implements RowRenderer {
                     ((Textbox) Path.getComponent("/pregled_ure/Podatki").getFellow("sprememba")).setValue(((Label) event.getTarget().getChildren().get(6)).getValue().toString());
                     Clients.evalJavaScript("$('.izbrana-vrstica').toggleClass('izbrana-vrstica'); $('#" + event.getTarget().getUuid() + "').toggleClass('izbrana-vrstica'); $('.izbrana-vrstica>td').toggleClass('izbrana-vrstica');");
                     if(vrstice.getChildren().indexOf(vrstica) != 0){
-                        ((Button) Path.getComponent("/pregled_ure/Podatki").getFellow("arrow-up")).setDisabled(false);
+                        ((Button) Path.getComponent("/pregled_ure/Podatki").getFellow("arrow_up")).setDisabled(false);
                     }
                     if(vrstice.getChildren().indexOf(vrstica) != vrstice.getChildren().size() - 1){
-                        ((Button) Path.getComponent("/pregled_ure/Podatki").getFellow("arrow-down")).setDisabled(false);
+                        ((Button) Path.getComponent("/pregled_ure/Podatki").getFellow("arrow_down")).setDisabled(false);
                     }
                 }
             }

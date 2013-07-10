@@ -24,6 +24,9 @@ public class sqlStavki {
 		sql_stavki.put("insert_zgradba_ure", "INSERT INTO dnevnik.pregled_ure (UCNA_PRIPRAVA_ID,CILJ,STRATEGIJA,NACIN,METODE,CAS,PRIPOMOCKI,ZAP) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
                 sql_stavki.put("update_zgradba_ure", "UPDATE dnevnik.pregled_ure SET UCNA_PRIPRAVA_ID = ?, CILJ = ?, STRATEGIJA = ?,NACIN = ?, METODE = ?,CAS = ?,PRIPOMOCKI = ? WHERE ID = ?;"); 
 		sql_stavki.put("delete_zgradba_ure", "DELETE FROM dnevnik.pregled_ure WHERE id = ?;");
+                sql_stavki.put("insert_podrobni_pregled", "INSERT INTO dnevnik.podrobni_pregled (UCNA_PRIPRAVA_ID,NAMEN,DEJAVNOST_UCIT,DEJAVNOST_UCEN,TABELSKA_SLIKA,ZAP) VALUES (?, ?, ?, ?, ?, ?);");
+                sql_stavki.put("update_podrobni_pregled", "UPDATE dnevnik.podrobni_pregled SET UCNA_PRIPRAVA_ID = ?, NAMEN = ?, DEJAVNOST_UCIT = ?,DEJAVNOST_UCEN = ?, TABELSKA_SLIKA = ? WHERE ID = ?;"); 
+		sql_stavki.put("delete_podrobni_pregled", "DELETE FROM dnevnik.podrobni_pregled WHERE id = ?;");
 		sql_stavki.put("delete_dodatne_dej", "DELETE FROM dnevnik.dodatne_dejavnosti WHERE UCNA_PRIPRAVA_ID = ?;");
 		sql_stavki.put("insert_dodatne_dej", "INSERT INTO dnevnik.dodatne_dejavnosti (UCNA_PRIPRAVA_ID,ZA,DEJAVNOST) VALUES (?, ?, ?);");
 		sql_stavki.put("poisci_id_podatki_ure", "select id from dnevnik.podatki_ure where datum = STR_TO_DATE(? ,'%M %d %Y') AND IZVAJALEC = ? AND MENTOR = ? AND URA = ?;");
@@ -53,6 +56,7 @@ public class sqlStavki {
 		sql_stavki.put("poisci_nalogo", "SELECT * FROM naloge_elementi WHERE NALOGE_ID = ?;");
 		sql_stavki.put("poisci_nalogo_oddaj", "SELECT * FROM naloge WHERE ID = ?;");
                 sql_stavki.put("poisci_vrstice_pregled_ure", "SELECT * FROM pregled_ure WHERE UCNA_PRIPRAVA_ID = ? ORDER BY ZAP");
+                sql_stavki.put("poisci_vrstice_podrobni_pregled_ure", "SELECT * FROM podrobni_pregled WHERE UCNA_PRIPRAVA_ID = ? ORDER BY ZAP");
 	}
 		
 	public static String getSqlString(String Ime) {

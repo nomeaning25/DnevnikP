@@ -60,24 +60,22 @@
     </style>
 
     
-<window id="pregled_ure" border="none"  width="900px" style="margin:auto; padding-top: 50px; padding-bottom: 50px; backgorund-color: #B5B5B5;">
+<window id="podrobni_pregled" border="none"  width="900px" style="margin:auto; padding-top: 50px; padding-bottom: 50px; backgorund-color: #B5B5B5;">
     <grid style="border: white; padding:50px; background:white;">
         <rows>
             <row>
-                <cell style="text-align: center; padding-bottom: 35px;"><label style="font-size: 26px; text-align: right;" value="Zgradba ure"/></cell>	
+                <cell style="text-align: center; padding-bottom: 35px;"><label style="font-size: 26px; text-align: right;" value="Podrobni pregled ure"/></cell>	
             </row>
             <row style="background:#FFFFFF; border: white;">
                 <hlayout>
-                    <grid id="PregledUre"  height="775px" width="150px">        
+                    <grid id="PodrobniPregled"  height="1030px" width="150px">        
                         <columns>           
-                            <column hflex="2">Cilj</column>
-                            <column hflex="1" visible="false">Stretegija</column>
-                            <column hflex="1" visible="false">Nacin doseganja</column>
-                            <column hflex="2" visible="false">Metode</column>
-                            <column hflex="1">Čas</column>
-                            <column hflex="2" visible="false">Pripomocki</column>
-                            <column hflex="2" visible="false">Sprememba</column>
-                            <column hflex="2" visible="false">id</column>
+                            <column hflex="1">Namen</column>
+                            <column hflex="1" visible="false">Dejavnost ucit.</column>
+                            <column hflex="1" visible="false">Dejavnost ucen.</column>
+                            <column hflex="1" visible="false">Tabelska slika</column>      
+                            <column hflex="1" visible="false">Sprememba</column>                     
+                            <column hflex="1" visible="false">id</column>
                         </columns>
                         <foot>
                             <footer span="4" id="footer_category_nal" class="footer_right" >
@@ -90,60 +88,50 @@
                         <rows id="polja">
                             <row>
                                 <cell sclass="loginCtl" width="100px">
-                                    <vlayout>Namen/Cilj:</vlayout>
+                                    <vlayout>Namen:</vlayout>
                                 </cell>
                                 <cell sclass="loginCtl" width="310px">
                                     <vlayout>
-                                        <textbox id="cilj" value="" width="360px">
+                                        <textbox id="namen" value="" width="360px">
                                             <attribute name="onChange">
                                                 sprememba.setValue(1 + "");
                                             </attribute>
                                         </textbox>
                                     </vlayout>
-                                </cell>
-                            <cell sclass="loginCtl" width="60px">
-                                <vlayout>Čas (min):</vlayout>
-                            </cell>
-                            <cell sclass="loginCtl" width="70px">
-                                <vlayout>
-                                    <textbox id="cas" value="" width="70px">
-                                            <attribute name="onChange">
-                                                sprememba.setValue(1 + "");
-                                            </attribute>
-                                        </textbox>
-                                </vlayout>
-                            </cell>
-                            </row>                            
-                            <row><cell sclass="loginCtl" colspan="1"><vlayout>Metode/Oblike:</vlayout></cell><cell sclass="loginCtl" colspan="3"><vlayout><textbox id="metode" value="" width="495px">
-                                            <attribute name="onChange">
-                                                sprememba.setValue(1 + "");
-                                            </attribute>
-                                        </textbox></vlayout></cell></row>
-                            <row><cell sclass="loginCtl" colspan="1"><vlayout>Pripomočki:</vlayout></cell><cell sclass="loginCtl" colspan="3"><vlayout><textbox id="pripomocki" value="" width="495px">
-                                            <attribute name="onChange">
-                                                sprememba.setValue(1 + "");
-                                            </attribute>
-                                        </textbox></vlayout></cell></row>
+                                </cell>                           
+                            </row>
                             <row>
                                 <cell height="20px" colspan="4"><textbox id="rowid" visible="false"/>
                                         <textbox id="sprememba" visible="false" />
                                 </cell>
                             </row>
-                            <row><cell sclass="loginCtl" colspan="4"><vlayout>Strategija doseganja:</vlayout></cell></row>
+                            <row><cell sclass="loginCtl" colspan="4"><vlayout>Dejavnost učitelja:</vlayout></cell></row>
                             <row>
                                 <cell sclass="loginCtl" colspan="4">
                                     <vlayout>
-                                        <ckeditor id="doseganje" width="585px" customConfigurationsPath="/scripts/ck_config.js" toolbar="MyToolbar2" ><attribute name="onChange">
+                                        <ckeditor id="dejavnost_ucit" width="585px" customConfigurationsPath="/scripts/ck_config.js" toolbar="MyToolbar2" ><attribute name="onChange">
                                             sprememba.setValue(1 + "");
                                             </attribute></ckeditor>
                                     </vlayout>
                                 </cell>
                             </row>
-                            <row><cell sclass="loginCtl" colspan="4"><vlayout>Način preverjanja:</vlayout></cell></row>
+                            <row><cell sclass="loginCtl" colspan="4"><vlayout>Dejavnost učenca:</vlayout></cell></row>
                             <row>
                                 <cell sclass="loginCtl" colspan="4">
                                     <vlayout>
-                                        <ckeditor id="preverjanje" width="585px" customConfigurationsPath="/scripts/ck_config.js" toolbar="MyToolbar2">
+                                        <ckeditor id="dejavnost_ucen" width="585px" customConfigurationsPath="/scripts/ck_config.js" toolbar="MyToolbar2">
+                                            <attribute name="onChange">                                                
+                                                sprememba.setValue(1 + "");                    
+                                            </attribute>
+                                        </ckeditor>
+                                    </vlayout>
+                                </cell>
+                            </row> 
+                            <row><cell sclass="loginCtl" colspan="4"><vlayout>Tabelska slika:</vlayout></cell></row>
+                            <row>
+                                <cell sclass="loginCtl" colspan="4">
+                                    <vlayout>
+                                        <ckeditor id="tabelska_sl" width="585px" customConfigurationsPath="/scripts/ck_config.js" toolbar="MyToolbar3">
                                             <attribute name="onChange">                                                
                                                 sprememba.setValue(1 + "");                    
                                             </attribute>
@@ -168,13 +156,13 @@
                                 Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
                                     public void onEvent(Event evt) throws InterruptedException {
                                         if (evt.getName().equals("onYes")) {
-                                            execution.sendRedirect("../Priprava/PodatkiOuri.zul");
+                                            execution.sendRedirect("../Priprava/PregledUre.zul");
                                         } 
                                     }
                                 });
                             }
                             else {
-                                execution.sendRedirect("../Priprava/PodatkiOuri.zul");
+                                execution.sendRedirect("../Priprava/PregledUre.zul");
                             }
                         ]]>
                         </attribute>
@@ -202,13 +190,13 @@
                                 Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
                                     public void onEvent(Event evt) throws InterruptedException {
                                         if (evt.getName().equals("onYes")) {
-                                            execution.sendRedirect("../Priprava/PodatkiOuri.zul");
+                                            execution.sendRedirect("../Priprava/DodatneDejavnosti.zul");
                                         } 
                                     }
                                 });
                             }
                             else {
-                                execution.sendRedirect("../Priprava/PodrobniPregled.zul");
+                                execution.sendRedirect("../Priprava/DodatneDejavnosti.zul");
                             }
                         ]]>
                         </attribute>
@@ -222,44 +210,42 @@
         
         import org.zkoss.zk.ui.event.EventListener;
         
-        PregledUre.setRowRenderer(new PregledUreRenderer());
-        PregledUrePodatki.napolni();
-        PregledUre.setModel(new ListModelList(PregledUrePodatki.vrniVrstice()));        
+        PodrobniPregled.setRowRenderer(new PodrobniPregledRenderer());
+        PodrobniPregledPodatki.napolni();
+        PodrobniPregled.setModel(new ListModelList(PodrobniPregledPodatki.vrniVrstice()));        
                  
         public void update(){   
             if(preveri_vnose()){
-                PregledUrePodatki.update_row();
-                PregledUrePodatki.napolni();
-                PregledUre.setModel(new ListModelList(PregledUrePodatki.vrniVrstice()));
+                PodrobniPregledPodatki.update_row();
+                PodrobniPregledPodatki.napolni();
+                PodrobniPregled.setModel(new ListModelList(PodrobniPregledPodatki.vrniVrstice()));
                 sprememba.setValue("0");
-                Events.postEvent(new Event(Events.ON_CLICK, PregledUre.getRows().getChildren().get(Sessions.getCurrent().getAttribute("zgradba_ure_row"))));           
+                Events.postEvent(new Event(Events.ON_CLICK, PodrobniPregled.getRows().getChildren().get(Sessions.getCurrent().getAttribute("podrobni_pregled_row"))));           
             }
         }
         
         public void delete(){
-            PregledUrePodatki.delete_row();
-            PregledUrePodatki.napolni();
-            PregledUre.setModel(new ListModelList(PregledUrePodatki.vrniVrstice()));
+            PodrobniPregledPodatki.delete_row();
+            PodrobniPregledPodatki.napolni();
+            PodrobniPregled.setModel(new ListModelList(PodrobniPregledPodatki.vrniVrstice()));
             clear();
         }
         
         public void insert(){
             if(preveri_vnose()){
-                PregledUrePodatki.insert_row();
-                PregledUrePodatki.napolni();
-                PregledUre.setModel(new ListModelList(PregledUrePodatki.vrniVrstice()));        
+                PodrobniPregledPodatki.insert_row();
+                PodrobniPregledPodatki.napolni();
+                PodrobniPregled.setModel(new ListModelList(PodrobniPregledPodatki.vrniVrstice()));        
                 sprememba.setValue("0");
-                Events.postEvent(new Event(Events.ON_CLICK, PregledUre.getRows().getChildren().get(PregledUre.getRows().getChildren().size() - 1)));           
+                Events.postEvent(new Event(Events.ON_CLICK, PodrobniPregled.getRows().getChildren().get(PodrobniPregled.getRows().getChildren().size() - 1)));           
             }
         }
         
         public void clear(){
-            cilj.setValue("");
-            cas.setValue("");
-            metode.setValue("");
-            pripomocki.setValue("");
-            doseganje.setValue("");
-            preverjanje.setValue("");
+            namen.setValue("");
+            dejavnost_ucit.setValue("");
+            dejavnost_ucen.setValue("");
+            tabelska_sl.setValue("");           
             rowid.setValue("");
             sprememba.setValue("");
             arrow_up.setDisabled(true);
@@ -271,20 +257,20 @@
                 Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
                     public void onEvent(Event evt) throws InterruptedException {
                         if (evt.getName().equals("onYes")) {
-                            PregledUrePodatki.move_row_up();
-                            PregledUrePodatki.napolni();
-                            PregledUre.setModel(new ListModelList(PregledUrePodatki.vrniVrstice()));
+                            PodrobniPregledPodatki.move_row_up();
+                            PodrobniPregledPodatki.napolni();
+                            PodrobniPregled.setModel(new ListModelList(PodrobniPregledPodatki.vrniVrstice()));
                             sprememba.setValue("0");
-                            Events.postEvent(new Event(Events.ON_CLICK, PregledUre.getRows().getChildren().get(Sessions.getCurrent().getAttribute("zgradba_ure_row") - 1)));           
+                            Events.postEvent(new Event(Events.ON_CLICK, PodrobniPregled.getRows().getChildren().get(Sessions.getCurrent().getAttribute("podrobni_pregled_row") - 1)));           
                         } 
                     }
                 });
             }
             else {
-                PregledUrePodatki.move_row_up();
-                PregledUrePodatki.napolni();
-                PregledUre.setModel(new ListModelList(PregledUrePodatki.vrniVrstice()));
-                Events.postEvent(new Event(Events.ON_CLICK, PregledUre.getRows().getChildren().get(Sessions.getCurrent().getAttribute("zgradba_ure_row") - 1)));          
+                PodrobniPregledPodatki.move_row_up();
+                PodrobniPregledPodatki.napolni();
+                PodrobniPregled.setModel(new ListModelList(PodrobniPregledPodatki.vrniVrstice()));
+                Events.postEvent(new Event(Events.ON_CLICK, PodrobniPregled.getRows().getChildren().get(Sessions.getCurrent().getAttribute("podrobni_pregled_row") - 1)));          
         
             }            
         }
@@ -294,20 +280,20 @@
                 Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
                     public void onEvent(Event evt) throws InterruptedException {
                         if (evt.getName().equals("onYes")) {
-                            PregledUrePodatki.move_row_down();
-                            PregledUrePodatki.napolni();
-                            PregledUre.setModel(new ListModelList(PregledUrePodatki.vrniVrstice()));
+                            PodrobniPregledPodatki.move_row_down();
+                            PodrobniPregledPodatki.napolni();
+                            PodrobniPregled.setModel(new ListModelList(PodrobniPregledPodatki.vrniVrstice()));
                             sprememba.setValue("0");
-                            Events.postEvent(new Event(Events.ON_CLICK, PregledUre.getRows().getChildren().get(Sessions.getCurrent().getAttribute("zgradba_ure_row") + 1)));          
+                            Events.postEvent(new Event(Events.ON_CLICK, PodrobniPregled.getRows().getChildren().get(Sessions.getCurrent().getAttribute("podrobni_pregled_row") + 1)));          
                         } 
                     }
                 });
             }
             else {
-                PregledUrePodatki.move_row_down();
-                PregledUrePodatki.napolni();
-                PregledUre.setModel(new ListModelList(PregledUrePodatki.vrniVrstice()));
-                Events.postEvent(new Event(Events.ON_CLICK, PregledUre.getRows().getChildren().get(Sessions.getCurrent().getAttribute("zgradba_ure_row") + 1)));          
+                PodrobniPregledPodatki.move_row_down();
+                PodrobniPregledPodatki.napolni();
+                PodrobniPregled.setModel(new ListModelList(PodrobniPregledPodatki.vrniVrstice()));
+                Events.postEvent(new Event(Events.ON_CLICK, PodrobniPregled.getRows().getChildren().get(Sessions.getCurrent().getAttribute("podrobni_pregled_row") + 1)));          
             }            
         }
         
@@ -315,26 +301,18 @@
             int p = 0;
             String m = "Prosim vnesite manjkajoča polja: \n";
             Boolean r = false;
-            if(cilj.getValue().equals("")){
+            if(namen.getValue().equals("")){
                 p++;
-                m+="- Cilj \n";
+                m+="- Namen \n";
             }
-            if(cas.getValue().equals("")){
+            if(dejavnost_ucit.getValue().equals("")){
                 p++;
-                m+="- Čas \n";
+                m+="- Dejavnost učitelja \n";
             }
-            if(metode.getValue().equals("")){
+            if(dejavnost_ucen.getValue().equals("")){
                 p++;
-                m+="- Metode/Oblike \n";
-            }
-            if(doseganje.getValue().equals("")){
-                p++;
-                m+="- Strategija doseganja \n";
-            }
-            if(preverjanje.getValue().equals("")){
-                p++;
-                m+="- Način preverjanja \n";
-            }
+                m+="- Dejavnost učenca \n";
+            }                       
             if(p > 0){
                 Messagebox.show(m, "Opozorilo", Messagebox.OK, Messagebox.EXCLAMATION);
             } else {
