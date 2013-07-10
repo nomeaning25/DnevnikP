@@ -202,7 +202,7 @@
                                 Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
                                     public void onEvent(Event evt) throws InterruptedException {
                                         if (evt.getName().equals("onYes")) {
-                                            execution.sendRedirect("../Priprava/PodatkiOuri.zul");
+                                            execution.sendRedirect("../Priprava/PodrobniPregled.zul");
                                         } 
                                     }
                                 });
