@@ -1,8 +1,10 @@
 <menubar id="menubar" width="100%">
     <menu label="Datoteka">
         <menupopup>
-            <menuitem label="Nova priprava" onClick="" image="../../stil/slike/icons/linedpaperpencil32.png" />
+            <menuitem label="Nova priprava" onClick='session.setAttribute("ID_datoteke",null); iframe.setSrc("./Priprava/PodatkiOuri.zul");' image="../../stil/slike/icons/linedpaperpencil32.png" />
             <menuitem label="Nova hospitacija" onClick="" image="../../stil/slike/icons/notepencil32.png" />
+            <menuseparator />
+            <menuitem label="Natisni" onClick="" image="../../stil/slike/icons/notepencil32.png" />
             <menuseparator />
             <menuitem label="Odjava" onClick="" image="../../stil/slike/icons/plug32.png" />
         </menupopup>

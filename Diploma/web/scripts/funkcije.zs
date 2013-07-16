@@ -139,11 +139,12 @@ import dnevnik.*;
 					  	celicaGrid = (Component) celicaGrid.getChildren().get(0);
 					  	tbxGrid = (Textbox) celicaGrid;
 					  	if(tbxGrid.getValue() != "") tmpValue = tbxGrid.getValue();
-					  	vsebina = vsebina + tmpValue + ", ";
+					  	vsebina = vsebina + tmpValue + ", ";   
+                                                
 			        }
 			        vsebina = vsebina.substring(0,vsebina.length()-2) + "; ";
-			  		
-			  	}
+                                
+                            }
 			  	
 		  	}
 
@@ -153,8 +154,9 @@ import dnevnik.*;
 			}
 			
 			if(vsebina.length() > 0) podatki = vsebina.split(";");		
-			
+			System.out.println(vsebina);
 			return podatki;
+                        
 	    }
     
     

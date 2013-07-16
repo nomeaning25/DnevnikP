@@ -1,78 +1,228 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk>
-<style dynamic="true">
-        .no_border tr.z-row td.z-row-inner, tr.z-row .z-cell,div.z-grid, .z-grid-header-bg 
+<?link href='http://fonts.googleapis.com/css?family=Italianno&subset=latin,latin-ext' rel='stylesheet' type='text/css'?>
+    <style>
+        body{
+            background: #686868; 
+        }
+        .no_border tr.z-row td.z-row-inner, tr.z-row .z-cell, .z-grid-header-bg 
 		 { 
 			 border: white;
 			 background:white;
 		 }
 		.CelicaLabela{
-			text-align: right;
+                    text-align: right;    
+                    
 		}
+            .z-label{
+                font-weight: bold;
+            }
+                
+            .z-textbox, .z-intbox{ 
+                color: #686868;
+                border-color : #FFF; 
+                background: #FFF;
+                font-size: 16px;
+                border-bottom: 1px solid #B5B5B5;
+            }
+            .z-combobox-inp, .z-datebox-inp{ 
+                color: #686868;
+                border-color : #FFF; 
+                background: #FFF;
+                font-size: 16px;
+                border-bottom: 1px solid #B5B5B5;
+            }
+            
+            .z-datebox .z-datebox-btn {
+                background: url('../../stil/slike/calendar.png');   
+                background-size: 18px 18px;   
+                width: 18px;
+                height: 18px;
+                border-color : #FFF;
+            }
+        
+            .z-combobox .z-combobox-btn {
+                background: url('../../stil/slike/Arrow-down.png');   
+                background-size: 22px 22px;   
+                width: 22px;
+                height: 22px;
+                border-color : #FFF;
+            }
+            .z-textbox:hover, .z-datebox-inp:hover, .z-intbox:hover, .z-combobox-inp:hover{
+                border-bottom: 1px solid black;
+            }
+        
+            .izbrana-vrstica{
+                background: none repeat scroll 0 0 #CCCCCC !important;
+            }
+        
+            textarea {
+                border: 1px solid #B5B5B5 !important;
+            }
+        
+            textarea:hover {
+                border: 1px solid black !important;
+            }
+
     </style>
+
     
-
-<window title="Podatki naloge" id="opis_nal" border="normal"  width="800px" style="margin:auto; padding-top:50px;">
-
-<grid id="Podatki_naloge"  height="160px">
-      
+<window id="pregled_ure" border="none"  width="800px" style="margin:auto; padding-top: 50px; padding-bottom: 50px; backgorund-color: #B5B5B5;">
+    <grid style="border: white; padding:50px; margin:auto; background:white;">
         <columns>
-			<column width="150px" label=""/>
-			<column label=""/>
-		</columns>
-		<rows id="forma">
-			<row>
-				<cell sclass="CelicaLabela"><label value="Ime naloge: "/></cell>
-				<cell><textbox id="ime_naloge" width="366px"/> </cell>	
-			</row>
-			<row>
-				<cell sclass="CelicaLabela"><label value="Opis/Navodilo: "/></cell>
-				<cell><textbox rows="4" id="opis_naloge" cols="70" style="overflow: auto;"/></cell>	
-			</row>
-			<row>
-				<cell sclass="CelicaLabela"><label value="Datum in zaključka: "/></cell>
-				<cell><datebox id="datum_zaklj" format="MEDIUM"/><timebox id="ura_zaklj" format="SHORT" style="position:relative;" left="10px"/></cell>	
-			</row>			
-		</rows>
-	</grid>
-</window>
-
-
-<window title="Seznam elementov" id="Pod_nal" border="normal"  width="800px" style="margin:auto; padding-top:50px;">
-
-<grid id="Struktura"  height="450px">
-         <auxhead>
-            <auxheader label="Dodaj element" colspan="1" rowspan="1" />
-            <auxheader colspan="4" rowspan="1">
-                <label value="id elementa: "/><textbox id="labela" constraint="/[A-Za-z0-9_]{0,}/: Vnesite brez presledkov in posebnih znakov (razen &quot;_&quot;)"/>
-                <label style="position:relative;" left="10px"  value="Tip: "/>
-                <combobox style="position:relative;" left="10px"  id="tip" disabled="false" >
-                	<comboitem label="Textovno polje"/>
-                	<comboitem label="Textovno polje (3 vrstice)"/>
-                	<comboitem label="Textovno polje (5 vrstic)"/>
-                	<comboitem label="Urejevalnik besedila"/>
-                	<comboitem label="Besedilo"/>
-                	<comboitem label="Izbirno polje"/>
-                </combobox>
-                <image style="position:relative;" left="30px" top="7px" src="../../stil/slike/Dodaj.png" height="25px" width="25px" tooltiptext="Dodaj" onClick="dodajElement_nal()"/>                    
-            </auxheader>
-        </auxhead>
-        <columns>
-			<column width="" label=""/>
-		</columns>
-		<rows id="Struktura_elementi">
-			
-		</rows>
-		 <foot>
-			<footer>
-				<image src="../../stil/slike/gumb_dodaj.png" width="101px" height="25px" style="position:relative; top:10px; margin-bottom:15px;" onClick="dodaj_nalogo()"/>
-			</footer>
-		</foot>
-		
-	</grid>
-	<zscript src="../../scripts/DB.zs"/>
-	<zscript src="../../scripts/DodajNalogo.zs"/>
-
+                <column width="108px" label=""/>
+                <column label=""/>
+        </columns>
+        <rows>
+            <row>
+                <cell style="text-align: center; padding-bottom: 35px;" colspan="2"><label style="font-size: 26px; text-align: right;" value="Dodajanje naloge"/></cell>	
+            </row>
+            <row>
+                    <cell sclass="CelicaLabela" width="100px"><label value="Naslov: "/></cell>
+                    <cell><textbox id="naslov" width="500px"  /></cell>	
+            </row>
+            <row>
+                    <cell sclass="CelicaLabela"><label value="Datum zaključka: "/></cell>
+                    <cell><datebox format="medium" id="datum" width="120px"  /></cell>	
+            </row>
+             <row><cell sclass="loginCtl" ><vlayout>Navodilo:</vlayout></cell></row>
+            <row>
+               <cell sclass="loginCtl" colspan="2">
+                   <vlayout>
+                       <ckeditor id="navodilo" width="675px" customConfigurationsPath="/scripts/ck_config.js" toolbar="MyToolbar2" >
+                           <attribute name="onChange">
+                             sprememba.setValue(1 + "");
+                           </attribute>
+                       </ckeditor>
+                   </vlayout>
+               </cell>
+           </row>
+           <row>
+                <cell height="20px">
+                    <textbox id="sprememba" visible="false" />
+                </cell>           
+            </row>
+            <row style="background:#FFFFFF; border: white;">
+                <cell colspan="2">
+                <hlayout>
+                    <grid id="PregledNaloge"  height="300px" width="150px">        
+                        <columns>
+                            <column hflex="1" visible="false">Vrsta komponente</column>           
+                            <column hflex="1">Id komponente</column>                        
+                            <column hflex="1" visible="false">Dodatno polje</column>    
+                            <column hflex="1" visible="false">Sprememba</column>
+                            <column hflex="1" visible="false">id</column>
+                        </columns>
+                        <foot>
+                            <footer span="2" id="footer_category_nal" class="footer_right" >
+                                <button width="131px" id="arrow_up" label="Premakni vr." dir="reverse" disabled="true" image="../../stil/slike/Arrow-up.png" onClick="move_up()"/>
+                                <button width="131px" id="arrow_down" label="Premakni vr." dir="reverse" disabled="true" image="../../stil/slike/Arrow-down.png" onClick="move_down()"/>
+                            </footer>
+                        </foot>
+                    </grid>
+                    <grid id="Podatki" style="border: white; margin-left: 15px; position:relative; top: 0px;" width="510px">
+                         <columns>
+                                <column width="150px" label=""/>
+                                <column label=""/>
+                        </columns>
+                        <rows id="polja">
+                            <row>
+                                <cell sclass="CelicaLabela"><label value="Tip komponente: "/></cell>
+                               <cell>
+                                   <combobox>
+                                        <comboitem label="Vnosno polje" value="1"/>
+                                        <comboitem label="Vnosno polje (večvrstično)" value="2"/>
+                                        <comboitem label="Izbirno polje" value="3"/>
+                                        <comboitem label="Urejevalnik besedila" value="4"/>
+                                        <comboitem label="Oddaja datoteke" value="5"/>
+                                        <comboitem label="Oddaja hospitacije" value="6"/>
+                                        <comboitem label="Oddaja priprave" value="7"/>
+                                        <comboitem label="Oddaja dnevnika prakse" value="8"/>
+                                    </combobox>
+                               </cell>
+                           </row>
+                           <row>
+                                <cell sclass="CelicaLabela"><label value="Id komponente za bazo: "/></cell>
+                                <cell sclass="loginCtl" width="310px">
+                                    <vlayout>
+                                        <textbox id="id_komponente" value="" constraint='/[A-Za-z0-9_]{0,}/: Vnesite brez presledkov in posebnih znakov.' width="250px">
+                                            <attribute name="onChange">
+                                                sprememba.setValue(1 + "");
+                                            </attribute>
+                                        </textbox>
+                                    </vlayout>
+                                </cell>
+                           </row>
+                           <row>
+                                <cell sclass="CelicaLabela" valign="top"><label value="Dodatno polje: "/></cell>
+                                <cell><textbox rows="4" id="opis_naloge" cols="40" style="resize: none;"/></cell>	
+                            </row>
+                            <row>
+                                <cell sclass="CelicaLabela" valign="top"><label style="font-weight: normal !important; font-style:italic; color: grey; " value="*"/></cell>
+                                <cell><label style="font-weight: normal !important; font-style:italic; color: grey; " value="V dodatno polje se vnese pripis h komponenti. V primeru, ko je komponenta izbirno polje, pa se poleg pripisa vnese še možne izbire. Pripis in možne izbire se loči s podpičjem. Posamezne izbire pa se vnese v zavite oklepaje ter loči z vejico. Primer: pripis; {izbira1},{izbira2}"/><separator /></cell>	
+                            </row>                                                     
+                            <row>
+                                <cell height="20px" align="center" colspan="2">                                    
+                                    <button label="Odstrani izbrano" onClick="delete();"></button><button label="Posodobi izbrano" onClick="update();"></button><button label="Vstavi kot novo" onClick="insert()"></button><button label="Počisti polja" onClick="clear()"></button>                                    
+                                </cell>
+                            </row>
+                        </rows>            
+                    </grid>
+                </hlayout>
+                </cell>
+            </row>
+            <row>
+                        <cell style="text-align: center; padding-top: 35px;" colspan="2">                            
+                            <image src="../../stil/slike/zapri_1.png">
+                                <attribute name="onClick"><![CDATA[
+                                if(sprememba.getValue().equals("1")){
+                                        Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
+                                            public void onEvent(Event evt) throws InterruptedException {
+                                                if (evt.getName().equals("onYes")) {
+                                                    session.setAttribute("ID_datoteke",null); execution.sendRedirect("../Priprava/Pregled.zul");
+                                                } 
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        session.setAttribute("ID_datoteke",null); execution.sendRedirect("../Priprava/Pregled.zul");
+                                    }
+                                ]]>
+                                </attribute>
+                            </image>
+                            <image src="../../stil/slike/shrani.png">
+                                <attribute name="onClick"><![CDATA[
+                                    UcnaPriprava.vnos_dejavnosti();
+                                    sprememba.setValue("0");
+                                ]]>
+                                </attribute>
+                            </image>
+                            <image src="../../stil/slike/aktiviraj.png">
+                                <attribute name="onClick"><![CDATA[
+                                    if(sprememba.getValue().equals("1")){
+                                        Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
+                                            public void onEvent(Event evt) throws InterruptedException {
+                                                if (evt.getName().equals("onYes")) {
+                                                    execution.sendRedirect("../Priprava/PodrobniPregled.zul");
+                                                } 
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        execution.sendRedirect("../Priprava/PodrobniPregled.zul");
+                                    }
+                                ]]>
+                                </attribute>
+                            </image>
+                                                
+                        </cell>	
+                    </row>
+        </rows>
+    </grid>
+    <zscript><![CDATA[
+        import dnevnik.*;        
+             
+    ]]></zscript>
 </window>
 
  </zk>

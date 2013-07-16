@@ -4,22 +4,23 @@
             <borderlayout	>
                 <north border="none">
                 <zk switch="${ID_skupine_upor}">
-				    <zk case="1">   
-				       <include src="./Studentje/menu.zul" />				       
-				    </zk>
-				    <zk case="2">
-				       <include src="./Profesorji/menu.zul" />
-				    </zk>				   
-				</zk>
-                     
+                    <zk case="1">   
+                       <include src="./Studentje/menu.zul" />				       
+                    </zk>
+                    <zk case="2">
+                       <include src="./Profesorji/menu.zul" />
+                    </zk>				   
+                </zk>                     
                 </north>
                 <center border="none">
                    <iframe id="iframe" src="http://www.zkoss.org" width="100%" height="100%"/>
                 </center>
             </borderlayout>
-            <zscript><![CDATA[            
-				iframe.setSrc("./Studentje/Index.zul");
-			]]></zscript>
+            <zscript><![CDATA[
+                import dnevnik.*;
+                            
+                iframe.setSrc("./Studentje/Index.zul");
+            ]]></zscript>
         </window>
         
 </zk>

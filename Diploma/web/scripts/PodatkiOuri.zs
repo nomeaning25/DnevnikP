@@ -19,8 +19,7 @@ import java.sql.*;
     		alert(VsaSporocila.getSporocilo("vnesite_vsa_pola"));
     	}
     	else{
-    	
-    	
+
     		Connection conn = null;
     		PreparedStatement s = null;
             try
@@ -51,9 +50,9 @@ import java.sql.*;
                                     Ura.getValue(),
                                     Razred.getValue(),
                                     Sola.getValue(),
-                                    data[6].trim(),
                                     data[7].trim(),
                                     data[8].trim(),
+                                    data[9].trim(),
                                     Pristop.getValue(),
                                     Oblike.getValue(),
                                     Metode.getValue(),
@@ -74,11 +73,11 @@ import java.sql.*;
                  
                  else{
 	                 //
-                	 Object[] obj_insert_podatki_ure = new Object[16];
+                	 Object[] obj_insert_podatki_ure = new Object[17];
 	                 String[] tmpdate = {};
 	                 for(int d = 0; d < data.length-1 ; d++){
-	                	 if(d < 6 || d > 9){
-	                		 if (d == 2){
+	                	 if(d < 7 || d > 10){
+	                		 if (d == 3){
 	                			 tmpdate = data[d].trim().split(" ");	                			 
 	                			 obj_insert_podatki_urequery[d] = tmpdate[1].trim() + " " + tmpdate[2].trim() + " " + tmpdate[5].trim();
 	                		 }
@@ -86,7 +85,7 @@ import java.sql.*;
 	                			 obj_insert_podatki_urequery[d] = data[d].trim();
 	                		 }
 	                	 }
-	                	 else if(d >= 6 && d < 9){
+	                	 else if(d >= 7 && d < 10){
 	                		 
 	                		 obj_insert_podatki_urequery[d] = data[d].trim();
 	                	 }
@@ -96,8 +95,8 @@ import java.sql.*;
 					 s.execute ();
 					 
 	                
-					 Object[] obj_poisci_id_podatki_ure =   {tmpdate[1].trim() + " " + tmpdate[2].trim() + " " + tmpdate[5].trim(), data[0].trim(), data[1].trim(), data[3].trim()};
-					 s = PStatment(conn, "poisci_id_podatki_ure", obj_poisci_id_podatki_ure);
+                         Object[] obj_poisci_id_podatki_ure =   {tmpdate[1].trim() + " " + tmpdate[2].trim() + " " + tmpdate[5].trim(), data[1].trim(), data[2].trim(), data[4].trim()};
+                         s = PStatment(conn, "poisci_id_podatki_ure", obj_poisci_id_podatki_ure);
 					
 	                 ResultSet rs = s.executeQuery();
 	                 rs.next();
@@ -116,14 +115,13 @@ import java.sql.*;
 	                 
 	                 session.setAttribute("ID_datoteke", idpriprave);
 	                 
-	             }
-	                
-                 String[] ciljiure = data[9].trim().split(",");
-                 for(int c = 0; c < ciljiure.length; c++){                	 
+	             }   
+                    String[] ciljiure = data[10].trim().split(",");
+                    for(int c = 0; c < ciljiure.length; c++){                	 
                 	
-                	 Object[] obj_insert_cilji_ure = {idure, ciljiure[c].trim()};
-	                 s = PStatment(conn, "insert_cilji_ure", obj_insert_cilji_ure);	
-	                 s.execute ();
+                        Object[] obj_insert_cilji_ure = {idure, ciljiure[c].trim()};
+                        s = PStatment(conn, "insert_cilji_ure", obj_insert_cilji_ure);	
+                        s.execute ();
              	}
              	
                  

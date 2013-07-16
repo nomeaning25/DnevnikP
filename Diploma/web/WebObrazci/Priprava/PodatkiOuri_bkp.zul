@@ -98,15 +98,15 @@
                     </row>
                     <row>
                             <cell sclass="CelicaLabela"><label value="Učna tema: "/></cell>
-                            <cell><textbox id="tema" width="200px"/></cell>
+                            <cell><textbox id="tema" readonly="true"/></cell>
                     </row>
                     <row>
                             <cell sclass="CelicaLabela"><label value="Učni sklop: "/></cell>
-                            <cell><textbox id="sklop" width="200px"/></cell>
+                            <cell><textbox id="sklop" readonly="true"/></cell>
                     </row>
                     <row>
                             <cell sclass="CelicaLabela"><label value="Učna enota: "/></cell>
-                            <cell><textbox id="enota" width="200px"/></cell>
+                            <cell><textbox id="enota" readonly="true"/></cell>
                     </row>
                     <row>
                         <cell sclass="CelicaLabela" style="vertical-align: top; padding-top:12px;"><label value="Specifični učni cilji: "/></cell>
@@ -121,7 +121,7 @@
                                                 <row>
                                                         <cell><label>-</label> </cell>
                                                         <cell><textbox id="Cilj1"  width="189px" /></cell>
-                                                        <cell><image src="../../stil/slike/Dodaj_2.png" width="23px" height="23px" onClick='UcnaPriprava.dodajCilj("");'/></cell>
+                                                        <cell><image src="../../stil/slike/Dodaj_2.png" width="23px" height="23px" onClick="DodajCilj(&quot;&quot;)"/></cell>
                                                 </row>
                                         </rows>
                                 </grid>
@@ -166,25 +166,114 @@
                                     ]]>
                                     </attribute>
                                 </image>
-                                <image src="../../stil/slike/nadaljuj.png" onClick="nadaljuj();"/>
+                                <image src="../../stil/slike/nadaljuj.png" onClick="prenesiVbazo(); execution.sendRedirect(&quot;PregledUre.zul&quot;);"/>
                             </cell>	
                     </row>			
             </rows>
     </grid>
             
     <zscript><![CDATA[
-        import java.sql.*;
-        import dnevnik.*;          
+
+import java.sql.*;
+import dnevnik.*;          
         
-        UcnaPriprava.select_and_fill();
+public void Napolni(){
         
-        public void nadaljuj(){
-            if(UcnaPriprava.preveri()){
-                UcnaPriprava.shrani(); 
-                execution.sendRedirect("PregledUre.zul");
+	if(session.getAttribute("ID_datoteke") != null){
+		String podatki_ure_id = "";
+		Connection conn = null;
+		PreparedStatement s = null;
+        try
+        {
+     	   //Povežemo se na bazo
+            conn = openDB("root","","jdbc:mysql://localhost:3306/dnevnik");
+            //Kreiramo SQL za prenos podatkov v šifrant Sklopov
+         	Object[] obj_poisci_podatki_ure_priprava = {session.getAttribute("ID_datoteke")};
+	        s = PStatment(conn, "poisci_podatki_ure_priprava", obj_poisci_podatki_ure_priprava);
+		    ResultSet rs = s.executeQuery ();					    
+			rs.next();
+			podatki_ure_id = rs.getString("PODATKI_URE_ID");
+			Object[] obj_select_podatki_ure = {podatki_ure_id};
+	        s = PStatment(conn, "select_podatki_ure", obj_select_podatki_ure);
+		    rs = s.executeQuery ();					    
+			rs.next();
+			    
+                                Naslov.setValue(rs.getString("NASLOV_URE"));
+				Izvajalec.setValue(rs.getString("IZVAJALEC"));
+				Mentor.setValue(rs.getString("MENTOR"));
+				Datum.setValue(rs.getDate("DATUM"));
+				Ura.setValue(Integer.parseInt(rs.getString("URA")));
+				Razred.setValue(Integer.parseInt(rs.getString("RAZRED")));
+				Sola.setValue(rs.getString("SOLA"));
+				Pristop.setValue(rs.getString("PRISTOP"));
+				Oblike.setValue(rs.getString("OBLIKE"));
+				Metode.setValue(rs.getString("METODE"));
+				Pripomocki.setValue(rs.getString("PRIPOMOCKI"));
+				Viri.setValue(rs.getString("VIRI"));
+				combo_tema.setSelectedIndex(Integer.parseInt(rs.getString("TEMA_ID")) - 1);
+				combobox("combo_sklop","ID","SKLOP","ucni_sklop_combobox");
+				List items = combo_sklop.getItems();
+				 for (int i = 0; i < items.size(); i++) {
+			    	Comboitem item = items.get(i);
+			    	Integer cval = Integer.parseInt(item.getValue().toString());
+
+			    	if(cval != null && cval.equals(Integer.parseInt(rs.getString("TEMA_ID")))){
+			    		combo_sklop.setSelectedIndex(i);
+			    		break;
+			    	}
+			     }	
+				
+				combobox("combo_enota","ID","ENOTA","ucna_enota_combobox");
+				items = combo_enota.getItems();
+				 for (int i = 0; i < items.size(); i++) {
+			    	Comboitem item = items.get(i);
+			    	Integer cval = Integer.parseInt(item.getValue().toString());
+
+			    	if(cval != null && cval.equals(Integer.parseInt(rs.getString("ENOTA_ID")))){
+			    		combo_enota.setSelectedIndex(i);
+			    		break;
+			    	}
+			     }	
+		   	
+				
+				rs = s.getResultSet ();
+				Object[] obj_select_cilji_ure = {podatki_ure_id};
+		        s = PStatment(conn, "select_cilji_ure", obj_select_cilji_ure);
+			    rs = s.executeQuery ();					    
+							   	
+				if(rs.next()){
+					Cilj1.setValue(rs.getString("CILJ"));
+					
+					while(rs.next()){
+						DodajCilj(rs.getString("CILJ"));
+					}
+				}
+				
+				
+				
+			//Zapremo povezavo do baze
+			rs.close ();
+			s.close ();
+			   
+        }
+        catch (Exception e)
+        {
+            System.err.println ("ERROR: "+ e.getMessage());
+        }
+        finally
+        {
+            if (conn != null)
+            {
+                try
+                {
+                   closeDB(conn);
+                }
+                catch (Exception e) { /* ignore close errors */ }
             }
         }
-        
+        	
+     }
+}
 ]]></zscript>
  </window>
 

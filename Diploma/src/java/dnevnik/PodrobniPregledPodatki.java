@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
 import javax.servlet.ServletContext;
-import org.jruby.RubyGC$s_method_0_0$RUBYINVOKER$garbage_collect;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Textbox;

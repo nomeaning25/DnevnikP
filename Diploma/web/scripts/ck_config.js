@@ -4,9 +4,9 @@ CKEDITOR.editorConfig = function(config) {
     config.toolbar = 'MyToolbar';
     config.toolbar_MyToolbar = [ [ 'Bold','TextColor' ], ['Itemize'] ];
     config.toolbar = 'MyToolbar2';
-    config.toolbar_MyToolbar2 = [ [ 'Bold', 'Italic','Subscript','Superscript', 'TextColor', '-', 'NumberedList', 'BulletedList', '-', 'Cut', 'Copy', 'Paste', 'Link', 'Unlink' ], [ 'Undo', 'Redo', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ], [ 'Table', 'SpecialChar', 'Format', 'Font', 'FontSize'] ];
+    config.toolbar_MyToolbar2 = [ [ 'Bold', 'Italic','Subscript','Superscript', 'TextColor', '-', 'NumberedList', 'BulletedList', '-', 'Cut', 'Copy', 'Paste', 'Link', 'Unlink' ], [ 'Undo', 'Redo', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ], [ 'SpecialChar', 'Format', 'Font', 'FontSize'] ];
     config.toolbar = 'MyToolbar3';
-    config.toolbar_MyToolbar3 = [ [ 'Bold', 'Italic','Subscript','Superscript', 'TextColor', 'Image', '-', 'NumberedList', 'BulletedList', '-', 'Cut', 'Copy', 'Paste', 'Link', 'Unlink' ], [ 'Undo', 'Redo', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ], [ 'Table', 'SpecialChar', 'Format', 'Font', 'FontSize'] ];
+    config.toolbar_MyToolbar3 = [ [ 'Bold', 'Italic','Subscript','Superscript', 'TextColor', 'Image', '-', 'NumberedList', 'BulletedList', '-', 'Cut', 'Copy', 'Paste', 'Link', 'Unlink' ], [ 'Undo', 'Redo', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ], [ 'SpecialChar', 'Format', 'Font', 'FontSize'] ];
     config.toolbarStartupExpanded = true;
     config.removePlugins = 'elementspath';
 };
