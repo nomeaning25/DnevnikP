@@ -10,6 +10,7 @@ package dnevnik;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 /**
  *
@@ -99,7 +100,7 @@ public class database {
     public PreparedStatement Prepare(String sql, Object[] param){
         PreparedStatement ps = null;
         try{
-            ps = this.conn.prepareStatement(sql);
+            ps = this.conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             if(param != null){
                 for(int i = 0; i < param.length; i++){
                     ps.setObject(i + 1, param[i]);

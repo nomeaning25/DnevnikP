@@ -178,7 +178,8 @@ import dnevnik.*;
                 
                 if(!rs.getString("ID").equals("-1")){
                 		session.setAttribute("ID_uporabnika",rs.getString("ID"));
-                		session.setAttribute("ID_skupine_upor",rs.getString("UPOR_SKUPINA_ID"));                		
+                		session.setAttribute("ID_skupine_upor",rs.getString("UPOR_SKUPINA_ID"));    
+                                session.setAttribute("ID_predmeta",1);  
                 	    execution.sendRedirect("Index.zul");                		
                 }
                 else{
