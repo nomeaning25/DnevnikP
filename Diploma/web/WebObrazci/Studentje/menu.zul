@@ -11,9 +11,9 @@
     </menu>
     <menu label="Pregled">
         <menupopup>
-            <menuitem label="Priprave" onClick="iframe.setSrc(&quot;./Priprava/Pregled.zul;&quot;)" image="../../stil/slike/icons/folder32.png" />
-            <menuitem label="Hospitacije" onClick="iframe.setSrc(&quot;./Hospitacija/Pregled.zul;&quot;)" image="../../stil/slike/icons/folder32.png" />
-            <menuitem label="Naloge" onClick="" image="../../stil/slike/icons/folder32.png" />
+            <menuitem label="Priprave" onClick='iframe.setSrc("./Priprava/Pregled.zul")' image="../../stil/slike/icons/folder32.png" />
+            <menuitem label="Hospitacije" onClick='iframe.setSrc("./Naloge/Pregled_oddaj.zul")' image="../../stil/slike/icons/folder32.png" />
+            <menuitem label="Naloge" onClick='iframe.setSrc("./Naloge/Pregled_oddaj.zul")' image="../../stil/slike/icons/folder32.png" />
             <menuseparator />
             <menuitem label="Dnevnik" onClick="" image="../../stil/slike/icons/pencil32.png"/>
         </menupopup>

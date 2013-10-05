@@ -203,13 +203,13 @@
                                         Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
                                             public void onEvent(Event evt) throws InterruptedException {
                                                 if (evt.getName().equals("onYes")) {
-                                                    session.setAttribute("ID_naloge",null); execution.sendRedirect("../Studentje/Index.zul");
+                                                    session.setAttribute("ID_naloge",null); execution.sendRedirect("../Profesorji/Index.zul");
                                                 } 
                                             }
                                         });
                                     }
                                     else {
-                                        session.setAttribute("ID_naloge",null); execution.sendRedirect("../Studentje/Index.zul");
+                                        session.setAttribute("ID_naloge",null); execution.sendRedirect("../Profesorji/Index.zul");
                                     }
                                 ]]>
                                 </attribute>
@@ -226,13 +226,14 @@
                                         Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
                                             public void onEvent(Event evt) throws InterruptedException {
                                                 if (evt.getName().equals("onYes")) {
-                                                    session.setAttribute("ID_naloge",null); execution.sendRedirect("../Studentje/Index.zul");
+                                                    Naloge.aktiviraj();                                                        
+                                                    
                                                 } 
                                             }
                                         });
                                     }
                                     else {
-                                        session.setAttribute("ID_naloge",null); execution.sendRedirect("../Studentje/Index.zul");
+                                        Naloge.aktiviraj();    
                                     }
                                 ]]>
                                 </attribute>

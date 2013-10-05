@@ -19,7 +19,7 @@
             <zscript><![CDATA[
                 import dnevnik.*;
                 
-                switch(Sessions.getCurrent().getAttribute("ID_skupine_upor")){
+                switch(Integer.parseInt(Sessions.getCurrent().getAttribute("ID_skupine_upor").toString())){
                     case 1: iframe.setSrc("./Studentje/Index.zul");
                             break;
                     case 2: iframe.setSrc("./Profesorji/Index.zul");
