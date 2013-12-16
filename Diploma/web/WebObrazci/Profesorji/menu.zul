@@ -4,7 +4,7 @@
             <menuitem label="Nova priprava" onClick="" image="../../stil/slike/icons/linedpaperpencil32.png" />
             <menuitem label="Nova hospitacija" onClick="" image="../../stil/slike/icons/notepencil32.png" />
             <menuseparator />
-            <menuitem label="Odjava" onClick="alert(self.label)" image="../../stil/slike/icons/plug32.png" />
+            <menuitem label="Odjava" onClick='session.setAttribute("ID_uporabnika",""); session.setAttribute("ID_skupine_upor",-1); session.setAttribute("ID_predmeta",-1);Executions.sendRedirect("../index.zul");' image="../../stil/slike/icons/plug32.png" />
         </menupopup>
     </menu>
     <menu label="Naloge">

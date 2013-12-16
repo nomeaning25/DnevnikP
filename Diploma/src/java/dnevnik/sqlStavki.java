@@ -62,7 +62,7 @@ public class sqlStavki {
             sql_stavki.put("update_hosp_vidik_a", "UPDATE dnevnik.hospitacija_vidik_a SET opis_ucne_ure = ?, pristop_ucne_ure = ?, vprasanje_uciteljici = ?, mnenje_o_organizaciji_hospitacije = ? WHERE id_hospitacije = ?;");
             sql_stavki.put("update_hosp_vidik_b", "UPDATE dnevnik.hospitacija_vidik_b SET opazovani_vidik = ?, opazovani_vidik_opazanja = ?, ravnanje_z_opazovanim_vidikom = ?, razlaganje_opazanja = ?, zakaj_je_vidkik_pomemben = ?, utemeljitev_premislekov = ? WHERE id_hospitacije = ?;");
 
-/*
+             /*
               * Sql stavki za naloge
               */
             sql_stavki.put("Seznam_Nalog_dodaj","select n.id , n.ime, n.Datum_zaklj from dnevnik.naloge n WHERE n.aktivna = 0 AND N.UPORABNIK = ? ORDER BY n.Datum_zaklj DESC;");
@@ -76,13 +76,14 @@ public class sqlStavki {
             sql_stavki.put("select_naloge_insert", "SELECT `INSERT` FROM NALOGE WHERE ID = ?;");
             sql_stavki.put("select_naloge_update", "SELECT `UPDATE` FROM NALOGE WHERE ID = ?;");
             sql_stavki.put("select_naloge_select", "SELECT `SELECT` FROM NALOGE WHERE ID = ?;");
-            sql_stavki.put("select_el_naloge","select a.TIP, a.ID_KONTROLE, a.VREDNOST, a.id, a.zap FROM naloge_elementi a where a.NALOGE_ID = ?;");
+            sql_stavki.put("select_el_naloge","select a.TIP, a.ID_KONTROLE, a.VREDNOST, a.id, a.zap FROM naloge_elementi a where a.NALOGE_ID = ? ORDER BY ZAP;");
 
             //Insert stavki
             sql_stavki.put("insert_naloga", "INSERT INTO dnevnik.naloge (IME, OPIS, DATUM_ZAKLJ,PREDMET_ID,UPORABNIK) VALUES(?, ?, ?, ?, ?);");		
             sql_stavki.put("insert_el_naloge", "INSERT INTO naloge_elementi (ID_KONTROLE, TIP, VREDNOST, NALOGE_ID, ZAP) VALUES(?, ?, ?, ?, ?);");
 
             //Update stavki             
+            sql_stavki.put("update_naloga", "UPDATE dnevnik.naloge SET IME = ?, OPIS = ?, DATUM_ZAKLJ = ? WHERE ID = ?;");		
             sql_stavki.put("posodobi_naloge_insert", "UPDATE NALOGE SET `INSERT` = ? WHERE ID = ?");
             sql_stavki.put("posodobi_naloge_update", "UPDATE NALOGE SET `UPDATE` = ? WHERE ID = ?");
             sql_stavki.put("posodobi_naloge_select", "UPDATE NALOGE SET `SELECT` = ? WHERE ID = ?");

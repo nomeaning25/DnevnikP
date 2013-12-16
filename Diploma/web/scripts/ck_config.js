@@ -1,5 +1,5 @@
 CKEDITOR.editorConfig = function(config) {
-    config.extraPlugins = 'uicolor';
+    //config.extraPlugins = 'uicolor';
     config.resize_enabled = false;
     config.toolbar = 'MyToolbar';
     config.toolbar_MyToolbar = [ [ 'Bold','TextColor' ], ['Itemize'] ];

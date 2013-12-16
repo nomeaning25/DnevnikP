@@ -90,7 +90,7 @@
             <row>
                     <cell sclass="CelicaLabela"><label value="Datum zaključka: "/></cell>
                     <cell>
-                        <datebox format="medium" id="datum" width="120px"  >
+                        <datebox format="medium" id="datum" width="120px" constraint="no past, no today">
                             <attribute name="onChange">
                              sprememba_o.setValue(1 + "");
                            </attribute>
@@ -215,8 +215,12 @@
                                 </attribute>
                             </image>
                             <image src="../../stil/slike/shrani.png">
-                                <attribute name="onClick"><![CDATA[
-                                    Boolean b = Naloge.shrani();
+                                <attribute name="onClick"><![CDATA[                                    
+                                    if(Naloge.shrani()){
+                                        alert("Shranjeno!");
+                                        sprememba_o.setValue("0");
+                                        sprememba_e.setValue("0");
+                                    }
                                 ]]>
                                 </attribute>
                             </image>
@@ -226,19 +230,46 @@
                                         Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
                                             public void onEvent(Event evt) throws InterruptedException {
                                                 if (evt.getName().equals("onYes")) {
-                                                    Naloge.aktiviraj();                                                        
-                                                    
+                                                    if(Naloge.shrani()){
+                                                        sprememba_o.setValue("0");
+                                                        sprememba_e.setValue("0");
+                                                        Naloge.aktiviraj(); 
+                                                        alert("Naloga je aktivna! Ponovno jo boste lahko videli, ko bo naloga zaključena.");
+                                                        session.setAttribute("ID_naloge",null); execution.sendRedirect("../Profesorji/Index.zul");
+                                                    }
                                                 } 
                                             }
                                         });
                                     }
                                     else {
-                                        Naloge.aktiviraj();    
+                                        if(Naloge.shrani()){
+                                            sprememba_o.setValue("0");
+                                            sprememba_e.setValue("0");
+                                            Naloge.aktiviraj(); 
+                                            alert("Naloga je aktivna! Ponovno jo boste lahko videli, ko bo naloga zaključena.");
+                                            session.setAttribute("ID_naloge",null); execution.sendRedirect("../Profesorji/Index.zul");
+                                        }   
                                     }
                                 ]]>
                                 </attribute>
                             </image>
-                                                
+                            <image src="../../stil/slike/zapri_1.png">
+                            <attribute name="onClick"><![CDATA[
+                                if(sprememba_o.getValue().equals("1") || sprememba_e.getValue().equals("1")){
+                                        Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
+                                            public void onEvent(Event evt) throws InterruptedException {
+                                                if (evt.getName().equals("onYes")) {
+                                                    execution.sendRedirect("../Naloge/PredogledNaloge.zul");
+                                                } 
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        execution.sendRedirect("../Naloge/PredogledNaloge.zul");
+                                    }
+                                ]]>
+                                </attribute>
+                            </image>     
                         </cell>	
                     </row>
         </rows>

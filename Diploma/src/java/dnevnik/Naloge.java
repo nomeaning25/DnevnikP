@@ -73,8 +73,7 @@ public class Naloge extends HtmlMacroComponent {
                 r = preveri_podatke();
             }
         }
-        return r;
-        
+        return r;        
     }
     
     public static void aktiviraj() throws InterruptedException{
@@ -186,6 +185,7 @@ public class Naloge extends HtmlMacroComponent {
         }
     }
     
+    //Vnos nove naloge - profesor
     public static Boolean insert() throws InterruptedException{
         Boolean r = preveri_podatke();
         if(r){
@@ -215,8 +215,28 @@ public class Naloge extends HtmlMacroComponent {
         return r;
     }
     
-    public static Boolean update(){
-        return false;
+    public static Boolean update() throws InterruptedException{
+        Boolean r = preveri_podatke();
+        if(r){
+            database db = new database();
+
+            PreparedStatement s;
+            try
+            {   
+                //Pripravimo statement za posodobitev podatkiov
+                Object[] param = {((Textbox) Path.getComponent("/Dodaj_nalogo/Podatki").getFellow("naslov")).getValue(), ((CKeditor) Path.getComponent("/Dodaj_nalogo/Podatki").getFellow("navodilo")).getValue(), ((Datebox) Path.getComponent("/Dodaj_nalogo/Podatki").getFellow("datum")).getValue(), Sessions.getCurrent().getAttribute("ID_naloge").toString()};
+                s = db.Statement(Boolean.FALSE, "update_naloga", param);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
+                s.execute();
+                               
+                db.close ();
+            }
+            catch (Exception e)
+            {
+                System.out.println ("ERROR: " + e.getMessage());                  //Če pride do napake, jo vrnemo
+                r = false;
+            }
+        }
+        return r;
     }
     
     public static Boolean preveri_podatke() throws InterruptedException{
@@ -407,9 +427,9 @@ public class Naloge extends HtmlMacroComponent {
                                 c3 = new Cell();
                                 Combobox cbx = new Combobox();
                                 cbx.setId(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"));
-                                String[] citems = dodatno_p.substring(dodatno_p.indexOf(';') + 2, dodatno_p.length() - 2).split("},{");
+                                String[] citems = dodatno_p.substring(dodatno_p.indexOf(';') + 1, dodatno_p.length()).split(",");
                                 for(int i = 0; i < citems.length; i++){
-                                    cbx.appendItem(citems[i]);
+                                    cbx.appendItem(citems[i].substring(1,citems[i].length()-1));
                                 }
                                 cbx.addEventListener("onChange", new EventListener() {
                                     public void onEvent(Event e) throws Exception {
@@ -641,6 +661,226 @@ public class Naloge extends HtmlMacroComponent {
         }
     }
     
+    public static void PredogledNaloge() {
+        
+        database db = new database();
+        PreparedStatement s;
+        try {
+                //Najprej naložimo osnovne podatke
+                Object[] param_osnovni = {Sessions.getCurrent().getAttribute("ID_naloge").toString()};   
+                
+                s = db.Statement(Boolean.FALSE, "poisci_podatke_nal", param_osnovni);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo                       
+                ResultSet rs = s.executeQuery ();
+                
+                rs.next();
+                ((Label) Path.getComponent("/PredogledNaloge/PodatkiNaloge").getFellow("naslov_naloge")).setValue(rs.getString("ime"));                
+                ((Cell) Path.getComponent("/PredogledNaloge/PodatkiNaloge").getFellow("opis")).appendChild(new Html(rs.getString("opis")));                
+                
+                                       Object[] param_poisci = {Sessions.getCurrent().getAttribute("ID_naloge").toString()};   
+                
+                s = db.Statement(Boolean.FALSE, "select_el_naloge", param_poisci);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo                       
+                rs = s.executeQuery ();
+
+                Rows rws = ((Grid) Path.getComponent("/PredogledNaloge/PodatkiNaloge")).getRows();
+                Row r = new Row();
+                
+                Textbox sprem = new Textbox();
+                Cell sprem_c = new Cell();
+                sprem_c.setColspan(2);
+                sprem.setId("sprememba");
+                sprem.setStyle("display:none;");
+                sprem_c.appendChild(sprem);
+                r.appendChild(sprem_c);
+                rws.appendChild(r);
+                
+                while (rs.next()) 
+                {                                 
+                    r = new Row();
+                    String dodatno_p = rs.getString("VREDNOST");                    
+                    int tip = rs.getInt("tip");
+                    switch(tip){
+                        case VNOSTNO_POLJE: Label l1 = new Label(dodatno_p);
+                                Cell c1 = new Cell();
+                                c1.appendChild(l1);
+                                r.appendChild(c1);
+                                c1 = new Cell();
+                                Textbox t1 = new Textbox();
+                                t1.setId(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"));
+                                t1.addEventListener("onChange", new EventListener() {
+                                    public void onEvent(Event e) throws Exception {
+                                        ((Textbox) Path.getComponent("/PredogledNaloge/PodatkiNaloge").getFellow("sprememba")).setValue("1");
+                                    }
+                                        
+                                });
+                                c1.appendChild(t1);
+                                r.appendChild(c1);
+                                break;
+                        case VECVRSTICNO_VNOSNO_POLJE: Label l2 = new Label(dodatno_p);
+                                Cell c2 = new Cell();
+                                c2.appendChild(l2);
+                                r.appendChild(c2);
+                                c2 = new Cell();
+                                Textbox t2 = new Textbox();
+                                t2.setId(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"));
+                                t2.setRows(3);
+                                t2.addEventListener("onChange", new EventListener() {
+                                    public void onEvent(Event e) throws Exception {
+                                        ((Textbox) Path.getComponent("/PredogledNaloge/PodatkiNaloge").getFellow("sprememba")).setValue("1");
+                                    }
+                                        
+                                });
+                                c2.appendChild(t2);
+                                r.appendChild(c2);
+                                break;
+                        case IZBIRNO_POLJE: Label l3 = new Label(dodatno_p.substring(0, dodatno_p.indexOf(';')));
+                                Cell c3 = new Cell();
+                                c3.appendChild(l3);
+                                r.appendChild(c3);
+                                c3 = new Cell();
+                                Combobox cbx = new Combobox();
+                                cbx.setId(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"));
+                                String[] citems = dodatno_p.substring(dodatno_p.indexOf(';') + 1, dodatno_p.length()).split(",");
+                                for(int i = 0; i < citems.length; i++){
+                                    cbx.appendItem(citems[i].substring(1,citems[i].length()-1));
+                                }
+                                cbx.addEventListener("onChange", new EventListener() {
+                                    public void onEvent(Event e) throws Exception {
+                                        ((Textbox) Path.getComponent("/PredogledNaloge/PodatkiNaloge").getFellow("sprememba")).setValue("1");
+                                    }
+                                        
+                                });
+                                c3.appendChild(cbx);
+                                r.appendChild(c3);
+                                break;
+                        case EDITOR: Label l4 = new Label(dodatno_p);
+                                Cell c4 = new Cell();
+                                c4.appendChild(l4);
+                                c4.setColspan(2);
+                                r.appendChild(c4);
+                                rws.appendChild(r);
+                                r = new Row();
+                                c4 = new Cell();
+                                CKeditor ck = new CKeditor();
+                                ck.setId(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"));
+                                ck.addEventListener("onChange", new EventListener() {
+                                    public void onEvent(Event e) throws Exception {
+                                        ((Textbox) Path.getComponent("/PredogledNaloge/PodatkiNaloge").getFellow("sprememba")).setValue("1");
+                                    }
+                                        
+                                });
+                                c4.appendChild(ck);
+                                r.appendChild(c4);
+                                break;
+                        case PRENOS_DATOTEKE: Label l5 = new Label(dodatno_p);
+                                Cell c5 = new Cell();
+                                c5.appendChild(l5);
+                                r.appendChild(c5);
+                                c5 = new Cell();
+                                Button b = new Button();
+                                b.setId(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"));
+                                b.setLabel("Naloži");
+                                b.setUpload("true");
+                                b.addEventListener("onUpload", new EventListener(){
+                                    public void onEvent(Event e) throws Exception {
+                                        Media media = ((UploadEvent) e).getMedia();
+                                        /*String pot = path + "/doc/" + Sessions.getCurrent().getAttribute("ID_uporabnika") + "/nal_" + Sessions.getCurrent().getAttribute("ID_naloge") + "_" + e.getTarget().getId().toString() + "_" + media.getName();        
+                                        if (media.isBinary()) {
+                                            Files.copy(new File(pot), media.getStreamData());
+                                        }
+                                        else {
+                                            BufferedWriter writer = new BufferedWriter(new FileWriter(pot,null));
+                                            Files.copy(writer, media.getReaderData());
+                                        }*/
+                                        ((Label) e.getTarget().getFellow("success")).setValue(media.getName());
+                                        ((Textbox) Path.getComponent("/PredogledNaloge/PodatkiNaloge").getFellow("sprememba")).setValue("1");
+                                    }
+                                });
+                                Label lbl = new Label();
+                                lbl.setId("success");
+                                lbl.setStyle("color: grey; margin-left: 5px; position:relative; top:-5px; font-weight:normal; font-style:italic;");
+                                c5.appendChild(b);
+                                c5.appendChild(lbl);
+                                r.appendChild(c5);
+                                break;
+                        case IZBIRA_HOSPITACIJE: Label l6 = new Label(dodatno_p);
+                                Cell c6 = new Cell();
+                                c6.appendChild(l6);
+                                r.appendChild(c6);
+                                c6 = new Cell();
+                                Combobox cbx_hosp = new Combobox();
+                                cbx_hosp.setId(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"));
+                                Object[] param_hosp = {Sessions.getCurrent().getAttribute("ID_uporabnika").toString(), Sessions.getCurrent().getAttribute("ID_predmeta").toString()}; 
+                                s = db.Statement(Boolean.TRUE, "SELECT id, naslov_ure FROM hospitacije WHERE uporabnik_id = ? AND predmet_id = ?", param_hosp);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo                       
+                                ResultSet rs_hosp = s.executeQuery ();
+                                while(rs_hosp.next()){
+                                    Comboitem ci = new Comboitem(rs_hosp.getString("naslov_ure"));
+                                    ci.setValue(rs_hosp.getInt("id"));
+                                    cbx_hosp.appendChild(ci);
+                                }       
+                                cbx_hosp.addEventListener("onChange", new EventListener() {
+                                    public void onEvent(Event e) throws Exception {
+                                        ((Textbox) Path.getComponent("/PredogledNaloge/PodatkiNaloge").getFellow("sprememba")).setValue("1");
+                                    }
+                                        
+                                });
+                                c6.appendChild(cbx_hosp);
+                                r.appendChild(c6);
+                                break;
+                        case IZBIRA_PRIPRAVE: Label l7 = new Label(dodatno_p);
+                                Cell c7 = new Cell();
+                                c7.appendChild(l7);
+                                r.appendChild(c7);
+                                c7 = new Cell();
+                                Combobox cbx_prip = new Combobox();
+                                cbx_prip.setId(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"));
+                                Object[] param_prip = {Sessions.getCurrent().getAttribute("ID_uporabnika").toString(), Sessions.getCurrent().getAttribute("ID_predmeta").toString()}; 
+                                s = db.Statement(Boolean.TRUE, "SELECT a.id, b.naslov_ure, b.datum FROM ucna_priprava a, podatki_ure b WHERE a.id = b.ucna_priprava_id AND a.uporabnik_id = ? AND a.predmet_id = ?", param_prip);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo                       
+                                ResultSet rs_prip = s.executeQuery ();
+                                while(rs_prip.next()){
+                                    Comboitem ci = new Comboitem(rs_prip.getString("naslov_ure") + " (" + rs_prip.getDate("datum").toString() + ")");
+                                    ci.setValue(rs_prip.getInt("id"));
+                                    cbx_prip.appendChild(ci);
+                                }      
+                                cbx_prip.addEventListener("onChange", new EventListener() {
+                                    public void onEvent(Event e) throws Exception {
+                                        ((Textbox) Path.getComponent("/PredogledNaloge/PodatkiNaloge").getFellow("sprememba")).setValue("1");
+                                    }
+                                        
+                                });
+                                c7.appendChild(cbx_prip);
+                                r.appendChild(c7);
+                                break;
+                        default: break;
+                    }
+                    rws.appendChild(r);
+                }
+                
+                r = new Row();
+                Cell cl = new Cell();
+                cl.setStyle("text-align: center; padding-top: 35px;");
+                cl.setColspan(2);
+               
+                Image im = new Image();
+                im.setSrc("../../stil/slike/zapri_1.png");
+                im.addEventListener("onClick", new EventListener() {
+                    public void onEvent(Event e) throws Exception {                       
+                       Executions.getCurrent().sendRedirect("../Naloge/DodajNalogo.zul");                        
+                    }
+                });
+                cl.appendChild(im);
+                
+                r.appendChild(cl);
+                rws.appendChild(r);
+                
+                rs.close();                
+                db.close ();
+        }
+        catch (Exception e)
+        {
+            System.err.println ("ERROR: "+ e.getMessage());
+        }
+    }
+    
     public static void shrani_vnose(){
         if(Sessions.getCurrent().getAttribute("ID_vnosa_naloge") != null){                
             update_vnos();
@@ -650,6 +890,7 @@ public class Naloge extends HtmlMacroComponent {
         }
     }
     
+    //Update za študente
     public static void update_vnos(){
         ServletContext serv = (ServletContext)Sessions.getCurrent().getWebApp().getNativeContext();
         final String path = serv.getRealPath("/");
@@ -709,6 +950,7 @@ public class Naloge extends HtmlMacroComponent {
         
     }
     
+    //Vnos za študente
     public static void insert_vnos(){
         ServletContext serv = (ServletContext)Sessions.getCurrent().getWebApp().getNativeContext();
         final String path = serv.getRealPath("/");
@@ -718,7 +960,7 @@ public class Naloge extends HtmlMacroComponent {
         try {
             Object[] param_poisci = {Sessions.getCurrent().getAttribute("ID_naloge").toString()};   
                 
-            s = db.Statement(Boolean.FALSE, "select_el_naloge", param_poisci);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo                       
+            s = db.Statement(Boolean.FALSE, "select_el_naloge", param_poisci);   
             ResultSet rs = s.executeQuery ();
             String sql = "INSERT INTO NAL_" + Sessions.getCurrent().getAttribute("ID_naloge").toString() + "(";
             String sql_values = " VALUES(";

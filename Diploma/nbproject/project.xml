@@ -83,10 +83,6 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.ckez.jar-1}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
                     <file>${libs.ZK6.0.2CE.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>

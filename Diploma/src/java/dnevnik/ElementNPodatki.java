@@ -197,7 +197,7 @@ public class ElementNPodatki {
             try
             {   
                  //Pripravimo statement za poizvedbo po podatkih
-                Object[] param_z = {((Textbox) Path.getComponent("/podrobni_pregled/Podatki").getFellow("rowid")).getValue()};   
+                Object[] param_z = {((Textbox) Path.getComponent("/Dodaj_nalogo/PregledNaloge").getFellow("rowid")).getValue()};   
                 s = db.Statement(Boolean.TRUE, "select zap FROM naloge_elementi WHERE ID = ?;", param_z);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
                 ResultSet rs = s.executeQuery ();	                                
                 rs.next();
@@ -207,7 +207,7 @@ public class ElementNPodatki {
                 Object[] param = {zap - 1 , zap, Sessions.getCurrent().getAttribute("ID_naloge")};   
                 s = db.Statement(Boolean.TRUE, "UPDATE naloge_elementi SET zap = ? where zap = ? and NALOGE_ID = ?;", param);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
                 s.execute();
-                Object[] param_z_new = {zap, ((Textbox) Path.getComponent("/podrobni_pregled/Podatki").getFellow("rowid")).getValue()};   
+                Object[] param_z_new = {zap, ((Textbox) Path.getComponent("/Dodaj_nalogo/PregledNaloge").getFellow("rowid")).getValue()};   
                 s = db.Statement(Boolean.TRUE, "UPDATE naloge_elementi SET zap = ? where ID = ?;", param_z_new);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
                 s.execute();
                 
