@@ -1,1 +1,23 @@
-<label value="You are using ZK version: ${desktop.webApp.version}"/>
+<window sclass="cardSys" border="none"
+    apply="org.zkoss.bind.BindComposer"
+    viewModel="@id('vm') @init('dnevnik.NalogaViewModel')">
+    <listbox vflex="true" hflex="1"
+            model="@load(vm.seznam)" selectedItem="@bind(vm.selected)" >
+            <auxhead>
+                <auxheader colspan="3" class="topic">Seznam</auxheader>
+            </auxhead>
+            <listhead>
+                <listheader label="Ime" width="80px" align="center" />
+                <listheader label="Opis" align="center" />
+                <listheader label="Datum zaklj." width="80px" align="center" />
+            </listhead>
+            <template name="model" var="Naloga">
+                <listitem>
+                    <listcell label="@load(Naloga.ime)" />
+                    <listcell label="@load(Naloga.opis)" />
+                    <listcell label="@load(Naloga.datumZaklj)" />
+                </listitem>
+            </template>
+ 
+        </listbox>          
+</window>
