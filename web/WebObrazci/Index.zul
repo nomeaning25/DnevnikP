@@ -1,0 +1,34 @@
+<?page title="Aplikacija" contentType="text/html;charset=UTF-8"?>
+<zk>	
+        <window id="win" border="none" height="100%" style="margin:auto; padding-top:0px;">
+            <borderlayout	>
+                <north border="none">
+                <zk switch="${ID_skupine_upor}">
+                    <zk case="1">   
+                       <include src="./Studentje/menu.zul" />				       
+                    </zk>
+                    <zk case="2">
+                       <include src="./Profesorji/menu.zul" />
+                    </zk>				   
+                </zk>                     
+                </north>
+                <center border="none">
+                   <iframe id="iframe" src="" width="100%" height="100%"/>
+                </center>
+            </borderlayout>
+            <zscript><![CDATA[
+                import dnevnik.*;
+                
+                switch(Integer.parseInt(Sessions.getCurrent().getAttribute("ID_skupine_upor").toString())){
+                    case 1: iframe.setSrc("./Studentje/Index.zul");
+                            break;
+                    case 2: iframe.setSrc("./Profesorji/Index.zul");
+                            break;
+                    Executions.sendRedirect("WebObrazci/Prijava.zul");
+                }
+                            
+                
+            ]]></zscript>
+        </window>
+        
+</zk>
