@@ -7,6 +7,7 @@
 package dnevnik;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -33,6 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Naloga.findByIme", query = "SELECT n FROM Naloga n WHERE n.ime = :ime"),
     @NamedQuery(name = "Naloga.findByOpis", query = "SELECT n FROM Naloga n WHERE n.opis = :opis"),
     @NamedQuery(name = "Naloga.findByDatumZaklj", query = "SELECT n FROM Naloga n WHERE n.datumZaklj = :datumZaklj"),    
+    @NamedQuery(name = "Naloga.findZakljucene", query = "SELECT n FROM Naloga n WHERE n.datumZaklj < :datum AND n.predmetId = :predmetId and n.uporabnik = :uporabnik and n.aktivna = 1"),    
+    @NamedQuery(name = "Naloga.findByAktivnaFromUporabnikAndPredmet", query = "SELECT n FROM Naloga n WHERE n.aktivna = :aktivna AND n.predmetId = :predmetId and n.uporabnik = :uporabnik"),    
     @NamedQuery(name = "Naloga.findByAktivna", query = "SELECT n FROM Naloga n WHERE n.aktivna = :aktivna")})
 public class Naloga implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -49,7 +53,8 @@ public class Naloga implements Serializable {
     private String opis;
     @Basic(optional = false)
     @Column(name = "DATUM_ZAKLJ")
-    private String datumZaklj;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date datumZaklj;
     @Column(name = "AKTIVNA")
     private Integer aktivna;
     @JoinColumn(name = "UPORABNIK", referencedColumnName = "ID")
@@ -58,7 +63,7 @@ public class Naloga implements Serializable {
     @JoinColumn(name = "PREDMET_ID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private Predmet predmetId;
-
+    
     public Naloga() {
     }
 
@@ -66,7 +71,7 @@ public class Naloga implements Serializable {
         this.id = id;
     }
 
-    public Naloga(Integer id, String ime, String opis, String datumZaklj) {
+    public Naloga(Integer id, String ime, String opis, Date datumZaklj) {
         this.id = id;
         this.ime = ime;
         this.opis = opis;
@@ -97,11 +102,11 @@ public class Naloga implements Serializable {
         this.opis = opis;
     }
 
-    public String getDatumZaklj() {
+    public Date getDatumZaklj() {
         return datumZaklj;
     }
 
-    public void setDatumZaklj(String datumZaklj) {
+    public void setDatumZaklj(Date datumZaklj) {
         this.datumZaklj = datumZaklj;
     }
 
@@ -128,7 +133,7 @@ public class Naloga implements Serializable {
     public void setPredmetId(Predmet predmetId) {
         this.predmetId = predmetId;
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 0;

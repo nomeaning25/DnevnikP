@@ -2,7 +2,7 @@
     apply="org.zkoss.bind.BindComposer"
     viewModel="@id('vm') @init('dnevnik.NalogaViewModel')">
     <listbox vflex="true" hflex="1"
-            model="@load(vm.seznam)" selectedItem="@bind(vm.selected)" >
+            model="@load(vm.seznamZaklj)">
             <auxhead>
                 <auxheader colspan="3" class="topic">Seznam</auxheader>
             </auxhead>
