@@ -83,9 +83,11 @@ public class ElementNRenderer implements RowRenderer {
         });
         
     }
-
+    
+    @Override
     public void render(Row row, Object t, int i) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        render(row,t);
     }
  
 }

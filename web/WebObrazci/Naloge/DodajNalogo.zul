@@ -90,7 +90,7 @@
             <row>
                     <cell sclass="CelicaLabela"><label value="Datum zaključka: "/></cell>
                     <cell>
-                        <datebox format="medium" id="datum" width="120px" constraint="no past, no today">
+                        <datebox format="medium" id="datum" width="120px">
                             <attribute name="onChange">
                              sprememba_o.setValue(1 + "");
                            </attribute>
@@ -117,7 +117,7 @@
             <row style="background:#FFFFFF; border: white;">
                 <cell colspan="2">
                 <hlayout>
-                    <grid id="PregledNaloge"  height="300px" width="150px">        
+                    <grid id="PregledNaloge" height="300px" width="150px">        
                         <columns>
                             <column hflex="1">Id komponente</column>     
                             <column hflex="1" visible="false">Tip komponente</column>                              
@@ -197,7 +197,7 @@
             </row>
             <row>
                         <cell style="text-align: center; padding-top: 35px;" colspan="2">                            
-                            <image src="../../stil/slike/zapri_1.png">
+                            <image src="../../stil/slike/nazaj.png">
                                 <attribute name="onClick"><![CDATA[
                                 if(sprememba_o.getValue().equals("1") || sprememba_e.getValue().equals("1")){
                                         Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
@@ -279,7 +279,7 @@
 
         import org.zkoss.zk.ui.event.EventListener;
         
-        PregledNaloge.setRowRenderer(new  ElementNRenderer());
+        PregledNaloge.setRowRenderer(new ElementNRenderer());
         ElementNPodatki.napolni();
         PregledNaloge.setModel(new ListModelList(ElementNPodatki.vrniVrstice()));        
                  

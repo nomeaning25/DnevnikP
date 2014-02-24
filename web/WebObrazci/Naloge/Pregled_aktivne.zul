@@ -18,23 +18,29 @@
                 cursor: pointer;
             }
             
+            .datoteka_item .z-label{
+                font-family: 'Italianno', cursive;
+                font-size: 25px;
+            }
+            
             .datoteka_item:hover{
                 background-image: url('../../stil/slike/Gumb-datoteka-hover.png');
             }
             
-            .datoteka_item .datum{
+            .datoteka_item .datum .z-label{
                 font-size:20px;
                 color: #B5B5B5; 
             }
         </style>
-        <window id="Seznam_nalog" border="none" width="1066px" style="margin:auto;">
-	<div id="Seznam" width="1066px" style="margin:auto; padding-top:100px;"></div>
-	<zscript><![CDATA[
-	    import dnevnik.*;		
-	    import java.sql.*;
-	    
-    	    Naloge.napolni_pregled(true);
-            
-	]]></zscript>
+        <window id="Seznam_nalog" sclass="Seznam_nalog" apply="org.zkoss.bind.BindComposer"           
+            viewModel="@id('vm') @init('dnevnik.NalogaViewModel')" border="none" width="1066px" style="margin:auto;">
+            <div children="@load(vm.getSeznamAkt)" id="Seznam" width="1066px" style="margin:auto; padding-top:100px;">
+                <template name="children">  
+                    <div class="datoteka_item" onClick="@command('onChooseItemAkt', id=each.id)">                  
+                        <div><span class='datum'><label value="@load(each.datumZaklj)"/></span></div>
+                        <div><span class='naslov'><label value="@load(each.ime)"/></span></div>
+                    </div>
+                </template>
+            </div>                      
         </window>
  </zk>
