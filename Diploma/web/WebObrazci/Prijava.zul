@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+<style dynamic="true">
+        .no_border tr.z-row td.z-row-inner, tr.z-row .z-cell,div.z-grid, .z-grid-header-bg 
+		 { 
+			 border: white;
+			 background:white;
+		 }
+		.CelicaLabela{
+			text-align: right;
+		}
+    </style>
+<window title="Prijava" border="normal"  width="400px" style="margin:auto; padding-top:50px;" onOK="preveriPrijavo()" >
+
+<zscript src="../scripts/DB.zs"/>
+<zscript src="../scripts/funkcije.zs"/>
+
+<grid sclass="no_border" style="padding-top:15px; padding-bottom:15px; width:300px; margin:auto;">
+		<columns>
+			<column width="100px" label=""/>
+			<column label=""/>
+		</columns>
+		<rows id="forma">
+			<row>Uporabniško ime:<textbox id="uime" width="150px"  /></row>
+			<row>Geslo:<textbox id="geslo" width="150px" type="password"/></row>
+                        <row><cell sclass="loginCtl" colspan="2"><vlayout>
+                            <button label="Prijava" onClick="preveriPrijavo()" width="100px"/>
+                            <label id="mesg" />
+                        </vlayout></cell></row>		
+		</rows>
+	</grid>
+	
+ </window>
+
+ </zk>

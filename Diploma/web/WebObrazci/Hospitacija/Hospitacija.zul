@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+<style dynamic="true">
+        .no_border tr.z-row td.z-row-inner, tr.z-row .z-cell,div.z-grid, .z-grid-header-bg 
+		 { 
+			 border: white;
+			 background:white;
+		 }
+		.CelicaLabela{
+			text-align: right;
+		}
+    </style>
+<window title="Osnovni podatki o uri" id="osnovni_podatki" border="normal"  width="800px" style="margin:auto; padding-top:50px;">
+<zscript src="../../scripts/DB.zs"/>
+<zscript src="../../scripts/funkcije.zs"/>
+
+
+
+<grid sclass="no_border" style="padding-top:15px; padding-bottom:15px; width:700px; margin:auto;">
+		<columns>
+			<column width="200px" label=""/>
+			<column label=""/>
+		</columns>
+		<rows id="forma">
+		    <row>
+				<cell sclass="CelicaLabela"><label value="Izvajalec: "/></cell>
+				<cell><textbox id="Izvajalec" width="200px"  /></cell>	
+			</row>			
+			<row>
+				<cell sclass="CelicaLabela"><label value="Datum: "/></cell>
+				<cell><datebox id="Datum" format="medium"/></cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Šola: "/></cell>
+				<cell><textbox id="Sola" width="200px"/></cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Ura: "/></cell>
+				<cell><intbox id="Ura" width="99px"/></cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Mentor-ica (OŠ/SŠ): "/></cell>
+				<cell><textbox id="Mentor" width="200px"/></cell>	
+			</row>			
+			<row>
+				<cell sclass="CelicaLabela"><label value="Razred: "/></cell>
+				<cell><intbox id="Razred" width="99px"/></cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Naslov učne ure: "/></cell>
+				<cell><textbox id="NaslovUre" width="99px"/></cell>	
+			</row>			
+			<row>
+				<cell sclass="CelicaLabela"><label value="Učna tema: "/></cell>
+				<cell><combobox id="combo_tema" readonly="true" onCreate="combobox(&quot;combo_tema&quot;,&quot;ID&quot;,&quot;TEMA&quot;,&quot;ucna_tema_combobox&quot;)" onChange="combobox(&quot;combo_sklop&quot;,&quot;ID&quot;,&quot;SKLOP&quot;,&quot;ucni_sklop_combobox&quot;)"></combobox></cell>
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Učni sklop: "/></cell>
+				<cell><combobox id="combo_sklop" readonly="true" onChange="combobox(&quot;combo_enota&quot;,&quot;ID&quot;,&quot;ENOTA&quot;,&quot;ucna_enota_combobox&quot;)" /></cell>	
+			</row>
+			<row>
+				<cell sclass="CelicaLabela"><label value="Učna enota: "/></cell>
+				<cell><combobox id="combo_enota" readonly="true" onCreate="Napolni()"></combobox></cell>
+			</row>	
+		</rows>
+	</grid>
+	<zscript><![CDATA[
+import java.sql.*;
+import dnevnik.*;  
+
+public void Napolni(){
+	if(session.getAttribute("ID_datoteke") != null){
+		Connection conn = null;
+		PreparedStatement s = null;
+        try
+        {
+     	   //Povežemo se na bazo
+            conn = openDB("root","","jdbc:mysql://localhost:3306/dnevnik");
+            //Kreiramo SQL za prenos podatkov v šifrant Sklopov
+         	
+            Object[] obj_select_podatki_ure = {session.getAttribute("ID_datoteke")};
+	        s = PStatment(conn, "select_hospitacija", obj_select_podatki_ure);
+	        ResultSet rs = s.executeQuery ();	
+
+				rs.next();
+				
+				Izvajalec.setValue(rs.getString("IZVAJALEC"));
+				Mentor.setValue(rs.getString("MENTOR"));
+				Datum.setValue(rs.getDate("DATUM"));
+				Ura.setValue(Integer.parseInt(rs.getString("URA")));
+				Razred.setValue(Integer.parseInt(rs.getString("RAZRED")));
+				Sola.setValue(rs.getString("SOLA"));
+				NaslovUre.setValue(rs.getString("NASLOV_URE"));	
+				combo_tema.setSelectedIndex(Integer.parseInt(rs.getString("TEMA_ID")) - 1);
+				combobox("combo_sklop","ID","SKLOP","ucni_sklop_combobox");
+				List items = combo_sklop.getItems();
+				 for (int i = 0; i < items.size(); i++) {
+			    	Comboitem item = items.get(i);
+			    	Integer cval = Integer.parseInt(item.getValue().toString());
+	
+			    	if(cval != null && cval.equals(Integer.parseInt(rs.getString("TEMA_ID")))){
+			    		combo_sklop.setSelectedIndex(i);
+			    		break;
+			    	}
+			     }	
+				
+				combobox("combo_enota","ID","ENOTA","ucna_enota_combobox");
+				items = combo_enota.getItems();
+				 for (int i = 0; i < items.size(); i++) {
+			    	Comboitem item = items.get(i);
+			    	Integer cval = Integer.parseInt(item.getValue().toString());
+			    	if(cval != null && cval.equals(Integer.parseInt(rs.getString("ENOTA_ID")))){
+			    		combo_enota.setSelectedIndex(i);
+			    		break;
+			    	}
+			     }	
+	
+				//Zapremo povezavo do baze
+				rs.close ();
+				s.close ();
+		    }
+			   
+       
+        catch (Exception e)
+        {
+            System.err.println ("ERROR: "+ e.getMessage());
+        }
+        finally
+        {
+            if (conn != null)
+            {
+                try
+                {
+                   closeDB(conn);
+                }
+                catch (Exception e) { /* ignore close errors */ }
+            }
+        }
+        	
+     }
+}
+]]></zscript>
+ </window>
+
+<window title="Analita ure" border="normal"  width="800px" style="margin:auto; padding-top:50px;">
+<zscript src="../../scripts/DB.zs"/>
+<zscript src="../../scripts/funkcije.zs"/>
+
+<tabbox width="778px">
+	<tabs>         
+		<tab label="Vidik A"/>
+        <tab label="Vidik B"/>
+    </tabs>
+	<tabpanels>
+		<tabpanel>
+			<grid sclass="no_border" style="padding-top:15px; padding-bottom:15px; width:750px; margin:auto;">
+				<columns>
+					<column label=""/>
+				</columns>
+				<rows id="forma_vidikA">
+					<row>
+						<cell>1. Kratek opis učne ure (zgradba, kratka vsebina obravnavane snovi). Zapišite, kateri naj bi bili (po vašem menju) učni cilji opazovane ure in v kolikšni meri so bili uresničeni.</cell>	
+					</row>
+					<row>
+						<ckeditor id="opis_ucne_ure" toolbar="MyToolbar2" height="105px" customConfigurationsPath="/scripts/ck_config_hosp.js"></ckeditor>	
+					</row>
+					<row style="padding-top:20px;">
+						<cell>2. Na katerem pristopu je po vaši presoji temeljila opazovana učna ura (vedenjskem, kognitivnem, interakcijskem)? S čim utemeljujete svojo presojo? Se vam je pristop zdel ustrezen? Zakaj je, po vašem mnenju, učiteljica izbrala opazovani pristop?</cell>	
+					</row>
+					<row>
+						<ckeditor id="pristop_ucne_ure" toolbar="MyToolbar2" height="105px" customConfigurationsPath="/scripts/ck_config_hosp.js"></ckeditor>	
+					</row>
+					<row style="padding-top:20px;">
+						<cell>3. Katero (napišite eno samo) vprašanje bi v zvezi z opazovano uro želeli zastaviti učiteljici?</cell>	
+					</row>
+					<row>
+						<ckeditor id="vprasanje_uciteljici" toolbar="MyToolbar2" height="70px" customConfigurationsPath="/scripts/ck_config_hosp.js"></ckeditor>	
+					</row>
+					<row style="padding-top:20px;">
+						<cell>4. Zapišite svoje mnenje o organizaciji hospitacije, načina izdelave poročila ipd.</cell>	
+					</row>
+					<row>
+						<ckeditor id="mnenje_o_organizaciji_hospitacije" toolbar="MyToolbar2" height="105px" customConfigurationsPath="/scripts/ck_config_hosp.js"></ckeditor>	
+					</row>						
+				</rows>
+			</grid>
+		</tabpanel>         
+		<tabpanel>
+			<grid sclass="no_border" style="padding-top:15px; padding-bottom:15px; width:750px; margin:auto;">
+				<columns>
+					<column label=""/>
+				</columns>
+				<rows id="forma_vidikB">
+					<row>
+					
+						<cell>5. Opazovani vidik ure:*</cell>	
+					</row>
+					<row>
+						<ckeditor id="opazovani_vidik" toolbar="MyToolbar2" height="35px" customConfigurationsPath="/scripts/ck_config_hosp.js"></ckeditor>	
+					</row>
+					<row style="padding-top:20px;">
+						<cell>5.1. Kaj ste v zvezi z opazovanim pojavom opazili? (Opišite ga.)*</cell>	
+					</row>
+					<row>
+						<ckeditor id="opazovani_vidik_opazanja" toolbar="MyToolbar2" height="105px" customConfigurationsPath="/scripts/ck_config_hosp.js"></ckeditor>	
+					</row>
+					<row style="padding-top:20px;">
+						<cell>5.2. Kako bi vi v zvezi z opazovanim vidikom ure ravnali? Utemeljite svoj odgovor.*</cell>	
+					</row>
+					<row>
+						<ckeditor id="ravnanje_z_opazovanim_vidikom" toolbar="MyToolbar2" height="105px" customConfigurationsPath="/scripts/ck_config_hosp.js"></ckeditor>	
+					</row>
+					<row style="padding-top:20px;">
+						<cell>5.3. Kako si razlagate svoja opažanja (zakaj je npr. učiteljica ali kak učenec ravnal tako, kot je)?*</cell>	
+					</row>
+					<row>
+						<ckeditor id="razlaganje_opazanja" toolbar="MyToolbar2" height="105px" customConfigurationsPath="/scripts/ck_config_hosp.js"></ckeditor>	
+					</row>
+					<row style="padding-top:20px;">
+						<cell>5.4. Zakaj je opazovani vidik oz. pojav pomemben in kako vpliva na pouk matematike?</cell>	
+					</row>
+					<row>
+						<ckeditor id="zakaj_je_vidkik_pomemben" toolbar="MyToolbar2" height="105px" customConfigurationsPath="/scripts/ck_config_hosp.js"></ckeditor>	
+					</row>
+					<row style="padding-top:20px;">
+						<cell>5.5. Na osnovi česa ste prišli do gornjih premislekov (posebej b-d)? Kje in kako bi o opazovanem vidiku oz. pojavu izvedeli kaj več?  </cell>	
+					</row>
+					<row>
+						<ckeditor id="utemeljitev_premislekov" toolbar="MyToolbar2" height="105px" customConfigurationsPath="/scripts/ck_config_hosp.js"></ckeditor>	
+					</row>
+					<row style="padding-top:20px;">
+						<cell style="color:grey;" >(* - rubrike so obvezna za hospitacije med prakso)</cell>	
+					</row>
+				</rows>
+			</grid>
+		</tabpanel>
+	</tabpanels> 
+</tabbox>
+
+<image src="../../stil/slike/gumb_naprej.png" width="101px" height="25px" style="position:relative; left:325px; margin-bottom:15px;" onClick="kreiraj_hospitacijo()" onCreate="Napolni()"/>
+
+	<zscript><![CDATA[
+import java.sql.*;
+import dnevnik.*;  
+
+	Boolean update = false;
+
+  public String preveri(){
+	  String r = "";
+	  		
+	  		Textbox izvajalec = (Textbox)osnovni_podatki.getFellow("Izvajalec");
+	  		Datebox datum = (Datebox)osnovni_podatki.getFellow("Datum");
+	  		Textbox sola = (Textbox)osnovni_podatki.getFellow("Sola");
+	  		Intbox ura = (Intbox)osnovni_podatki.getFellow("Ura");
+	  		Textbox mentor = (Textbox)osnovni_podatki.getFellow("Mentor");
+	  		Intbox razred = (Intbox)osnovni_podatki.getFellow("Razred");
+	  		Textbox naslov_ure = (Textbox)osnovni_podatki.getFellow("NaslovUre");
+	  		Combobox tema = (Combobox)osnovni_podatki.getFellow("combo_tema");
+	  		Combobox sklop = (Combobox)osnovni_podatki.getFellow("combo_sklop");
+	  		Combobox enota = (Combobox)osnovni_podatki.getFellow("combo_enota");
+
+	  	
+	  
+		if(izvajalec.getValue() == "") {			
+			r += "\n- Izvajalec";
+		}
+		if(datum.getValue() == null) {			
+			r += "\n- Datum";
+		}
+		if(sola.getValue() == "") {			
+			r += "\n- Šola";
+		}
+		if(ura.getValue() == null) {			
+			r += "\n- Ura";
+		}
+		if(mentor.getValue() == "") {			
+			r += "\n- Mentor";
+		}
+		if(razred.getValue() == null) {			
+			r += "\n- Razred";
+		}
+		if(naslov_ure.getValue() == "") {			
+			r += "\n- Naslov";
+		}
+		if(tema.getValue() == "") {			
+			r += "\n- Tema";
+		}
+		if(sklop.getValue() == "") {			
+			r += "\n- Sklop";
+		}
+		if(enota.getValue() == "") {			
+			r += "\n- Enota";
+		}
+	  
+	  	return r;
+  }
+
+	public void kreiraj_hospitacijo(){
+		Object p = preveri();
+		
+		Textbox izvajalec = (Textbox)osnovni_podatki.getFellow("Izvajalec");
+  		Datebox datum = (Datebox)osnovni_podatki.getFellow("Datum");
+  		Textbox sola = (Textbox)osnovni_podatki.getFellow("Sola");
+  		Intbox ura = (Intbox)osnovni_podatki.getFellow("Ura");
+  		Textbox mentor = (Textbox)osnovni_podatki.getFellow("Mentor");
+  		Intbox razred = (Intbox)osnovni_podatki.getFellow("Razred");
+  		Textbox naslov_ure = (Textbox)osnovni_podatki.getFellow("NaslovUre");
+  		Combobox tema = (Combobox)osnovni_podatki.getFellow("combo_tema");
+  		Combobox sklop = (Combobox)osnovni_podatki.getFellow("combo_sklop");
+  		Combobox enota = (Combobox)osnovni_podatki.getFellow("combo_enota");
+		
+		if(p == ""){		
+			Connection conn = null;
+			PreparedStatement s = null;
+	        try
+	        {
+	        	
+	        	//Povežemo se na bazo
+	        	conn = openDB("root","","jdbc:mysql://localhost:3306/dnevnik");
+	        	String id_hosp = session.getAttribute("ID_datoteke");
+	        	
+	        	if(id_hosp != null){
+	        		Object[] obj1 = { session.getAttribute("ID_uporabnika"), izvajalec.getValue(), datum.getValue(), ura.getValue(), razred.getValue(), tema.getSelectedIndex() + 1, sklop.getSelectedIndex() + 1, enota.getSelectedIndex() + 1, mentor.getValue(), naslov_ure.getValue(), sola.getValue(), id_hosp};
+	                s = PStatment(conn, "update_hospitacije", obj1);
+	                s.execute ();	                
+	                
+	                Object[] obj2 = {opis_ucne_ure.getValue(), pristop_ucne_ure.getValue(), vprasanje_uciteljici.getValue(), mnenje_o_organizaciji_hospitacije.getValue(), id_hosp};
+	                s = PStatment(conn, "update_hosp_vidik_a", obj2);
+	                System.out.println (s);
+	                s.execute ();	
+	                
+	                Object[] obj3 = {opazovani_vidik.getValue(), opazovani_vidik_opazanja.getValue(), ravnanje_z_opazovanim_vidikom.getValue(), razlaganje_opazanja.getValue(), zakaj_je_vidkik_pomemben.getValue(), utemeljitev_premislekov.getValue(), id_hosp};
+	                s = PStatment(conn, "update_hosp_vidik_b", obj3);
+	                s.execute ();	
+	        	}
+	        	else {
+	        		Object[] obj4 = {session.getAttribute("ID_uporabnika"), izvajalec.getValue(), datum.getValue(), ura.getValue(), razred.getValue(), tema.getSelectedIndex() + 1, sklop.getSelectedIndex() + 1, enota.getSelectedIndex() + 1, mentor.getValue(), naslov_ure.getValue(), sola.getValue()};
+	                s = PStatment(conn, "insert_hospitacije", obj4);
+	                s.execute ();		                
+
+	                Object[] obj5 = {session.getAttribute("ID_uporabnika"), izvajalec.getValue(), datum.getValue(), ura.getValue(), razred.getValue(), tema.getSelectedIndex() + 1, sklop.getSelectedIndex() + 1, enota.getSelectedIndex() + 1, mentor.getValue(), naslov_ure.getValue(), sola.getValue()};
+	                s = PStatment(conn, "poisci_id_hospitacije", obj5);
+	                ResultSet rs = s.executeQuery ();
+	                rs.next();
+	                
+	                Object[] obj6 = {rs.getInt("ID"), opis_ucne_ure.getValue(), pristop_ucne_ure.getValue(), vprasanje_uciteljici.getValue(), mnenje_o_organizaciji_hospitacije.getValue()};
+	                s = PStatment(conn, "insert_hosp_vidik_a", obj6);
+	                s.execute ();	
+	                
+	                Object[] obj7 = {rs.getString("ID"), opazovani_vidik.getValue(), opazovani_vidik_opazanja.getValue(), ravnanje_z_opazovanim_vidikom.getValue(), razlaganje_opazanja.getValue(), zakaj_je_vidkik_pomemben.getValue(), utemeljitev_premislekov.getValue()};
+	                s = PStatment(conn, "insert_hosp_vidik_b", obj7);
+	                s.execute ();	
+	        	}
+				
+	        	
+	             
+	        }
+	        catch (Exception e)
+	        {
+	            System.err.println ("ERROR: "+ e.getMessage());
+	        }
+	        finally
+	        {
+	            if (conn != null)
+	            {
+	                try
+	                {
+	                    closeDB(conn);
+	                    
+	                }
+	                catch (Exception e) { /* ignore close errors */ }
+	                execution.sendRedirect("../Studentje/PrvaStranStudentje.zul");
+	            }
+	        }  
+		}
+		else {
+			alert("Prosimo vnesite naslednje podatke:" + p);
+		}
+	}
+	
+	public void Napolni(){
+		if(session.getAttribute("ID_datoteke") != null){
+			Connection conn = null;
+			PreparedStatement s = null;
+	        try
+	        {
+	     	   //Povežemo se na bazo
+	            conn = openDB("root","","jdbc:mysql://localhost:3306/dnevnik");
+	            //Kreiramo SQL za prenos podatkov v šifrant Sklopov
+	         	
+	            Object[] obj8 = {session.getAttribute("ID_datoteke")};
+		        s = PStatment(conn, "select_hosp_vidik_A", obj8);
+		        ResultSet rs = s.executeQuery ();	
+		        
+
+			    
+			    if(rs.next()) {
+					update = true;
+					
+					opis_ucne_ure.setValue(rs.getString("opis_ucne_ure"));
+					pristop_ucne_ure.setValue(rs.getString("pristop_ucne_ure"));
+					vprasanje_uciteljici.setValue(rs.getString("vprasanje_uciteljici"));
+					mnenje_o_organizaciji_hospitacije.setValue(rs.getString("mnenje_o_organizaciji_hospitacije"));
+					
+			    }
+			    Object[] obj9 = {session.getAttribute("ID_datoteke")};
+		        s = PStatment(conn, "select_hosp_vidik_B", obj9);
+				rs = s.executeQuery ();	
+		        
+		        update = false;
+			    
+		        if(rs.next()) {
+					update = true;
+					
+					opazovani_vidik.setValue(rs.getString("opazovani_vidik"));
+					opazovani_vidik_opazanja.setValue(rs.getString("opazovani_vidik_opazanja"));		
+					ravnanje_z_opazovanim_vidikom.setValue(rs.getString("ravnanje_z_opazovanim_vidikom"));		
+					razlaganje_opazanja.setValue(rs.getString("razlaganje_opazanja"));		
+					zakaj_je_vidkik_pomemben.setValue(rs.getString("zakaj_je_vidkik_pomemben"));		
+					utemeljitev_premislekov.setValue(rs.getString("utemeljitev_premislekov"));		
+	
+					//Zapremo povezavo do baze
+					rs.close ();
+					s.close ();
+			    } 
+			    
+	        }
+	        catch (Exception e)
+	        {
+	            System.err.println ("ERROR: "+ e.getMessage());
+	        }
+	        finally
+	        {
+	            if (conn != null)
+	            {
+	                try
+	                {
+	                   closeDB(conn);
+	                }
+	                catch (Exception e) { /* ignore close errors */ }
+	            }
+	        }
+	        	
+	     }
+	}
+
+]]></zscript>
+ </window>
+
+ </zk>

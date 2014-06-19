@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <?link href='http://fonts.googleapis.com/css?family=Italianno&subset=latin,latin-ext' rel='stylesheet' type='text/css'?>
+    <style>
+        body{
+            background: #686868; 
+        }
+        .no_border tr.z-row td.z-row-inner, tr.z-row .z-cell,div.z-grid, .z-grid-header-bg 
+		 { 
+			 border: white;
+			 background:white;
+		 }
+		.CelicaLabela{
+                    text-align: right;    
+                    
+		}
+            .z-label{
+                font-weight: bold;
+            }
+                
+            .z-textbox, .z-intbox{ 
+                color: #686868;
+                border-color : #FFF; 
+                background: #FFF;
+                font-size: 16px;
+                border-bottom: 1px solid #B5B5B5;
+            }
+            .z-combobox-inp, .z-datebox-inp{ 
+                color: #686868;
+                border-color : #FFF; 
+                background: #FFF;
+                font-size: 16px;
+                border-bottom: 1px solid #B5B5B5;
+            }
+            
+            .z-datebox .z-datebox-btn {
+                background: url('../../stil/slike/calendar.png');   
+                background-size: 18px 18px;   
+                width: 18px;
+                height: 18px;
+                border-color : #FFF;
+            }
+        
+            .z-combobox .z-combobox-btn {
+                background: url('../../stil/slike/Arrow-down.png');   
+                background-size: 22px 22px;   
+                width: 22px;
+                height: 22px;
+                border-color : #FFF;
+            }
+            .z-textbox:hover, .z-datebox-inp:hover, .z-intbox:hover, .z-combobox-inp:hover{
+                border-bottom: 1px solid black;
+            }
+
+
+    </style>
+<window id="podatki_ure" border="none"  width="800px" style="margin:auto; padding-top: 50px; padding-bottom: 50px; backgorund-color: #B5B5B5;">
+<zscript src="../../scripts/DB.zs"/>
+<zscript src="../../scripts/funkcije.zs"/>
+<zscript src="../../scripts/PodatkiOuri.zs"/>
+
+    <grid id="Podatki" sclass="no_border" style="padding:50px; width:700px; margin:auto;">
+            <columns>
+                    <column width="200px" label=""/>
+                    <column label=""/>
+            </columns>
+            <rows id="forma">
+                    <row>
+                            <cell style="text-align: center; padding-bottom: 35px;" colspan="2"><label style="font-size: 26px; text-align: right;" value="Učna priprava"/></cell>	
+                    </row>
+                    <row>
+                            <cell sclass="CelicaLabela"><label value="Naslov ure: "/></cell>
+                            <cell><textbox id="Naslov" width="200px"  /></cell>	
+                    </row>
+                    <row>
+                            <cell sclass="CelicaLabela"><label value="Izvajalec (študent): "/></cell>
+                            <cell><textbox id="Izvajalec" width="200px"  /></cell>	
+                    </row>
+                    <row>
+                            <cell sclass="CelicaLabela"><label value="Mentor-ica (OŠ/SŠ): "/></cell>
+                            <cell><textbox id="Mentor" width="200px"/></cell>	
+                    </row>
+                    <row>
+                            <cell sclass="CelicaLabela"><label value="Datum: "/></cell>
+                            <cell><datebox id="Datum" format="medium"/></cell>	
+                    </row>
+                    <row>
+                            <cell sclass="CelicaLabela"><label value="Ura: "/></cell>
+                            <cell><textbox id="Ura" width="99px"/></cell>	
+                    </row>
+                    <row>
+                            <cell sclass="CelicaLabela"><label value="Razred: "/></cell>
+                            <cell><textbox id="Razred" width="99px"/></cell>	
+                    </row>
+                    <row>
+                            <cell sclass="CelicaLabela"><label value="Šola: "/></cell>
+                            <cell><textbox id="Sola" width="200px"/></cell>	
+                    </row>
+                    <row>
+                            <cell sclass="CelicaLabela"><label value="Učna tema: "/></cell>
+                            <cell><textbox id="tema" width="200px"/></cell>
+                    </row>
+                    <row>
+                            <cell sclass="CelicaLabela"><label value="Učni sklop: "/></cell>
+                            <cell><textbox id="sklop" width="200px"/></cell>
+                    </row>
+                    <row>
+                            <cell sclass="CelicaLabela"><label value="Učna enota: "/></cell>
+                            <cell><textbox id="enota" width="200px"/></cell>
+                    </row>
+                    <row>
+                        <cell sclass="CelicaLabela" style="vertical-align: top; padding-top:12px;"><label value="Specifični učni cilji: "/></cell>
+                        <cell>
+                                <grid id="SpecUcniCilji">
+                                        <columns>
+                                                <column label="" width="10px"/>
+                                                <column label="" width="200px"/>
+                                                <column label=""/>			
+                                        </columns>
+                                        <rows>
+                                                <row>
+                                                        <cell><label>-</label> </cell>
+                                                        <cell><textbox id="Cilj1"  width="189px" /></cell>
+                                                        <cell><image src="../../stil/slike/Dodaj_2.png" width="23px" height="23px" onClick='UcnaPriprava.dodajCilj("");'/></cell>
+                                                </row>
+                                        </rows>
+                                </grid>
+                        </cell>	
+                    </row>
+                    <row>
+                            <cell sclass="CelicaLabela"><label value="Učni pristop: "/></cell>
+                            <cell><textbox id="Pristop" width="400px"/></cell>	
+                    </row>
+                    <row>
+                            <cell sclass="CelicaLabela"><label value="Učne oblike: "/></cell>
+                            <cell><textbox id="Oblike" width="400px"/></cell>	
+                    </row>
+                    <row>
+                            <cell sclass="CelicaLabela"><label value="Učne metode: "/></cell>
+                            <cell><textbox id="Metode" width="400px"/></cell>	
+                    </row>
+                    <row>
+                            <cell sclass="CelicaLabela"><label value="Učna sredstva in pripomočki: "/></cell>
+                            <cell><textbox id="Pripomocki" width="400px"/></cell>	
+                    </row>
+                    <row>
+                            <cell sclass="CelicaLabela"><label value="Viri: "/></cell>
+                            <cell><textbox id="Viri" width="400px"/></cell>	
+                    </row>
+                     <row>
+                            <cell style="text-align: center; padding-top: 35px;" colspan="2">
+                                <image src="../../stil/slike/zapri_1.png">
+                                    <attribute name="onClick"><![CDATA[
+                                    Messagebox.show("Želite shraniti pripravo?", "Pozor!", Messagebox.YES | Messagebox.NO  | Messagebox.CANCEL, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
+                                        public void onEvent(Event evt) throws InterruptedException {
+                                            if (evt.getName().equals("onYes")) {
+                                                prenesiVbazo();
+                                                session.setAttribute("ID_datoteke",null); execution.sendRedirect("../Priprava/Pregled.zul");
+                                            } else if (evt.getName().equals("onNo")) {
+                                                session.setAttribute("ID_datoteke",null); execution.sendRedirect("../Priprava/Pregled.zul");
+                                            } else {
+
+                                            }
+                                        }
+                                    });
+                                    ]]>
+                                    </attribute>
+                                </image>
+                                <image src="../../stil/slike/nadaljuj.png" onClick="nadaljuj();"/>
+                            </cell>	
+                    </row>			
+            </rows>
+    </grid>
+            
+    <zscript><![CDATA[
+        import java.sql.*;
+        import dnevnik.*;          
+        
+        UcnaPriprava.select_and_fill();
+        
+        public void nadaljuj(){
+            if(UcnaPriprava.preveri()){
+                UcnaPriprava.shrani(); 
+                execution.sendRedirect("PregledUre.zul");
+            }
+        }
+        
+]]></zscript>
+ </window>
+
+ </zk>

@@ -1,0 +1,32 @@
+<menubar id="menubar" width="100%">
+    <menu label="Datoteka">
+        <menupopup>
+            <menuitem label="Nova priprava" onClick="" image="" />
+            <menuitem label="Nova hospitacija" onClick="" image="" />
+            <menuseparator />
+            <menuitem label="Odjava" onClick="alert(self.label)" image="/widgets/window/positioning/img/DoorOpen-16x16.png" />
+        </menupopup>
+    </menu>
+    <menu label="Naloge">
+        <menupopup>
+            <menuitem label="Nova naloga" onClick="" image="" />
+            <menuitem label="Pregled nalog" onClick="" image="" />
+            <menuseparator />
+            <menuitem label="Pregled oddanih nalog" onClick="" image="" />
+        </menupopup>
+    </menu>
+    <menu label="Skupine">
+        <menupopup>
+            <menuitem label="Sestavi skupino" onClick="" image="" />
+            <menuitem label="Pregled skupin" onClick="" image="" />                           
+        </menupopup>
+    </menu>
+    <menuitem label="Dnevniki" onClick="" image="" />
+    <menu label="Pomoč">
+        <menupopup>
+            <menuitem label="Pomoč" onClick="" image="" />
+            <menuseparator />
+            <menuitem label="O programu" onClick="" image="" />                           
+        </menupopup>
+    </menu>
+</menubar>

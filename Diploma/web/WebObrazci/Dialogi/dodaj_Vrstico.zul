@@ -1,0 +1,203 @@
+<zk>
+        <?link href='http://fonts.googleapis.com/css?family=Italianno&subset=latin,latin-ext' rel='stylesheet' type='text/css'?>
+	<window id="dodajVrstico" title="Dodaj vrstico" width="910px" height="750px" position="center,center" border="normal" contentStyle="overflow:auto">
+            <grid>
+                <rows id="polja">
+                    <row><cell sclass="loginCtl" colspan="1"><vlayout>Namen/Cilj:</vlayout></cell><cell sclass="loginCtl" colspan="5"><vlayout><textbox id="cilj" value="" width="450px"/></vlayout></cell><cell sclass="loginCtl" colspan="1"><vlayout>Čas:</vlayout></cell><cell sclass="loginCtl" colspan="2"><vlayout><textbox id="cas" value="" width="160px"/></vlayout></cell></row>
+                    <row><cell sclass="loginCtl" colspan="1"><vlayout>Metode/Oblike:</vlayout></cell><cell sclass="loginCtl" colspan="8"><vlayout><textbox id="metode" value="" width="750px"/></vlayout></cell></row>
+                    <row><cell sclass="loginCtl" colspan="1"><vlayout>Pripomočki:</vlayout></cell><cell sclass="loginCtl" colspan="8"><vlayout><textbox id="pripomocki" value="" width="750px"/></vlayout></cell></row>
+                    <row><cell sclass="loginCtl" colspan="9"><vlayout>Strategija doseganja:</vlayout></cell></row>
+                    <row><cell sclass="loginCtl" colspan="9"><vlayout><ckeditor id="doseganje" width="850px" customConfigurationsPath="/scripts/ck_config.js" toolbar="Basic" /></vlayout></cell></row>
+                     <row><cell sclass="loginCtl" colspan="9"><vlayout>Način preverjanja:</vlayout></cell></row>
+                    <row><cell sclass="loginCtl" colspan="9"><vlayout><ckeditor id="preverjanje" width="850px" customConfigurationsPath="/scripts/ck_config.js" toolbar="Basic" /></vlayout></cell></row>
+                    <row>
+                        <cell sclass="loginCtl" colspan="9" align="center">
+                            <button label="OK" width="100px">
+                                <attribute name="onClick">
+                                    {
+                                        dodaj_besedilo_nal();
+                                    }
+                                </attribute>
+                            </button>
+                            <button label="Prekliči" width="100px" onCtreate="after_create()">
+                                <attribute name="onClick">
+                                    {
+                                        dodajVrstico.detach();
+                                    }
+                                </attribute>      
+                                <attribute name="onCreate">
+                                    {
+                                        LoadPage(1);
+                                    }
+                                </attribute>                          
+                            </button>
+                        </cell>
+                    </row>
+                </rows>
+            </grid>
+        <zscript><![CDATA[ 
+		import java.sql.*;
+		import dnevnik.*;
+                import org.zkoss.zk.ui.Component;
+                import org.zkoss.zk.ui.Executions;
+                import org.zkoss.zk.ui.event.Event;
+                import org.zkoss.zk.ui.select.SelectorComposer;
+                import org.zkoss.zk.ui.select.annotation.Listen;
+                import org.zkoss.zul.Window;
+                import java.util.List;
+		
+                public void LoadPage(int n){
+                    int ucna_ura = session.getAttribute("ID_datoteke");
+                    int stran = n;
+                    int st_strani = 0;
+                    List<Integer> strani = new List<Integer>();
+                    try
+                    {
+                        
+                        //Povežemo se na bazo
+                        conn = openDB("root","","jdbc:mysql://localhost:3306/dnevnik");
+                        //Kreiramo SQL za prenos podatkov v šifrant Sklopov
+                        Object[] poisci_pregled_ucne_ure_vrstice = {ucna_ura};
+                        s = PStatment(conn, "poisci_pregled_ucne_ure_vrstice", poisci_pregled_ucne_ure_vrstice);
+                        ResultSet rs = s.executeQuery ();					    
+                        while(rs.next())
+                        {
+                            //Nastavimo id učne ure
+                            strani.push(rs.getString("ID"));
+                            st_strani++;
+                        }                        
+                        
+                        if(n >= st_strani){
+                            //Skrij puščico za naprej in zamenjaj z plusom za dodajanje
+                        } else{
+                            Object[] poisci_pregled_ucne_ure_izbrana_stran = {n};
+                            s = PStatment(conn, "poisci_pregled_ucne_ure_vrstice", poisci_pregled_ucne_ure_izbrana_stran);
+                            ResultSet rs = s.executeQuery ();
+                            rs.next();
+                            cilj.setValue(rs.getString("CILJ"));
+                            doseganje.setValue(rs.getString("STRATEGIJA"));
+                            preverjanje.getValue(rs.getString("NACIN"));
+                            metode.getValue(rs.getString("METODE"));
+                            cas.setValue(rs.getString("CAS"));
+                            pripomocki.setValue(rs.getString("PRIPOMOCKI"));
+                        }
+                        
+                    }
+                    catch (Exception e)
+                    {
+                        System.err.println ("ERROR: "+ e.getMessage());
+                    }
+                    finally
+                    {
+                        if (conn != null)
+                        {
+                            try
+                            {
+                               closeDB(conn);
+                            }
+                            catch (Exception e) { /* ignore close errors */ }
+                        }
+                    }
+                    
+                }
+            		
+ 		public void dodaj_besedilo_nal(){
+			Row vrstica = new Row();
+                        Rows vrstice = (Rows) Path.getComponent("/Pregled_ure/Vrstice");
+			Label besedilo = new Label(cilj.getValue());
+			Cell c = new Cell();			
+			c.appendChild(besedilo);	
+			vrstica.appendChild(c);
+            
+                        Html besedilo_html = new Html(doseganje.getValue());
+                        c = new Cell();			
+			c.appendChild(besedilo_html);	
+			vrstica.appendChild(c);
+                        
+                        besedilo_html = new Html(preverjanje.getValue());
+                        c = new Cell();			
+			c.appendChild(besedilo_html);	
+			vrstica.appendChild(c);
+            
+                        besedilo = new Label(metode.getValue());
+                        c = new Cell();			
+			c.appendChild(besedilo);	
+			vrstica.appendChild(c);
+            
+                        besedilo = new Label(cas.getValue());
+                        c = new Cell();			
+			c.appendChild(besedilo);	
+			vrstica.appendChild(c);
+            
+                        besedilo = new Label(pripomocki.getValue());
+                        c = new Cell();			
+			c.appendChild(besedilo);	
+			vrstica.appendChild(c);
+                        
+                        c = new Cell();
+                        c = append_odstrani(c);		
+                        c = append_uredi(c);		
+			vrstica.appendChild(c);            
+                        
+			vrstice.appendChild(vrstica);
+			dodajVrstico.onClose();
+		}
+ 		
+                public Cell append_odstrani(Cell c){
+			Image b = new Image("../../stil/slike/Odstrani_1.png");
+			b.setHeight("23px");
+                        b.setWidth("23px");                        
+                        b.addEventListener("onClick", new Odstrani_txt());
+                        c.appendChild(b);
+                        return c;
+		}
+            
+                public Cell append_uredi(Cell c){
+			Image b = new Image("../../stil/slike/icons/spanner32.png");
+			b.setHeight("23px");
+                        b.setWidth("23px");                        
+                        b.addEventListener("onClick", new Uredi_vrstico());
+                        c.appendChild(b);
+                        return c;
+		}
+ 		
+ 		final class Odstrani_txt implements org.zkoss.zk.ui.event.EventListener {
+ 			public void onEvent(Event event) throws Exception {
+ 					event.getTarget().getParent().getParent().detach();	
+ 			}
+ 		}
+                
+                final class Uredi_vrstico implements org.zkoss.zk.ui.event.EventListener {
+ 			public void onEvent(Event event) throws Exception {
+                                List children = event.getTarget().getParent().getParent().getChildren();
+                                                                
+                                final HashMap<String, Object> map = new HashMap<String, Object>();
+                                map.push("cilj", children.get(0).setHtml() );
+                                map.push("doseganje", children.get(1).setHtml());
+                                map.push("preverjanje", children.get(2).setHtml());
+                                map.push("metode", children.get(3).setHtml());
+                                map.push("cas", children.get(4).setHtml());
+                                map.push("pripomocki", children.get(5).setHtml());
+                                
+                                Sessions.getCurrent().setAttribute("PU_ROW",map);
+            
+                                final Window win = (Window) Executions.createComponents("../Dialogi/dodaj_Vrstico.zul", null, null);
+                               
+                                event.getTarget().getParent().getParent().detach();
+                                win.doModal();	
+ 			}
+ 		}
+            
+                public void after_create(){
+                    if(Sessions.getCurrent().getAttribute("PU_ROW") != null){
+                        HashMap<String, Object> map = (HashMap) Sessions.getCurrent().getAttribute("PU_ROW");
+                        cilj.setValue(map.get("cilj"));
+                    }
+                }
+            
+                
+ 		
+	]]></zscript>
+	</window>
+	 
+ </zk>

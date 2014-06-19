@@ -1,0 +1,25 @@
+<zk>
+<style dynamic="true">	         
+	        .div-button{
+				background-image: url('../../stil/slike/Gumb-prva-stran.png');
+				margin:5px;
+			}
+			.div-button:hover{
+			    cursor:pointer;
+			}			
+    </style>
+	<window border="none" width="800px" style="margin:auto; padding-top:100px;">
+	  <div class="div-button" onClick='execution.sendRedirect("../Priprava/Pregled.zul");' style="float:left;"><image src="../../stil/slike/Gumb-prva-stran-pr.png" tooltip="pr"/></div>
+	  <div class="div-button" onClick='execution.sendRedirect("../Priprava/Pregled.zul");' style="float:left;"><image src="../../stil/slike/Gumb-prva-stran-Ho.png" tooltip="ho"/></div>
+	  <div class="div-button" onClick='execution.sendRedirect("../Naloge/Pregled_dodaj.zul");' style="float:left;"><image src="../../stil/slike/Gumb-prva-stran-na.png" tooltip="na"/></div>
+	  <div class="div-button" onClick='execution.sendRedirect("../Priprava/Pregled.zul");' style="float:left;"><image src="../../stil/slike/Gumb-prva-stran-sk.png" tooltip="sk"/></div>
+	  <div class="div-button" onClick='execution.sendRedirect("../Priprava/Pregled.zul");' style="float:left;"><image src="../../stil/slike/Gumb-prva-stran-dn.png" tooltip="dn"/></div>
+	  <div class="div-button" onClick='execution.sendRedirect("../Priprava/Pregled.zul");' style="float:left;"><image src="../../stil/slike/Gumb-prva-stran-ob.png" tooltip="ob"/></div>	  
+	  <popup id="pr"><vlayout>Pojdi na pregled učnih priprav.</vlayout></popup>
+	  <popup id="ho"><vlayout>Pojdi na pregled hospitacij.</vlayout></popup>
+	  <popup id="na"><vlayout>Pojdi na pregled nalog.</vlayout></popup>
+	  <popup id="sk"><vlayout>Pojdi na pregled moje skupine.</vlayout></popup>
+	  <popup id="dn"><vlayout>Pojdi na pregled dnevkika.</vlayout></popup>
+	  <popup id="ob"><vlayout>Pojdi na pregled ogjav.</vlayout></popup>
+	</window>
+</zk>
