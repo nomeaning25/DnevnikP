@@ -85,7 +85,7 @@
     <zscript><![CDATA[
         import dnevnik.*;        
 
-        Naloge.odpriNalogo();
+        Naloge.odpriNalogo(Sessions.getCurrent().getAttribute("ID_naloge_uporabnik").toString(), "oddane");
                     
     ]]></zscript>
 </window>

@@ -11,7 +11,7 @@
     <class>dnevnik.NalogaData</class>
     <class>dnevnik.Uporabniki</class>
     <class>dnevnik.UporSkupina</class>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>    
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/dnevnik?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.password" value=""/>

@@ -11,7 +11,7 @@ import org.zkoss.zk.ui.Sessions;
 public class NalogaViewModel {
     Naloga selected;    
     List<Naloga> seznamZaklj;
-    List<Naloga> seznamAkt;
+    List<Naloga> seznamAkt;    
     
     public static final int NE_AKTIVNA = 0;
     public static final int AKTIVNA = 1;
@@ -41,7 +41,14 @@ public class NalogaViewModel {
         Sessions.getCurrent().setAttribute("ID_naloge", id);
         Executions.getCurrent().sendRedirect("../Naloge/AktNaloga.zul");
     }
-    @Command public void onChooseItemZaklj(@BindingParam("id") Integer id, @BindingParam("idStud") String idStud) {    
+    
+    @Command public void onChooseItemZaklj(@BindingParam("id") Integer id ) {    
+        System.out.println(id);
+        Sessions.getCurrent().setAttribute("ID_naloge", id);
+        Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddane.zul");
+    }
+    
+    @Command public void onChooseItemOddana(@BindingParam("id") Integer id, @BindingParam("idStud") String idStud) {    
         System.out.println(id);
         Sessions.getCurrent().setAttribute("ID_naloge", id);
         Sessions.getCurrent().setAttribute("ID_naloge_stud", idStud);

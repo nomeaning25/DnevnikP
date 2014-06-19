@@ -139,7 +139,7 @@ public class Naloge extends HtmlMacroComponent {
                             PreparedStatement s;
                             try
                             {
-                                String create_tab = "CREATE TABLE NAL_" + Sessions.getCurrent().getAttribute("ID_naloge") + " (ID INT NOT NULL AUTO_INCREMENT, UPORABNIK_ID VARCHAR(25) NOT NULL, ";
+                                String create_tab = "CREATE TABLE NAL_" + Sessions.getCurrent().getAttribute("ID_naloge") + " (ID INT NOT NULL AUTO_INCREMENT, UPORABNIK_ID VARCHAR(25) NOT NULL, KOMENTAR LONGTEXT, ";
 
                                 Object[] param_ele = {Sessions.getCurrent().getAttribute("ID_naloge")};
                                 s = db.Statement(Boolean.TRUE, "SELECT id, id_kontrole, tip FROM naloge_elementi WHERE naloge_id = ? ORDER BY zap;", param_ele);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
@@ -180,6 +180,35 @@ public class Naloge extends HtmlMacroComponent {
                     }
                 });
             }
+        } else {
+            
+        }
+    }
+    
+    public static void deaktiviraj() throws InterruptedException{
+        
+        if(Sessions.getCurrent().getAttribute("ID_naloge") != null){            
+                    Messagebox.show("Pozor! Naloga bo deaktivirana in je ne bo mogoče več aktivirati. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
+                        public void onEvent(Event evt) throws InterruptedException {
+                            if (evt.getName().equals("onYes")) {
+                                database db = new database();
+
+                                PreparedStatement s;
+                                try
+                                {
+                                    Object[] param_akt = {Sessions.getCurrent().getAttribute("ID_naloge")};
+                                    s = db.Statement(Boolean.TRUE, "UPDATE naloge SET aktivna = 2 WHERE id = ?;", param_akt);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
+                                    s.execute();
+                                } catch (Exception ex) {
+                                    System.out.println ("ERROR: " + ex.getMessage());                  //Če pride do napake, jo vrnemo
+                                } finally {
+                                    Sessions.getCurrent().setAttribute("ID_naloge",null); 
+                                    Executions.getCurrent().sendRedirect("../Naloge/Pregled_aktivne.zul");
+                                }
+                            }
+                        }
+                    });
+            
         } else {
             
         }
@@ -415,12 +444,19 @@ public class Naloge extends HtmlMacroComponent {
             
     	}
     }   
-    
     public static void odpriNalogo() {
+        odpriNalogo(Sessions.getCurrent().getAttribute("ID_uporabnika").toString(), "");
+    }
+    
+    
+    public static void odpriNalogo(final String id_upor, final String tippregleda) {
         
         ServletContext serv = (ServletContext)Sessions.getCurrent().getWebApp().getNativeContext();
         final String path = serv.getRealPath("/");
-        File theDir = new File(path + "/doc/" + Sessions.getCurrent().getAttribute("ID_uporabnika"));               
+        
+        
+        
+        File theDir = new File(path + "/doc/" + id_upor);               
         // if the directory does not exist, create it
         if (!theDir.exists())
         {              
@@ -547,7 +583,7 @@ public class Naloge extends HtmlMacroComponent {
                                 b.addEventListener("onUpload", new EventListener(){
                                     public void onEvent(Event e) throws Exception {
                                         Media media = ((UploadEvent) e).getMedia();
-                                        String pot = path + "/doc/" + Sessions.getCurrent().getAttribute("ID_uporabnika") + "/nal_" + Sessions.getCurrent().getAttribute("ID_naloge") + "_" + e.getTarget().getId().toString() + "_" + media.getName();        
+                                        String pot = path + "/doc/" + id_upor + "/nal_" + Sessions.getCurrent().getAttribute("ID_naloge") + "_" + e.getTarget().getId().toString() + "_" + media.getName();        
                                         if (media.isBinary()) {
                                             Files.copy(new File(pot), media.getStreamData());
                                         }
@@ -573,7 +609,7 @@ public class Naloge extends HtmlMacroComponent {
                                 c6 = new Cell();
                                 Combobox cbx_hosp = new Combobox();
                                 cbx_hosp.setId(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"));
-                                Object[] param_hosp = {Sessions.getCurrent().getAttribute("ID_uporabnika").toString(), Sessions.getCurrent().getAttribute("ID_predmeta").toString()}; 
+                                Object[] param_hosp = {id_upor, Sessions.getCurrent().getAttribute("ID_predmeta").toString()}; 
                                 s = db.Statement(Boolean.TRUE, "SELECT id, naslov_ure FROM hospitacije WHERE uporabnik_id = ? AND predmet_id = ?", param_hosp);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo                       
                                 ResultSet rs_hosp = s.executeQuery ();
                                 while(rs_hosp.next()){
@@ -597,7 +633,7 @@ public class Naloge extends HtmlMacroComponent {
                                 c7 = new Cell();
                                 Combobox cbx_prip = new Combobox();
                                 cbx_prip.setId(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"));
-                                Object[] param_prip = {Sessions.getCurrent().getAttribute("ID_uporabnika").toString(), Sessions.getCurrent().getAttribute("ID_predmeta").toString()}; 
+                                Object[] param_prip = {id_upor, Sessions.getCurrent().getAttribute("ID_predmeta").toString()}; 
                                 s = db.Statement(Boolean.TRUE, "SELECT a.id, b.naslov_ure, b.datum FROM ucna_priprava a, podatki_ure b WHERE a.id = b.ucna_priprava_id AND a.uporabnik_id = ? AND a.predmet_id = ?", param_prip);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo                       
                                 ResultSet rs_prip = s.executeQuery ();
                                 while(rs_prip.next()){
@@ -625,76 +661,99 @@ public class Naloge extends HtmlMacroComponent {
                 cl.setColspan(2);
                
                 Image im = new Image();
-                im.setSrc("../../stil/slike/zapri_1.png");
+                im.setSrc("../../stil/slike/nazaj.png");
                 im.addEventListener("onClick", new EventListener() {
                     public void onEvent(Event e) throws Exception {
                         if(((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).getValue().equals("1")){
                             Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
                                 public void onEvent(Event evt) throws InterruptedException {
                                     if (evt.getName().equals("onYes")) {
-                                        Sessions.getCurrent().setAttribute("ID_naloge",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddaj.zul");
-                                    } 
-                                }
-                            });
-                        }
-                        else {
-                            Sessions.getCurrent().setAttribute("ID_naloge",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddaj.zul");
-                        }
-
-                    }
-                });
-                cl.appendChild(im);
-                
-                im = new Image();
-                im.setSrc("../../stil/slike/shrani.png");
-                im.addEventListener("onClick", new EventListener() {
-                    public void onEvent(Event e) throws Exception {
-                        shrani_vnose();
-                    }
-                });    
-                cl.appendChild(im);
-                
-                im = new Image();
-                im.setSrc("../../stil/slike/oddaj.png");
-                im.addEventListener("onClick", new EventListener() {
-                    public void onEvent(Event e) throws Exception {
-                        if(((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).getValue().equals("1")){
-                            Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
-                                public void onEvent(Event evt) throws InterruptedException {
-                                    if (evt.getName().equals("onYes")) {
-                                        if(((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).getValue().equals("1")){
-                                            Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
-                                                public void onEvent(Event evt) throws InterruptedException {
-                                                    if (evt.getName().equals("onYes")) {
-
-                                                    } 
-                                                }
-                                            });
+                                        if(tippregleda.equals("")){
+                                            Sessions.getCurrent().setAttribute("ID_naloge",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddaj.zul");
+                                        } else if(tippregleda.equals("aktivne"))  {
+                                            Sessions.getCurrent().setAttribute("ID_naloge_uporabnik",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_aktivne.zul");
+                                        } else {
+                                            Sessions.getCurrent().setAttribute("ID_naloge_uporabnik",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddane.zul");
                                         }
                                     } 
                                 }
                             });
                         }
                         else {
-                            if(((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).getValue().equals("1")){
-                            Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
-                                public void onEvent(Event evt) throws InterruptedException {
-                                    if (evt.getName().equals("onYes")) {
-                                        
-                                    } 
-                                }
-                            });
-                        }
+                            if(tippregleda.equals("")){
+                                Sessions.getCurrent().setAttribute("ID_naloge",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddaj.zul");
+                            } else if(tippregleda.equals("aktivne"))  {
+                                Sessions.getCurrent().setAttribute("ID_naloge_uporabnik",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_aktivne.zul");
+                            } else {
+                                Sessions.getCurrent().setAttribute("ID_naloge_uporabnik",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddane.zul");
+                            }
                         }
 
                     }
-                });    
+                });
                 cl.appendChild(im);
+                
+                if(tippregleda.equals("")){
+                    im = new Image();
+                    im.setSrc("../../stil/slike/shrani.png");
+                    im.addEventListener("onClick", new EventListener() {
+                        public void onEvent(Event e) throws Exception {
+                            shrani_vnose();
+                        }
+                    });    
+                    cl.appendChild(im);
+
+                    im = new Image();
+                    im.setSrc("../../stil/slike/oddaj.png");
+                    im.addEventListener("onClick", new EventListener() {
+                        public void onEvent(Event e) throws Exception {
+                            if(((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).getValue().equals("1")){
+                                Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
+                                    public void onEvent(Event evt) throws InterruptedException {
+                                        if (evt.getName().equals("onYes")) {
+                                            if(((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).getValue().equals("1")){
+                                                Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
+                                                    public void onEvent(Event evt) throws InterruptedException {
+                                                        if (evt.getName().equals("onYes")) {
+
+                                                        } 
+                                                    }
+                                                });
+                                            }
+                                        } 
+                                    }
+                                });
+                            }
+                            else {
+                                if(((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).getValue().equals("1")){
+                                Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
+                                    public void onEvent(Event evt) throws InterruptedException {
+                                        if (evt.getName().equals("onYes")) {
+
+                                        } 
+                                    }
+                                });
+                            }
+                            }
+
+                        }
+                    });    
+                    cl.appendChild(im);
+                } else if(tippregleda.equals("aktivne")){
+                    im = new Image();
+                    im.setSrc("../../stil/slike/Deaktiviraj.png");
+                    im.addEventListener("onClick", new EventListener() {
+                        public void onEvent(Event e) throws Exception {                            
+                           deaktiviraj();        
+                        }
+                    });    
+                    cl.appendChild(im);
+                }
                 
                 r.appendChild(cl);
                 rws.appendChild(r);
                 
-                Object[] param_vnosi = {Sessions.getCurrent().getAttribute("ID_uporabnika").toString()};
+                Object[] param_vnosi = {id_upor};
                 
                 s = db.Statement(Boolean.TRUE, "SELECT * FROM NAL_" + Sessions.getCurrent().getAttribute("ID_naloge") + " WHERE UPORABNIK_ID = ?;", param_vnosi);
                 ResultSet rs_t = s.executeQuery ();
@@ -937,7 +996,7 @@ public class Naloge extends HtmlMacroComponent {
                 cl.setColspan(2);
                
                 Image im = new Image();
-                im.setSrc("../../stil/slike/zapri_1.png");
+                im.setSrc("../../stil/slike/nazaj.png");
                 im.addEventListener("onClick", new EventListener() {
                     public void onEvent(Event e) throws Exception {                       
                        Executions.getCurrent().sendRedirect("../Naloge/DodajNalogo.zul");                        

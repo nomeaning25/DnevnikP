@@ -66,7 +66,7 @@ public class sqlStavki {
               * Sql stavki za naloge
               */
             sql_stavki.put("Seznam_Nalog_dodaj","select n.id , n.ime, n.Datum_zaklj from dnevnik.naloge n WHERE n.aktivna = 0 AND N.UPORABNIK = ? ORDER BY n.Datum_zaklj DESC;");
-            sql_stavki.put("Seznam_Nalog_oddaj","select n.id , n.ime, n.Datum_zaklj from dnevnik.naloge n WHERE n.aktivna = 1 AND n.predmet_id = ? ORDER BY n.Datum_zaklj DESC;");            
+            sql_stavki.put("Seznam_Nalog_oddaj","select n.id , n.ime, n.Datum_zaklj from dnevnik.naloge n WHERE n.aktivna = 1 AND n.predmet_id = ? AND n.Datum_zaklj >= CURDATE() ORDER BY n.Datum_zaklj DESC;");            
 
             //Select stavki
             sql_stavki.put("poisci_podatke_nal","SELECT ime, datum_zaklj, opis FROM naloge WHERE id = ?;");
@@ -88,6 +88,7 @@ public class sqlStavki {
             sql_stavki.put("posodobi_naloge_update", "UPDATE NALOGE SET `UPDATE` = ? WHERE ID = ?");
             sql_stavki.put("posodobi_naloge_select", "UPDATE NALOGE SET `SELECT` = ? WHERE ID = ?");
             sql_stavki.put("posodobi_el_naloge", "UPDATE naloge_elementi SET ID_KONTROLE  = ?, TIP = ?, VREDNOST = ? WHERE ID = ?");
+            
 
             //Delete stavki
             sql_stavki.put("delete_el_naloge","DELETE FROM naloge_elementi WHERE ID = ?;");

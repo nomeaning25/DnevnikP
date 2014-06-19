@@ -21,7 +21,7 @@ class NalogaData {
     
     private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("DiplomaPU");
     private List<Naloga> naloge = new ArrayList<Naloga>();
-    
+        
     public NalogaData() {
         EntityManager em = emf.createEntityManager();
         naloge = em.createNamedQuery("Naloga.findAll").getResultList();
@@ -29,13 +29,15 @@ class NalogaData {
     
     public NalogaData(Predmet pid, Profesor uid, int a) {
         EntityManager em = emf.createEntityManager();
-        naloge = em.createNamedQuery("Naloga.findByAktivnaFromUporabnikAndPredmet").setParameter("aktivna", a).setParameter("predmetId", pid).setParameter("uporabnik", uid).getResultList();
+        naloge = em.createNamedQuery("Naloga.findByAktivnaFromUporabnikAndPredmet").setParameter("aktivna", a).setParameter("predmetId", pid).setParameter("uporabnik", uid).setParameter("datum", new Date()).getResultList();
     }
     
     public NalogaData(Date d, Predmet pid, Profesor uid) {
         EntityManager em = emf.createEntityManager();
         naloge = em.createNamedQuery("Naloga.findZakljucene").setParameter("datum", d).setParameter("predmetId", pid).setParameter("uporabnik", uid).getResultList();
     }
+    
+    
     
     public List<Naloga> getData() {
         return naloge;

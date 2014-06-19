@@ -34,9 +34,9 @@
         </style>
         <window id="Seznam_nalog" sclass="Seznam_nalog" apply="org.zkoss.bind.BindComposer"           
             viewModel="@id('vm') @init('dnevnik.NalogaViewModel')" border="none" width="1066px" style="margin:auto;">
-            <div children="@load(vm.seznamAkt)" id="Seznam" width="1066px" style="margin:auto; padding-top:100px;">
+            <div children="@load(vm.seznamZaklj)" id="Seznam" width="1066px" style="margin:auto; padding-top:100px;">
                 <template name="children">  
-                    <div class="datoteka_item" onClick="@command('onChooseItemAkt', id=each.id)">                  
+                    <div class="datoteka_item" onClick="@command('onChooseItemZaklj', id=each.id)">                  
                         <div><span class='datum'><label value="@load(each.datumZaklj)"/></span></div>
                         <div><span class='naslov'><label value="@load(each.ime)"/></span></div>
                     </div>

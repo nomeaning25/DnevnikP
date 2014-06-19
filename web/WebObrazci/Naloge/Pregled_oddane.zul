@@ -1,40 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <zk>
-        <?link href='http://fonts.googleapis.com/css?family=Italianno&subset=latin,latin-ext' rel='stylesheet' type='text/css'?>
-        <style>
-            .datoteka_item{
-                padding-left: 150px;
-                padding-right: 20px;
-                padding-top:30px;
-                font-size: 25px;
-                width: 180px;
-                height: 155px;
-                float: left;
-                margin-right:5px;
-                margin-bottom:5px;  
-                background-image: url('../../stil/slike/Gumb-datoteka.png');
-                font-family: 'Italianno', cursive;
-                line-height: 22px;
-                color: #686868;
-                cursor: pointer;
-            }
-            
-            .datoteka_item:hover{
-                background-image: url('../../stil/slike/Gumb-datoteka-hover.png');
-            }
-            
-            .datoteka_item .datum{
-                font-size:20px;
-                color: #B5B5B5; 
-            }
-        </style>
-        <window id="Seznam_nalog" border="none" width="1066px" style="margin:auto;">
-	<div id="Seznam" width="1066px" style="margin:auto; padding-top:100px;"></div>
-	<zscript><![CDATA[
-	    import dnevnik.*;		
-	    import java.sql.*;
-	    
-    	    Naloge.napolni_pregled(true);
-            
-	]]></zscript>
-        </window>
- </zk>
+<style dynamic="true">
+         
+        .nav_tabs .z-tabpanels .z-toolbarbutton-cnt { padding: 4px;}
+        .nav_category { cursor:pointer; }
+        .nav_text { color: #696569; font-size : 24px; font-weight: bold;}
+        
+
+.CelicaLabela{
+text-align: right;
+}
+
+    </style>
+    <zscript src="../../scripts/DB.zs"/>
+<zscript src="../../scripts/funkcije.zs"/>
+
+           
+
+<grid id="SeznamDatotek" height="250px">
+<columns>
+<column hflex="2">id</column>
+<column hflex="1">Uporabnik</column>
+<column hflex="1">status</column>
+<column hflex="1">Akcije</column>
+</columns>
+<foot>
+<footer span="4" id="footer_category_dat" class="footer_right" />
+</foot>
+</grid>
+<zscript><![CDATA[
+import dnevnik.*;
+
+SeznamDatotek.setRowRenderer(new OddaneNalRenderer());
+OddaneNalPodatki.OsveziOddaneNal();
+SeznamDatotek.setModel(new ListModelList(OddaneNalPodatki.vrniVseOddaneNal()));
+footer_category_dat.setLabel("Št. datotek: "+ OddaneNalPodatki.vrniVseOddaneNal().size() +"");
+
+]]></zscript>
+</zk>

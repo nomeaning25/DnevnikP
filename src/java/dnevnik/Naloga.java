@@ -35,9 +35,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Naloga.findByIme", query = "SELECT n FROM Naloga n WHERE n.ime = :ime"),
     @NamedQuery(name = "Naloga.findByOpis", query = "SELECT n FROM Naloga n WHERE n.opis = :opis"),
     @NamedQuery(name = "Naloga.findByDatumZaklj", query = "SELECT n FROM Naloga n WHERE n.datumZaklj = :datumZaklj"),    
-    @NamedQuery(name = "Naloga.findZakljucene", query = "SELECT n FROM Naloga n WHERE n.datumZaklj < :datum AND n.predmetId = :predmetId and n.uporabnik = :uporabnik and n.aktivna = 1"),    
-    @NamedQuery(name = "Naloga.findByAktivnaFromUporabnikAndPredmet", query = "SELECT n FROM Naloga n WHERE n.aktivna = :aktivna AND n.predmetId = :predmetId and n.uporabnik = :uporabnik"),    
-    @NamedQuery(name = "Naloga.findByAktivna", query = "SELECT n FROM Naloga n WHERE n.aktivna = :aktivna")})
+    @NamedQuery(name = "Naloga.findZakljucene", query = "SELECT n FROM Naloga n WHERE (n.datumZaklj < :datum AND n.predmetId = :predmetId and n.uporabnik = :uporabnik and n.aktivna = 1) or n.aktivna = 2"),    
+    @NamedQuery(name = "Naloga.findByAktivnaFromUporabnikAndPredmet", query = "SELECT n FROM Naloga n WHERE n.aktivna = :aktivna AND n.predmetId = :predmetId and n.uporabnik = :uporabnik and n.datumZaklj >= :datum"),    
+    @NamedQuery(name = "Naloga.findByAktivna", query = "SELECT n FROM Naloga n WHERE n.aktivna = :aktivna and n.datumZaklj >= :datum")})
 public class Naloga implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
