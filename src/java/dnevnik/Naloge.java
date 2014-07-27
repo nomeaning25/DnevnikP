@@ -172,8 +172,12 @@ public class Naloge extends HtmlMacroComponent {
                             } catch (Exception ex) {
                                 System.out.println ("ERROR: " + ex.getMessage());                  //Če pride do napake, jo vrnemo
                             } finally {
-                                Sessions.getCurrent().setAttribute("ID_naloge",null); 
-                                Executions.sendRedirect("../Profesorji/Index.zul");
+                                Messagebox.show("Naloga je aktivna! Ponovno jo boste lahko videli, ko bo naloga zaključena.", "Sporočilo!", Messagebox.OK, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
+                                    public void onEvent(Event evt) throws InterruptedException {                                        
+                                            Sessions.getCurrent().setAttribute("ID_naloge",null);
+                                            Executions.sendRedirect("../Profesorji/Index.zul");                                        
+                                    }
+                                });
                             }
                                     
                         }
@@ -489,7 +493,11 @@ public class Naloge extends HtmlMacroComponent {
                 sprem_c.setColspan(2);
                 sprem.setId("sprememba");
                 sprem.setStyle("display:none;");
+                Textbox sprem_kom = new Textbox();
+                sprem_kom.setId("sprememba_kom");
+                sprem_kom.setStyle("display:none;");
                 sprem_c.appendChild(sprem);
+                sprem_c.appendChild(sprem_kom);
                 r.appendChild(sprem_c);
                 rws.appendChild(r);
                 
@@ -512,6 +520,8 @@ public class Naloge extends HtmlMacroComponent {
                                     }
                                         
                                 });
+                                if(tippregleda.equals("oddane"))
+                                    t1.setDisabled(true);
                                 c1.appendChild(t1);
                                 r.appendChild(c1);
                                 break;
@@ -529,6 +539,8 @@ public class Naloge extends HtmlMacroComponent {
                                     }
                                         
                                 });
+                                if(tippregleda.equals("oddane"))
+                                    t2.setDisabled(true);
                                 c2.appendChild(t2);
                                 r.appendChild(c2);
                                 break;
@@ -549,6 +561,8 @@ public class Naloge extends HtmlMacroComponent {
                                     }
                                         
                                 });
+                                if(tippregleda.equals("oddane"))
+                                    cbx.setDisabled(true);
                                 c3.appendChild(cbx);
                                 r.appendChild(c3);
                                 break;
@@ -560,15 +574,24 @@ public class Naloge extends HtmlMacroComponent {
                                 rws.appendChild(r);
                                 r = new Row();
                                 c4 = new Cell();
-                                CKeditor ck = new CKeditor();
-                                ck.setId(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"));
-                                ck.addEventListener("onChange", new EventListener() {
-                                    public void onEvent(Event e) throws Exception {
-                                        ((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).setValue("1");
-                                    }
-                                        
-                                });
-                                c4.appendChild(ck);
+                                
+                                if(tippregleda.equals("oddane")){
+                                    Label lbl_ck = new Label();
+                                    lbl_ck.setId(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"));
+                                    lbl_ck.setStyle("color: grey; margin-left: 5px; position:relative; top:-5px; font-weight:normal; font-style:italic;");
+                                    c4.appendChild(lbl_ck);
+                                } else{
+                                    CKeditor ck = new CKeditor();
+                                    ck.setId(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"));
+                                    ck.addEventListener("onChange", new EventListener() {
+                                        public void onEvent(Event e) throws Exception {
+                                            ((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).setValue("1");
+                                        }
+
+                                    });
+                                    c4.appendChild(ck);
+                                }
+                                
                                 r.appendChild(c4);
                                 break;
                         case PRENOS_DATOTEKE: Label l5 = new Label(dodatno_p);
@@ -595,6 +618,8 @@ public class Naloge extends HtmlMacroComponent {
                                         ((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).setValue("1");
                                     }
                                 });
+                                if(tippregleda.equals("oddane"))
+                                    b.setVisible(false);
                                 Label lbl = new Label();
                                 lbl.setId("success");
                                 lbl.setStyle("color: grey; margin-left: 5px; position:relative; top:-5px; font-weight:normal; font-style:italic;");
@@ -623,6 +648,8 @@ public class Naloge extends HtmlMacroComponent {
                                     }
                                         
                                 });
+                                if(tippregleda.equals("oddane"))                                    
+                                    cbx_hosp.setDisabled(true);
                                 c6.appendChild(cbx_hosp);
                                 r.appendChild(c6);
                                 break;
@@ -647,6 +674,8 @@ public class Naloge extends HtmlMacroComponent {
                                     }
                                         
                                 });
+                                 if(tippregleda.equals("oddane"))
+                                    cbx_prip.setDisabled(true);
                                 c7.appendChild(cbx_prip);
                                 r.appendChild(c7);
                                 break;
@@ -698,47 +727,12 @@ public class Naloge extends HtmlMacroComponent {
                     im.setSrc("../../stil/slike/shrani.png");
                     im.addEventListener("onClick", new EventListener() {
                         public void onEvent(Event e) throws Exception {
+                            System.out.println("Shranjujem nalogo");
                             shrani_vnose();
                         }
                     });    
                     cl.appendChild(im);
 
-                    im = new Image();
-                    im.setSrc("../../stil/slike/oddaj.png");
-                    im.addEventListener("onClick", new EventListener() {
-                        public void onEvent(Event e) throws Exception {
-                            if(((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).getValue().equals("1")){
-                                Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
-                                    public void onEvent(Event evt) throws InterruptedException {
-                                        if (evt.getName().equals("onYes")) {
-                                            if(((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).getValue().equals("1")){
-                                                Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
-                                                    public void onEvent(Event evt) throws InterruptedException {
-                                                        if (evt.getName().equals("onYes")) {
-
-                                                        } 
-                                                    }
-                                                });
-                                            }
-                                        } 
-                                    }
-                                });
-                            }
-                            else {
-                                if(((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).getValue().equals("1")){
-                                Messagebox.show("Pozor! Neshranjeni podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
-                                    public void onEvent(Event evt) throws InterruptedException {
-                                        if (evt.getName().equals("onYes")) {
-
-                                        } 
-                                    }
-                                });
-                            }
-                            }
-
-                        }
-                    });    
-                    cl.appendChild(im);
                 } else if(tippregleda.equals("aktivne")){
                     im = new Image();
                     im.setSrc("../../stil/slike/Deaktiviraj.png");
@@ -773,8 +767,14 @@ public class Naloge extends HtmlMacroComponent {
                                     break;
                             case IZBIRNO_POLJE: ((Combobox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"))).setValue(rs_t.getString(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE")));
                                     break;
-                            case EDITOR: ((CKeditor) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"))).setValue(rs_t.getString(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE")));
-                                    break;
+                            case EDITOR: {                                        
+                                        if(tippregleda.equals("oddane")){
+                                            ((Label) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"))).setValue(rs_t.getString(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE")));
+                                        } else {
+                                            ((CKeditor) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"))).setValue(rs_t.getString(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE")));
+                                        }
+                                        break;
+                                    }
                             case PRENOS_DATOTEKE: ((Label)((Button) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"))).getFellow("success")).setValue((rs_t.getString(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"))).replace(path + "doc\\" + Sessions.getCurrent().getAttribute("ID_uporabnika").toString() + "\\nal_" + Sessions.getCurrent().getAttribute("ID_naloge").toString() + "_" + rs.getInt("id") + "_" + rs.getString("ID_KONTROLE") + "_", ""));                                    
                                     break;
                             case IZBIRA_HOSPITACIJE: ((Combobox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"))).setSelectedItem(getItemByValue((Combobox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE")), rs_t.getInt(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"))));
@@ -785,6 +785,21 @@ public class Naloge extends HtmlMacroComponent {
                         }                    
                     }
                 }
+                
+                Rows rws_kom = ((Grid) Path.getComponent("/Oddaj_nalogo/KomentarNaloge")).getRows();
+                Row r_kom = new Row();
+                Cell c_kom = new Cell();
+                CKeditor komentar = new CKeditor();
+                komentar.setId("ck_komentar");
+                komentar.addEventListener("onChange", new EventListener() {
+                    public void onEvent(Event e) throws Exception {
+                        ((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba_kom")).setValue("1");
+                    }
+
+                });
+                c_kom.appendChild(komentar);
+                r_kom.appendChild(c_kom);
+                rws_kom.appendChild(r_kom);
                 
                 rs.close();
                 rs_t.close();
@@ -1019,9 +1034,14 @@ public class Naloge extends HtmlMacroComponent {
     public static void shrani_vnose(){
         if(Sessions.getCurrent().getAttribute("ID_vnosa_naloge") != null){                
             update_vnos();
-
+            System.out.println("Posodabljam");
+            ((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).setValue("0");
+            Messagebox.show("Podatki so bili uspešno shranjeni", "Obvestilo!", Messagebox.OK, Messagebox.NONE);
         } else {
             insert_vnos();
+            System.out.println("Vstavljam novo");
+            ((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).setValue("0");
+            Messagebox.show("Podatki so bili uspešno shranjeni", "Obvestilo!", Messagebox.OK, Messagebox.NONE);
         }
     }
     
@@ -1037,7 +1057,8 @@ public class Naloge extends HtmlMacroComponent {
                 
             s = db.Statement(Boolean.FALSE, "select_el_naloge", param_poisci);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo                       
             ResultSet rs = s.executeQuery ();
-            String sql = "UPDATE NAL_" + Sessions.getCurrent().getAttribute("ID_naloge").toString() + "SET ";
+            String sql = "UPDATE NAL_" + Sessions.getCurrent().getAttribute("ID_naloge").toString() + " SET ";
+             
             List<Object> list_param = new ArrayList<Object>();
                      
             while(rs.next()){
@@ -1070,8 +1091,8 @@ public class Naloge extends HtmlMacroComponent {
             list_param.add(Sessions.getCurrent().getAttribute("ID_vnosa_naloge").toString());
             sql += "WHERE id = ?;";
             sql = sql.replace(", WHERE", " WHERE");
-            
-            Object[] param_statment = new String[ list_param.size() ];
+            System.out.println(sql);
+            Object[] param_statment = new Object[ list_param.size() ];
             list_param.toArray( param_statment );
             
             s = db.Statement(Boolean.TRUE, sql, param_statment);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
@@ -1080,7 +1101,7 @@ public class Naloge extends HtmlMacroComponent {
             db.close ();
             
         } catch(Exception ex){
-            
+            ex = ex;
         }
         
     }

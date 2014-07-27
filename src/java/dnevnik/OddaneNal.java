@@ -3,14 +3,14 @@ package dnevnik;
 public class OddaneNal {
     private int Id;
     private String Uporabnik_id;
-    private int StatusId;
+    private String Komentar;
     private int NalogaId;
  
-    public OddaneNal(int id, String uporabnik_id, int status, int nalogaid) {
+    public OddaneNal(int id, String uporabnik_id, String komentar, int nalogaid) {
         super();
         Id = id;
         Uporabnik_id = uporabnik_id;
-        StatusId = status;
+        Komentar = komentar;
         NalogaId = nalogaid;
 
     }
@@ -31,19 +31,19 @@ public class OddaneNal {
     	Uporabnik_id = uporabnik_id;
     }
  
-    public int nastaviStatusId() {
-        return StatusId;
+    public String vrniKomentar() {
+        return Komentar;
     }
  
-    public int vrniStatusId(int nalogaId) {
-    	return StatusId;
+    public void nastaviKomentar(String komentar) {
+    	Komentar = komentar;
     } 
     
-    public int nastaviNalogaId() {
+    public int vrniNalogaId() {
         return NalogaId;
     }
  
-    public void nastaviOpis(int nalogaId) {
+    public void nastaviNalogaId(int nalogaId) {
     	NalogaId = nalogaId;
     } 
 }

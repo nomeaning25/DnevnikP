@@ -82,6 +82,19 @@
             </row>           
         </rows>
     </grid>
+    <grid id="KomentarNaloge" style="border: white; padding:25px; margin:auto; margin-top:50px; background:white;">
+        <columns>                
+                <column label=""/>
+        </columns>
+        <rows>
+            <row>
+                <cell style="text-align: center; padding-bottom: 35px;"><label style="font-size: 26px; text-align: right;" id="" value="Komentar"/></cell>	
+            </row>
+            <row>
+                <cell id="komentar"></cell>
+            </row>           
+        </rows>
+    </grid>
     <zscript><![CDATA[
         import dnevnik.*;        
 

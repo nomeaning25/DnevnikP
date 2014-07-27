@@ -17,9 +17,11 @@ public class OddaneNalRenderer implements RowRenderer {
     public void render(Row row, Object data) throws Exception {
     	OddaneNal f = (OddaneNal) data;
     	final int id = f.vrniId();
-    	final String uporabnik_id = f.vrniUporabnika();
+    	final String uporabnik_id = f.vrniUporabnika();        
+        final String komentar = f.vrniKomentar();
         new Label(id+"").setParent(row);
         new Label(uporabnik_id).setParent(row);        
+        new Label(komentar).setParent(row);
         
         Cell celica = new Cell();        
         final Image vpogled = new Image("../../stil/slike/Vpogled.png");

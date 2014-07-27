@@ -233,9 +233,7 @@
                                                     if(Naloge.shrani()){
                                                         sprememba_o.setValue("0");
                                                         sprememba_e.setValue("0");
-                                                        Naloge.aktiviraj(); 
-                                                        alert("Naloga je aktivna! Ponovno jo boste lahko videli, ko bo naloga zaključena.");
-                                                        session.setAttribute("ID_naloge",null); execution.sendRedirect("../Profesorji/Index.zul");
+                                                        Naloge.aktiviraj();
                                                     }
                                                 } 
                                             }
@@ -245,9 +243,7 @@
                                         if(Naloge.shrani()){
                                             sprememba_o.setValue("0");
                                             sprememba_e.setValue("0");
-                                            Naloge.aktiviraj(); 
-                                            alert("Naloga je aktivna! Ponovno jo boste lahko videli, ko bo naloga zaključena.");
-                                            session.setAttribute("ID_naloge",null); execution.sendRedirect("../Profesorji/Index.zul");
+                                            Naloge.aktiviraj();
                                         }   
                                     }
                                 ]]>

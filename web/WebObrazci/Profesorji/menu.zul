@@ -9,7 +9,7 @@
     </menu>
     <menu label="Naloge">
         <menupopup>
-            <menuitem label="Nova naloga" onClick="iframe.setSrc(&quot;./Naloge/DodajNalogo.zul;&quot;)" image="../../stil/slike/icons/paperpencil32.png" />
+            <menuitem label="Nova naloga" onClick="Sessions.getCurrent().setAttribute(&quot;ID_naloge&quot;,null); iframe.setSrc(&quot;./Naloge/DodajNalogo.zul;&quot;)" image="../../stil/slike/icons/paperpencil32.png" />
             <menuitem label="Pregled nalog" onClick="iframe.setSrc(&quot;./Naloge/Pregled_dodaj.zul;&quot;)" image="../../stil/slike/icons/folder32.png" />
             <menuseparator />
             <menuitem label="Pregled aktivnih nalog" onClick="iframe.setSrc(&quot;./Naloge/Pregled_aktivne.zul;&quot;)" image="../../stil/slike/icons/paperstar.png" />            

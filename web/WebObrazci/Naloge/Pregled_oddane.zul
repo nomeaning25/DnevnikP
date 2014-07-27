@@ -19,9 +19,9 @@ text-align: right;
 
 <grid id="SeznamDatotek" height="250px">
 <columns>
-<column hflex="2">id</column>
+<column hflex="1">id</column>
 <column hflex="1">Uporabnik</column>
-<column hflex="1">status</column>
+<column hflex="3">Komentar</column>
 <column hflex="1">Akcije</column>
 </columns>
 <foot>
