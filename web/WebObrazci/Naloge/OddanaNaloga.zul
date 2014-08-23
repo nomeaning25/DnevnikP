@@ -91,14 +91,53 @@
                 <cell style="text-align: center; padding-bottom: 35px;"><label style="font-size: 26px; text-align: right;" id="" value="Komentar"/></cell>	
             </row>
             <row>
-                <cell id="komentar"></cell>
-            </row>           
+                <cell id="komentar">
+                    <ckeditor id="komentar_ck" customConfigurationsPath="/scripts/ck_config.js" toolbar="MyToolbar2">
+                        <attribute name="onChange">                                                
+                            sprememba.setValue(1 + "");                    
+                        </attribute>
+                    </ckeditor>
+                </cell>                
+            </row>     
+            <row>
+                <cell style="text-align:center; margin-top:20px;">
+                     <image src="../../stil/slike/shrani.png">
+                        <attribute name="onClick"><![CDATA[                               
+                            update_comment();                         
+                        ]]>
+                        </attribute>
+                    </image>
+                </cell>
+            </row>      
         </rows>
     </grid>
     <zscript><![CDATA[
         import dnevnik.*;        
-
+        import java.sql.PreparedStatement;
+        import java.sql.ResultSet;
+        
         Naloge.odpriNalogo(Sessions.getCurrent().getAttribute("ID_naloge_uporabnik").toString(), "oddane");
+        
+        database db = new database();
+        PreparedStatement s;
+        Object[] param = {Sessions.getCurrent().getAttribute("ID_naloge_uporabnik").toString()};
+        String sql = "SELECT komentar FROM NAL_" + Sessions.getCurrent().getAttribute("ID_naloge").toString() + " WHERE UPORABNIK_ID = ?;";
+        s = db.Statement(Boolean.TRUE, sql, param);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo                 
+        ResultSet rs = s.executeQuery();
+        rs.next();
+        ((CKeditor) Path.getComponent("/Oddaj_nalogo/KomentarNaloge").getFellow("komentar_ck")).setValue(rs.getString("KOMENTAR"));
+        ((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).setValue("0");
+
+        public void update_comment(){
+            database db = new database();
+            PreparedStatement s;
+            Object[] param = {((CKeditor) Path.getComponent("/Oddaj_nalogo/KomentarNaloge").getFellow("komentar_ck")).getValue(), Sessions.getCurrent().getAttribute("ID_naloge_uporabnik").toString()};
+            String sql = "UPDATE NAL_" + Sessions.getCurrent().getAttribute("ID_naloge").toString() + " SET KOMENTAR = ? WHERE UPORABNIK_ID = ?;";
+            s = db.Statement(Boolean.TRUE, sql, param);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo                 
+            s.execute();
+            ((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).setValue("0");
+            Messagebox.show("Podatki so bili shranjeni.", "Obvestilo!", Messagebox.OK, Messagebox.INFORMATION);
+        }
                     
     ]]></zscript>
 </window>

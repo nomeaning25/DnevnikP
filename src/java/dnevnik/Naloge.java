@@ -66,6 +66,8 @@ public class Naloge extends HtmlMacroComponent {
                 r = insert();
             }
             
+                                  
+            
         } else {
             if(Sessions.getCurrent().getAttribute("ID_naloge") != null){
                 r = true;
@@ -111,11 +113,11 @@ public class Naloge extends HtmlMacroComponent {
                                                 create_tab += "PRIMARY KEY (id));";
                                                 
                                                 Object[] param_ct = {};
-                                                s = db.Statement(Boolean.TRUE, create_tab, param_ct);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
+                                                s = db.Statement(Boolean.TRUE, create_tab, param_ct);    
                                                 s.execute();
                                                 
                                                 Object[] param_akt = {Sessions.getCurrent().getAttribute("ID_naloge")};
-                                                s = db.Statement(Boolean.TRUE, "UPDATE naloge SET aktivna = 1 WHERE id = ?;", param_akt);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
+                                                s = db.Statement(Boolean.TRUE, "UPDATE naloge SET aktivna = 1 WHERE id = ?;", param_akt);    
                                                 s.execute();
                                                 
                                                 rs.close();
@@ -136,6 +138,8 @@ public class Naloge extends HtmlMacroComponent {
                         if (evt.getName().equals("onYes")) {
                             database db = new database();
 
+                            
+                            
                             PreparedStatement s;
                             try
                             {
@@ -192,7 +196,7 @@ public class Naloge extends HtmlMacroComponent {
     public static void deaktiviraj() throws InterruptedException{
         
         if(Sessions.getCurrent().getAttribute("ID_naloge") != null){            
-                    Messagebox.show("Pozor! Naloga bo deaktivirana in je ne bo mogoče več aktivirati. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
+                    Messagebox.show("Pozor! Naloga bo deaktivirana in je ne bo mogoče več aktivirati. Vsi podatki bodo izgubljeni. Nadaljujem?", "Pozor!", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
                         public void onEvent(Event evt) throws InterruptedException {
                             if (evt.getName().equals("onYes")) {
                                 database db = new database();
@@ -201,7 +205,7 @@ public class Naloge extends HtmlMacroComponent {
                                 try
                                 {
                                     Object[] param_akt = {Sessions.getCurrent().getAttribute("ID_naloge")};
-                                    s = db.Statement(Boolean.TRUE, "UPDATE naloge SET aktivna = 2 WHERE id = ?;", param_akt);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
+                                    s = db.Statement(Boolean.TRUE, "UPDATE naloge SET aktivna = 3 WHERE id = ?;", param_akt);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
                                     s.execute();
                                 } catch (Exception ex) {
                                     System.out.println ("ERROR: " + ex.getMessage());                  //Če pride do napake, jo vrnemo
@@ -418,9 +422,8 @@ public class Naloge extends HtmlMacroComponent {
             database db = new database();
             PreparedStatement s;
             try {
-                    Object[] param_select = {Sessions.getCurrent().getAttribute("ID_uporabnika").toString(), Sessions.getCurrent().getAttribute("ID_predmeta").toString()};   
-                    Object[] param_update_select_oddaj = {};
-                    s = db.Statement(Boolean.FALSE, "Seznam_Nalog_aktivne", param_update_select_oddaj);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo                                             
+                    Object[] param_select = {Sessions.getCurrent().getAttribute("ID_predmeta").toString()};                       
+                    s = db.Statement(Boolean.FALSE, "Seznam_Nalog_zakljucene", param_select);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo                                             
                     ResultSet rs = s.executeQuery ();
 
                     while (rs.next()) 
@@ -430,9 +433,10 @@ public class Naloge extends HtmlMacroComponent {
                         tmp.setClass("datoteka_item");
                         tmp.appendChild(new Html("<span class='datum'>" + rs.getString("Datum_zaklj") + "</span><br/>" + "<span class='naslov'>" + rs.getString("ime") + "</span>"));	    	
                         tmp.addEventListener("onClick", new EventListener() {
-                            public void onEvent(Event e) throws Exception {
-                                Sessions.getCurrent().setAttribute("ID_naloge", id);                                
-                                Executions.getCurrent().sendRedirect("../Naloge/OddaniOdgovori.zul");
+                            public void onEvent(Event e) throws Exception {                
+                                Sessions.getCurrent().setAttribute("ID_naloge_stud", id);
+                                Sessions.getCurrent().setAttribute("ID_naloge_uporabnik", Sessions.getCurrent().getAttribute("ID_uporabnika"));
+                                Executions.getCurrent().sendRedirect("../Naloge/OddanaNaloga.zul");
                             }
                         });
                         Path.getComponent("/Seznam_nalog").getFellow("Seznam_nalog").appendChild(tmp);	
@@ -785,21 +789,7 @@ public class Naloge extends HtmlMacroComponent {
                         }                    
                     }
                 }
-                
-                Rows rws_kom = ((Grid) Path.getComponent("/Oddaj_nalogo/KomentarNaloge")).getRows();
-                Row r_kom = new Row();
-                Cell c_kom = new Cell();
-                CKeditor komentar = new CKeditor();
-                komentar.setId("ck_komentar");
-                komentar.addEventListener("onChange", new EventListener() {
-                    public void onEvent(Event e) throws Exception {
-                        ((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba_kom")).setValue("1");
-                    }
-
-                });
-                c_kom.appendChild(komentar);
-                r_kom.appendChild(c_kom);
-                rws_kom.appendChild(r_kom);
+                              
                 
                 rs.close();
                 rs_t.close();

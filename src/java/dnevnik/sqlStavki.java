@@ -67,6 +67,8 @@ public class sqlStavki {
               */
             sql_stavki.put("Seznam_Nalog_dodaj","select n.id , n.ime, n.Datum_zaklj from dnevnik.naloge n WHERE n.aktivna = 0 AND N.UPORABNIK = ? ORDER BY n.Datum_zaklj DESC;");
             sql_stavki.put("Seznam_Nalog_oddaj","select n.id , n.ime, n.Datum_zaklj from dnevnik.naloge n WHERE n.aktivna = 1 AND n.predmet_id = ? AND n.Datum_zaklj >= CURDATE() ORDER BY n.Datum_zaklj DESC;");            
+            sql_stavki.put("Seznam_Nalog_zakljucene","select n.id , n.ime, n.Datum_zaklj from dnevnik.naloge n WHERE n.aktivna = 2 AND n.predmet_id = ? AND n.Datum_zaklj < CURDATE() ORDER BY n.Datum_zaklj DESC;");            
+            
 
             //Select stavki
             sql_stavki.put("poisci_podatke_nal","SELECT ime, datum_zaklj, opis FROM naloge WHERE id = ?;");

@@ -15,13 +15,7 @@
             <menuitem label="Pregled aktivnih nalog" onClick="iframe.setSrc(&quot;./Naloge/Pregled_aktivne.zul;&quot;)" image="../../stil/slike/icons/paperstar.png" />            
             <menuitem label="Pregled oddanih nalog" onClick="iframe.setSrc(&quot;./Naloge/Pregled_zakljucene.zul;&quot;)" image="../../stil/slike/icons/papercheck32.png" />
         </menupopup>
-    </menu>
-    <menu label="Skupine">
-        <menupopup>
-            <menuitem label="Sestavi skupino" onClick="" image="../../stil/slike/icons/usersplus32.png" />
-            <menuitem label="Pregled skupin" onClick="" image="../../stil/slike/icons/users32.png" />                           
-        </menupopup>
-    </menu>
+    </menu>    
     <menuitem label="Dnevniki" onClick="" image="../../stil/slike/icons/pencil32.png" />
     <menu label="Pomoč">
         <menupopup>

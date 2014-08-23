@@ -35,6 +35,8 @@
 	    
     	    Naloge.napolni_pregled(true);
             
+            Naloge.napolni_pregled_zakljucene();
+            
 	]]></zscript>
         </window>
  </zk>

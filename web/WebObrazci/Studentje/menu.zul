@@ -17,13 +17,6 @@
             <menuseparator />
             <menuitem label="Dnevnik" onClick="" image="../../stil/slike/icons/pencil32.png"/>
         </menupopup>
-    </menu>
-    <menu label="Moja skupina">
-        <menupopup>
-            <menuitem label="Priprave" onClick="" image="../../stil/slike/icons/folder32.png" />
-            <menuitem label="Hospitacije" onClick="" image="../../stil/slike/icons/folder32.png" />
-            <menuitem label="Naloge" onClick="" image="../../stil/slike/icons/folder32.png" />                                
-        </menupopup>
     </menu>    
     <menu label="Pomoč">
         <menupopup>
