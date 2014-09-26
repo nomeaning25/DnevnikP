@@ -345,9 +345,14 @@ public class Naloge extends HtmlMacroComponent {
                         s = db.Statement(Boolean.FALSE, "Seznam_Nalog_dodaj", param_update_select);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo     
                     }                    
                     ResultSet rs = s.executeQuery ();
-
+                    if(oddaj)
+                        Path.getComponent("/Seznam_nalog").getFellow("Seznam_nalog").appendChild(new Html("<div><h2>Aktivne naloge</h1></div>"));
+                    else
+                        Path.getComponent("/Seznam_nalog").getFellow("Seznam_nalog").appendChild(new Html("<div><h2>Še neaktivne naloge</h1></div>"));
+                    int count_nal = 0;
                     while (rs.next()) 
                     {
+                        count_nal++;
                         Div tmp = new Div();
                         final String id = rs.getString("id");
                         tmp.setClass("datoteka_item");
@@ -364,6 +369,9 @@ public class Naloge extends HtmlMacroComponent {
                             }
                         });
                         Path.getComponent("/Seznam_nalog").getFellow("Seznam_nalog").appendChild(tmp);	
+                    }
+                    if(count_nal == 0){
+                        Path.getComponent("/Seznam_nalog").getFellow("Seznam_nalog").appendChild(new Html("<div><span style='color:grey;'>ni nalog, ki bi ustrezale kriteriju</span></div>"));
                     }
                     
                     rs.close();
@@ -388,7 +396,7 @@ public class Naloge extends HtmlMacroComponent {
                     Object[] param_update_select_oddaj = {};
                     s = db.Statement(Boolean.FALSE, "Seznam_Nalog_aktivne", param_update_select_oddaj);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo                                             
                     ResultSet rs = s.executeQuery ();
-
+                    
                     while (rs.next()) 
                     {
                         Div tmp = new Div();
@@ -426,20 +434,35 @@ public class Naloge extends HtmlMacroComponent {
                     s = db.Statement(Boolean.FALSE, "Seznam_Nalog_zakljucene", param_select);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo                                             
                     ResultSet rs = s.executeQuery ();
 
+                    Path.getComponent("/Seznam_nalog").getFellow("Seznam_nalog").appendChild(new Html("<div style=\"clear:both\"></div><div><h2>Zaključene naloge</h1></div>"));                    
+                    
+                    int count_nal = 0;
                     while (rs.next()) 
                     {
-                        Div tmp = new Div();
-                        final String id = rs.getString("id");
-                        tmp.setClass("datoteka_item");
-                        tmp.appendChild(new Html("<span class='datum'>" + rs.getString("Datum_zaklj") + "</span><br/>" + "<span class='naslov'>" + rs.getString("ime") + "</span>"));	    	
-                        tmp.addEventListener("onClick", new EventListener() {
-                            public void onEvent(Event e) throws Exception {                
-                                Sessions.getCurrent().setAttribute("ID_naloge_stud", id);
-                                Sessions.getCurrent().setAttribute("ID_naloge_uporabnik", Sessions.getCurrent().getAttribute("ID_uporabnika"));
-                                Executions.getCurrent().sendRedirect("../Naloge/OddanaNaloga.zul");
-                            }
-                        });
-                        Path.getComponent("/Seznam_nalog").getFellow("Seznam_nalog").appendChild(tmp);	
+                        count_nal++;
+                        Object[] param_select_one = {Sessions.getCurrent().getAttribute("ID_uporabnika")};                       
+                        String sql_one = "SELECT ID FROM NAL_" + rs.getString("id") + " WHERE uporabnik_id = ?;";
+                        s = db.Statement(Boolean.TRUE, sql_one, param_select_one);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo                                             
+                        ResultSet rs_one = s.executeQuery ();
+                        
+                        if(rs_one.next()){
+
+                            Div tmp = new Div();
+                            final String id = rs.getString("id");
+                            tmp.setClass("datoteka_item");
+                            tmp.appendChild(new Html("<span class='datum'>" + rs.getString("Datum_zaklj") + "</span><br/>" + "<span class='naslov'>" + rs.getString("ime") + "</span>"));	    	
+                            tmp.addEventListener("onClick", new EventListener() {
+                                public void onEvent(Event e) throws Exception {                
+                                    Sessions.getCurrent().setAttribute("ID_naloge", id);
+                                    Sessions.getCurrent().setAttribute("ID_naloge_uporabnik", Sessions.getCurrent().getAttribute("ID_uporabnika"));
+                                    Executions.getCurrent().sendRedirect("../Naloge/OddanaNaloga.zul");
+                                }
+                            });
+                            Path.getComponent("/Seznam_nalog").getFellow("Seznam_nalog").appendChild(tmp);	
+                        }
+                    }
+                    if(count_nal == 0){
+                        Path.getComponent("/Seznam_nalog").getFellow("Seznam_nalog").appendChild(new Html("<div><span style='color:grey;'>ni aktivnih nalog...</span></div>"));
                     }
                     
                     rs.close();
@@ -491,7 +514,7 @@ public class Naloge extends HtmlMacroComponent {
 
                 Rows rws = ((Grid) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge")).getRows();
                 Row r = new Row();
-                
+                                
                 Textbox sprem = new Textbox();
                 Cell sprem_c = new Cell();
                 sprem_c.setColspan(2);
@@ -586,7 +609,7 @@ public class Naloge extends HtmlMacroComponent {
                                     c4.appendChild(lbl_ck);
                                 } else{
                                     CKeditor ck = new CKeditor();
-                                    ck.setId(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"));
+                                    ck.setId(rs.getInt("id") + "_" + rs.getString("ID_KONTROLE"));                                    
                                     ck.addEventListener("onChange", new EventListener() {
                                         public void onEvent(Event e) throws Exception {
                                             ((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).setValue("1");
@@ -706,7 +729,11 @@ public class Naloge extends HtmlMacroComponent {
                                         } else if(tippregleda.equals("aktivne"))  {
                                             Sessions.getCurrent().setAttribute("ID_naloge_uporabnik",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_aktivne.zul");
                                         } else {
-                                            Sessions.getCurrent().setAttribute("ID_naloge_uporabnik",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddane.zul");
+                                            if(Sessions.getCurrent().getAttribute("ID_skupine_upor").equals("2")){
+                                                Sessions.getCurrent().setAttribute("ID_naloge_uporabnik",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddane.zul");
+                                            } else {
+                                                Sessions.getCurrent().setAttribute("ID_naloge",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddaj.zul");
+                                            }
                                         }
                                     } 
                                 }
@@ -718,7 +745,11 @@ public class Naloge extends HtmlMacroComponent {
                             } else if(tippregleda.equals("aktivne"))  {
                                 Sessions.getCurrent().setAttribute("ID_naloge_uporabnik",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_aktivne.zul");
                             } else {
-                                Sessions.getCurrent().setAttribute("ID_naloge_uporabnik",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddane.zul");
+                                if(Sessions.getCurrent().getAttribute("ID_skupine_upor").equals("2")){
+                                    Sessions.getCurrent().setAttribute("ID_naloge_uporabnik",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddane.zul");
+                                } else {
+                                    Sessions.getCurrent().setAttribute("ID_naloge",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddaj.zul");
+                                }
                             }
                         }
 

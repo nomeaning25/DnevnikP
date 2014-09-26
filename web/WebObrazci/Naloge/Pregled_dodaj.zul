@@ -34,7 +34,39 @@
 	    import java.sql.*;
 	    
     	    Naloge.napolni_pregled(false);
-            
+
 	]]></zscript>
+        </window>    
+        <window id="Seznam_nalog_akt" sclass="Seznam_nalog_akt" apply="org.zkoss.bind.BindComposer"           
+            viewModel="@id('vm') @init('dnevnik.NalogaViewModel')" border="none" width="1066px" style="margin:auto;">
+            <div children="@load(vm.seznamAkt)" id="Seznam_akt" width="1066px" style="margin:auto; padding-top:100px;">
+                <template name="children">  
+                    <div class="datoteka_item" onClick="@command('onChooseItemAkt', id=each.id)">                  
+                        <div><span class='datum'><label value="@load(each.datumZaklj)"/></span></div>
+                        <div><span class='naslov'><label value="@load(each.ime)"/></span></div>
+                    </div>
+                </template>
+            </div>
+            <zscript><![CDATA[
+            Path.getComponent("/Seznam_nalog_akt").getFellow("Seznam_nalog_akt").appendChild(new Html("<div><h2>Aktivne naloge</h1></div>"));
+	    if(((Div) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("Seznam_akt")).getChildren.size() == 0)
+                ((Div) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("Seznam_akt")).appendChild(new Html("<span style="\color:grey"\>ni nalog, ki bi ustrezale kriteriju</span>"));                
+	]]></zscript>                      
+        </window>    
+        <window id="Seznam_nalog_zakl" sclass="Seznam_nalog_zakl" apply="org.zkoss.bind.BindComposer"           
+            viewModel="@id('vm') @init('dnevnik.NalogaViewModel')" border="none" width="1066px" style="margin:auto;">
+            <div children="@load(vm.seznamZaklj)" id="Seznam_zaklj" width="1066px" style="margin:auto; padding-top:100px;">
+                <template name="children">  
+                    <div class="datoteka_item" onClick="@command('onChooseItemZaklj', id=each.id)">                  
+                        <div><span class='datum'><label value="@load(each.datumZaklj)"/></span></div>
+                        <div><span class='naslov'><label value="@load(each.ime)"/></span></div>
+                    </div>
+                </template>
+            </div> 
+        <zscript><![CDATA[
+            Path.getComponent("/Seznam_nalog_akt").getFellow("Seznam_nalog_akt").appendChild(new Html("<div><h2>Aktivne naloge</h1></div>"));
+	    if(((Div) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("Seznam_zaklj")).getChildren.size() == 0)
+                ((Div) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("Seznam_zaklj")).appendChild(new Html("<span style="\color:grey"\>ni nalog, ki bi ustrezale kriteriju</span>"));                
+	]]></zscript>                                           
         </window>
  </zk>

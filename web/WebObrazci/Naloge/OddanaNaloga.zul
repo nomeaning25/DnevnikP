@@ -92,21 +92,12 @@
             </row>
             <row>
                 <cell id="komentar">
-                    <ckeditor id="komentar_ck" customConfigurationsPath="/scripts/ck_config.js" toolbar="MyToolbar2">
-                        <attribute name="onChange">                                                
-                            sprememba.setValue(1 + "");                    
-                        </attribute>
-                    </ckeditor>
+                    
                 </cell>                
             </row>     
             <row>
-                <cell style="text-align:center; margin-top:20px;">
-                     <image src="../../stil/slike/shrani.png">
-                        <attribute name="onClick"><![CDATA[                               
-                            update_comment();                         
-                        ]]>
-                        </attribute>
-                    </image>
+                <cell style="text-align:center; margin-top:20px;" id="komentar_shrani">
+                     
                 </cell>
             </row>      
         </rows>
@@ -122,12 +113,47 @@
         PreparedStatement s;
         Object[] param = {Sessions.getCurrent().getAttribute("ID_naloge_uporabnik").toString()};
         String sql = "SELECT komentar FROM NAL_" + Sessions.getCurrent().getAttribute("ID_naloge").toString() + " WHERE UPORABNIK_ID = ?;";
+        System.out.println(sql + "; " + Sessions.getCurrent().getAttribute("ID_naloge_uporabnik").toString());
         s = db.Statement(Boolean.TRUE, sql, param);    //Kreiraj sql, ki vrne vsrico za izbrano ucno pripravo                 
         ResultSet rs = s.executeQuery();
         rs.next();
-        ((CKeditor) Path.getComponent("/Oddaj_nalogo/KomentarNaloge").getFellow("komentar_ck")).setValue(rs.getString("KOMENTAR"));
-        ((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).setValue("0");
-
+        
+        if(Sessions.getCurrent().getAttribute("ID_skupine_upor").equals("2")){
+            
+            Cell c = (Cell) Path.getComponent("/Oddaj_nalogo/KomentarNaloge").getFellow("komentar");
+            CKeditor kom_ck = new CKeditor();
+            kom_ck.setId("komentar_ck");
+            kom_ck.setCustomConfigurationsPath("/scripts/ck_config.js");
+            kom_ck.setToolbar("MyToolbar2");
+            kom_ck.addEventListener("onChange", new EventListener() {
+                public void onEvent(Event e) throws Exception {
+                    ((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).setValue("1");
+                }
+            });
+            kom_ck.setValue(rs.getString("KOMENTAR"));
+            c.appendChild(kom_ck);
+            ((Textbox) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("sprememba")).setValue("0");
+        
+        } else {
+            Cell c = (Cell) Path.getComponent("/Oddaj_nalogo/KomentarNaloge").getFellow("komentar");        
+            c.appendChild(new Html(rs.getString("KOMENTAR")));
+        }
+       
+        
+        if(Sessions.getCurrent().getAttribute("ID_skupine_upor").equals("2")){
+            Cell c = (Cell) Path.getComponent("/Oddaj_nalogo/KomentarNaloge").getFellow("komentar_shrani");
+            final Image save = new Image("../../stil/slike/shrani.png");        
+            save.setTooltiptext("shrani");
+            save.addEventListener(Events.ON_CLICK, new EventListener() {
+                public void onEvent(Event event) throws Exception {
+                     update_comment();
+                }
+            });
+            c.appendChild(save);
+        }
+        
+        
+        
         public void update_comment(){
             database db = new database();
             PreparedStatement s;
