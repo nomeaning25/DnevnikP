@@ -371,7 +371,7 @@ public class Naloge extends HtmlMacroComponent {
                         Path.getComponent("/Seznam_nalog").getFellow("Seznam_nalog").appendChild(tmp);	
                     }
                     if(count_nal == 0){
-                        Path.getComponent("/Seznam_nalog").getFellow("Seznam_nalog").appendChild(new Html("<div><span style='color:grey;'>ni nalog, ki bi ustrezale kriteriju</span></div>"));
+                        Path.getComponent("/Seznam_nalog").getFellow("Seznam_nalog").appendChild(new Html("<div><span style='color:grey;' class='z-label'>ni nalog, ki bi ustrezale kriteriju</span></div>"));
                     }
                     
                     rs.close();
@@ -725,14 +725,22 @@ public class Naloge extends HtmlMacroComponent {
                                 public void onEvent(Event evt) throws InterruptedException {
                                     if (evt.getName().equals("onYes")) {
                                         if(tippregleda.equals("")){
-                                            Sessions.getCurrent().setAttribute("ID_naloge",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddaj.zul");
+                                            Sessions.getCurrent().setAttribute("ID_naloge",null); 
+                                            Sessions.getCurrent().setAttribute("ID_vnosa_naloge",null);
+                                            Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddaj.zul");
                                         } else if(tippregleda.equals("aktivne"))  {
-                                            Sessions.getCurrent().setAttribute("ID_naloge_uporabnik",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_aktivne.zul");
+                                            Sessions.getCurrent().setAttribute("ID_naloge_uporabnik",null);                                             
+                                            Executions.getCurrent().sendRedirect("../Naloge/Pregled_dodaj.zul");
                                         } else {
                                             if(Sessions.getCurrent().getAttribute("ID_skupine_upor").equals("2")){
-                                                Sessions.getCurrent().setAttribute("ID_naloge_uporabnik",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddane.zul");
+                                                Sessions.getCurrent().setAttribute("ID_naloge_uporabnik",null);                                                                                           
+                                                Sessions.getCurrent().setAttribute("ID_vnosa_naloge",null);
+                                                Sessions.getCurrent().setAttribute("ID_naloge_stud",null);
+                                                Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddane.zul");                                                                                                
                                             } else {
-                                                Sessions.getCurrent().setAttribute("ID_naloge",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddaj.zul");
+                                                Sessions.getCurrent().setAttribute("ID_naloge",null); 
+                                                Sessions.getCurrent().setAttribute("ID_vnosa_naloge",null);
+                                                Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddaj.zul");
                                             }
                                         }
                                     } 
@@ -741,14 +749,22 @@ public class Naloge extends HtmlMacroComponent {
                         }
                         else {
                             if(tippregleda.equals("")){
-                                Sessions.getCurrent().setAttribute("ID_naloge",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddaj.zul");
+                                Sessions.getCurrent().setAttribute("ID_naloge",null);
+                                Sessions.getCurrent().setAttribute("ID_vnosa_naloge",null);
+                                Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddaj.zul");
                             } else if(tippregleda.equals("aktivne"))  {
-                                Sessions.getCurrent().setAttribute("ID_naloge_uporabnik",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_aktivne.zul");
+                                Sessions.getCurrent().setAttribute("ID_naloge_uporabnik",null);                                 
+                                Executions.getCurrent().sendRedirect("../Naloge/Pregled_dodaj.zul");
                             } else {
                                 if(Sessions.getCurrent().getAttribute("ID_skupine_upor").equals("2")){
-                                    Sessions.getCurrent().setAttribute("ID_naloge_uporabnik",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddane.zul");
+                                    Sessions.getCurrent().setAttribute("ID_naloge_uporabnik",null);          
+                                    Sessions.getCurrent().setAttribute("ID_vnosa_naloge",null);
+                                    Sessions.getCurrent().setAttribute("ID_naloge_stud",null);                                    
+                                    Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddane.zul");                                                                                                
                                 } else {
-                                    Sessions.getCurrent().setAttribute("ID_naloge",null); Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddaj.zul");
+                                    Sessions.getCurrent().setAttribute("ID_naloge",null); 
+                                    Sessions.getCurrent().setAttribute("ID_vnosa_naloge",null);
+                                    Executions.getCurrent().sendRedirect("../Naloge/Pregled_oddaj.zul");
                                 }
                             }
                         }
@@ -1139,7 +1155,7 @@ public class Naloge extends HtmlMacroComponent {
                 
             s = db.Statement(Boolean.FALSE, "select_el_naloge", param_poisci);   
             ResultSet rs = s.executeQuery ();
-            String sql = "INSERT INTO NAL_" + Sessions.getCurrent().getAttribute("ID_naloge").toString() + "(";
+            String sql = "INSERT INTO NAL_" + Sessions.getCurrent().getAttribute("ID_naloge").toString() + " (";
             String sql_values = " VALUES(";
             List<Object> list_param = new ArrayList<Object>();
                      

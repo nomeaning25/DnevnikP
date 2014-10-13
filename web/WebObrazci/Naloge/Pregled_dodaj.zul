@@ -39,23 +39,24 @@
         </window>    
         <window id="Seznam_nalog_akt" sclass="Seznam_nalog_akt" apply="org.zkoss.bind.BindComposer"           
             viewModel="@id('vm') @init('dnevnik.NalogaViewModel')" border="none" width="1066px" style="margin:auto;">
-            <div children="@load(vm.seznamAkt)" id="Seznam_akt" width="1066px" style="margin:auto; padding-top:100px;">
+            <div id="seznam_title_akt"></div>
+            <div children="@load(vm.seznamAkt)" id="Seznam_akt" width="1066px">
                 <template name="children">  
                     <div class="datoteka_item" onClick="@command('onChooseItemAkt', id=each.id)">                  
                         <div><span class='datum'><label value="@load(each.datumZaklj)"/></span></div>
                         <div><span class='naslov'><label value="@load(each.ime)"/></span></div>
                     </div>
-                </template>
-            </div>
-            <zscript><![CDATA[
-            Path.getComponent("/Seznam_nalog_akt").getFellow("Seznam_nalog_akt").appendChild(new Html("<div><h2>Aktivne naloge</h1></div>"));
-	    if(((Div) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("Seznam_akt")).getChildren.size() == 0)
-                ((Div) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("Seznam_akt")).appendChild(new Html("<span style="\color:grey"\>ni nalog, ki bi ustrezale kriteriju</span>"));                
-	]]></zscript>                      
+                </template>                
+            </div>         
+            <div visible="@load(empty vm.seznamAkt)" style='color:grey'>ni nalog, ki bi ustrezale kriteriju</div>   
+            <zscript><![CDATA[           
+                Path.getComponent("/Seznam_nalog_akt").getFellow("seznam_title_akt").appendChild(new Html("<div><h2>Aktivne naloge</h2></div>"));                                        
+            ]]></zscript>                      
         </window>    
         <window id="Seznam_nalog_zakl" sclass="Seznam_nalog_zakl" apply="org.zkoss.bind.BindComposer"           
             viewModel="@id('vm') @init('dnevnik.NalogaViewModel')" border="none" width="1066px" style="margin:auto;">
-            <div children="@load(vm.seznamZaklj)" id="Seznam_zaklj" width="1066px" style="margin:auto; padding-top:100px;">
+            <div id="seznam_title_zaklj"></div>
+            <div children="@load(vm.seznamZaklj)" id="Seznam_zaklj" width="1066px">
                 <template name="children">  
                     <div class="datoteka_item" onClick="@command('onChooseItemZaklj', id=each.id)">                  
                         <div><span class='datum'><label value="@load(each.datumZaklj)"/></span></div>
@@ -63,10 +64,9 @@
                     </div>
                 </template>
             </div> 
+            <div visible="@load(empty vm.seznamZaklj)" style='color:grey'>ni nalog, ki bi ustrezale kriteriju</div>   
         <zscript><![CDATA[
-            Path.getComponent("/Seznam_nalog_akt").getFellow("Seznam_nalog_akt").appendChild(new Html("<div><h2>Aktivne naloge</h1></div>"));
-	    if(((Div) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("Seznam_zaklj")).getChildren.size() == 0)
-                ((Div) Path.getComponent("/Oddaj_nalogo/PodatkiNaloge").getFellow("Seznam_zaklj")).appendChild(new Html("<span style="\color:grey"\>ni nalog, ki bi ustrezale kriteriju</span>"));                
+            Path.getComponent("/Seznam_nalog_zakl").getFellow("seznam_title_zaklj").appendChild(new Html("<div><h2>Zaključene naloge</h2></div>"));
 	]]></zscript>                                           
         </window>
  </zk>

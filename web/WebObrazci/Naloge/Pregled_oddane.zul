@@ -38,7 +38,7 @@ text-align: right;
                     <attribute name="onClick"><![CDATA[
 
                         Sessions.getCurrent().setAttribute("ID_naloge", null);                
-                        Executions.getCurrent().sendRedirect("../Naloge/Pregled_zakljucene.zul");
+                        Executions.getCurrent().sendRedirect("../Naloge/Pregled_dodaj.zul");
 
                     ]]>
                     </attribute>

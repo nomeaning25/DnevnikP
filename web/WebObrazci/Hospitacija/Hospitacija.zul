@@ -142,7 +142,7 @@ public void Napolni(){
 ]]></zscript>
  </window>
 
-<window title="Analita ure" border="normal"  width="800px" style="margin:auto; padding-top:50px;">
+<window title="Analiza ure" border="normal"  width="800px" style="margin:auto; padding-top:50px;">
 <zscript src="../../scripts/DB.zs"/>
 <zscript src="../../scripts/funkcije.zs"/>
 

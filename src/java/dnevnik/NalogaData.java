@@ -30,7 +30,7 @@ class NalogaData {
     public NalogaData(Predmet pid, Profesor uid, int a) {
         EntityManager em = emf.createEntityManager();
         Date today = new Date();
-        naloge = em.createNamedQuery("Naloga.findByAktivnaFromUporabnikAndPredmet").setParameter("aktivna", a).setParameter("predmetId", pid).setParameter("uporabnik", uid).setParameter("datum", today).getResultList();
+        naloge = em.createNamedQuery("Naloga.findByAktivnaFromUporabnikAndPredmet").setParameter("aktivna", a).setParameter("predmetId", pid).setParameter("uporabnik", uid).setParameter("datum", today).getResultList();       
     }
     
     public NalogaData(Date d, Predmet pid, Profesor uid) {
