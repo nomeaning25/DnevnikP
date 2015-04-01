@@ -40,7 +40,7 @@ public class UcnaPriprava {
         
         String DATE_FORMAT = "MM.dd.yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-     
+        System.out.println(((Datebox) Path.getComponent("/podatki_ure/Podatki").getFellow("Datum")).getValue());
         List<Object> p = new ArrayList<Object>();
             p.add(((Textbox) Path.getComponent("/podatki_ure/Podatki").getFellow("Naslov")).getValue());
             p.add(((Textbox) Path.getComponent("/podatki_ure/Podatki").getFellow("Izvajalec")).getValue());
